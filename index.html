@@ -17,7 +17,7 @@ img{max-width:100%}
   --violeta:#6B2FA0; --violeta-s:#F1EAF8; --magenta:#C4246B; --naranja:#E8841A;
   --alumno:#B4500C; --alumno-s:#FCEFE3;
   --ok:#1E7A4C; --ok-s:#E3F4EA; --prep:#8A5A00; --prep-s:#FFF4DA; --pend:#6D6784; --pend-s:#EEECF3;
-  --nota:#FFF7E3; --nota-t:#6B4700;
+  --nota:#FFF7E3; --nota-t:#6B4700; --sobre:#FFFFFF;
   --grad:linear-gradient(90deg,#7B3FB8 0%,#C4246B 55%,#F0961E 100%);
   --sombra:0 1px 2px rgba(34,29,61,.06),0 6px 20px rgba(34,29,61,.06);
   --disp:"Lexend",system-ui,sans-serif; --txt:"Source Sans 3",system-ui,sans-serif;
@@ -28,7 +28,7 @@ img{max-width:100%}
   --violeta:#BE93EA; --violeta-s:#2A2140; --magenta:#F06A9E; --naranja:#F4A45A;
   --alumno:#F4A45A; --alumno-s:#35241A;
   --ok:#6FD29E; --ok-s:#17301F; --prep:#F2C45A; --prep-s:#332812; --pend:#A9A2BD; --pend-s:#2A2638;
-  --nota:#2C2410; --nota-t:#F2C45A; --sombra:none;
+  --nota:#2C2410; --nota-t:#F2C45A; --sombra:none; --sobre:#14111D;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
@@ -36,7 +36,7 @@ img{max-width:100%}
   --violeta:#BE93EA; --violeta-s:#2A2140; --magenta:#F06A9E; --naranja:#F4A45A;
   --alumno:#F4A45A; --alumno-s:#35241A;
   --ok:#6FD29E; --ok-s:#17301F; --prep:#F2C45A; --prep-s:#332812; --pend:#A9A2BD; --pend-s:#2A2638;
-  --nota:#2C2410; --nota-t:#F2C45A; --sombra:none;
+  --nota:#2C2410; --nota-t:#F2C45A; --sombra:none; --sobre:#14111D;
 }
 *{box-sizing:border-box}
 body{background:var(--fondo);color:var(--tinta);font-family:var(--txt);font-size:17px;line-height:1.55}
@@ -148,7 +148,7 @@ section.vista{display:grid;gap:44px}
 .tj .cuerpo{padding:16px;display:grid;gap:8px;align-content:start;flex:1}
 .tj h4{font-size:17px;font-weight:600}
 .tj p{font-size:15px;color:var(--tinta2)}
-.tj .meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:auto;padding-top:6px}
+.tj .meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0}
 .tipo{font-size:13px;color:var(--tinta2);display:inline-flex;gap:5px;align-items:center}
 .tipo svg{width:15px;height:15px}
 .tj a.lnk{font-family:var(--disp);font-size:14px;font-weight:600;color:var(--c);text-decoration:none}
@@ -247,12 +247,35 @@ tr:last-child td{border-bottom:0}
 footer.pie{border-top:1px solid var(--linea);background:var(--hoja)}
 footer.pie .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:20px;font-size:14px;color:var(--tinta2)}
 
-dialog{border:0;padding:0;border-radius:14px;max-width:min(920px,94vw);max-height:92vh;background:var(--hoja);color:var(--tinta)}
-dialog::backdrop{background:rgba(20,17,29,.72)}
-dialog .dh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--linea);position:sticky;top:0;background:var(--hoja)}
-dialog .dh b{font-family:var(--disp);font-weight:500}
-dialog button.x{font:inherit;border:1px solid var(--linea);background:var(--hoja2);color:var(--tinta);border-radius:8px;padding:4px 12px;cursor:pointer}
-dialog img{display:block;width:100%;height:auto}
+/* botones de acción: grandes y con relleno para que se identifiquen de inmediato */
+.acciones{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:10px}
+.accion{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-size:16px;font-weight:600;line-height:1.2;background:var(--c);color:var(--sobre);border:2px solid var(--c);border-radius:999px;padding:10px 18px;cursor:pointer;text-decoration:none;box-shadow:0 2px 10px rgba(34,29,61,.18);transition:transform .12s ease,filter .12s ease}
+.accion svg{width:18px;height:18px;flex:none}
+.accion:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.accion.sec{background:transparent;color:var(--c);box-shadow:none}
+.accion.sec:hover{background:var(--cs)}
+.acciones.grande .accion{font-size:18px;padding:13px 24px}
+.acciones.lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.acciones.lista .accion{justify-content:flex-start;font-size:15px;padding:9px 14px}
+.tj.ancha{grid-column:1/-1}
+.tj .cuerpo{display:flex;flex-direction:column}
+@media (prefers-reduced-motion:reduce){.accion{transition:none}.accion:hover{transform:none}}
+
+/* visor integrado */
+dialog.visor{border:0;padding:0;margin:auto;width:min(1100px,96vw);height:92vh;max-width:96vw;max-height:92vh;border-radius:16px;background:var(--hoja);color:var(--tinta);display:none;flex-direction:column;overflow:hidden}
+dialog.visor[open]{display:flex}
+dialog.visor::backdrop{background:rgba(20,17,29,.72)}
+.visor .dh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--linea);flex-wrap:wrap}
+.visor .dh b{font-family:var(--disp);font-weight:600;font-size:17px}
+.visor .dh-acc{display:flex;gap:8px;flex-wrap:wrap}
+.visor .x{font:inherit;font-size:15px;font-weight:600;border:1px solid var(--linea);background:var(--hoja2);color:var(--tinta);border-radius:999px;padding:6px 14px;cursor:pointer;text-decoration:none}
+.visor .x.cerrar{background:var(--violeta);border-color:var(--violeta);color:var(--sobre)}
+.visor-nota{margin:0;padding:8px 14px;font-size:14px;background:var(--nota);color:var(--nota-t)}
+.visor-cuerpo{flex:1;min-height:0;background:var(--fondo);display:flex;align-items:center;justify-content:center}
+.visor-cuerpo iframe{width:100%;height:100%;border:0;background:#fff}
+.visor-cuerpo video{max-width:100%;max-height:100%;background:#000}
+.visor-cuerpo img{max-width:100%;max-height:100%;object-fit:contain}
+@media (max-width:640px){dialog.visor{width:100vw;height:100vh;max-width:100vw;max-height:100vh;border-radius:0}}
 
 @media (max-width:640px){
   body{font-size:16px}
@@ -344,9 +367,9 @@ dialog img{display:block;width:100%;height:auto}
   <div class="bloque">
     <header><h2>Lo más consultado</h2></header>
     <div class="rapidos">
-      <a class="rapido" href="https://claude.ai/artifact/C5mADzJWfYP7SqwS8NU3hZ?sk=KpzgsGX7uuyy3QQYLZn0fQ" target="_blank" rel="noopener"><span class="dot"></span><span><b>Guía para docentes · ol.uvp.mx</b><small>Paso a paso, del nivel básico al profesional</small></span></a>
-      <a class="rapido" href="#alumnos" style="--c:var(--alumno)"><span class="dot"></span><span><b>Inicio de sesión</b><small>Para alumnos y docentes</small></span></a>
-      <a class="rapido" href="#docentes-materiales"><span class="dot"></span><span><b>Fechas del ciclo A26-E27</b><small>Manual de fechas para docentes</small></span></a>
+      <a class="rapido" href="#docentes" data-ver="guia"><span class="dot"></span><span><b>Guía para docentes · ol.uvp.mx</b><small>Paso a paso, del nivel básico al profesional</small></span></a>
+      <a class="rapido" href="#docentes-recursos" data-ver="catalogo" style="--c:var(--alumno)"><span class="dot"></span><span><b>Catálogo de aplicaciones</b><small>27 herramientas digitales con fichas y prompts</small></span></a>
+      <a class="rapido" href="#docentes-materiales" data-ver="fechas"><span class="dot"></span><span><b>Fechas del ciclo A26-E27</b><small>Manual de fechas para docentes</small></span></a>
       <a class="rapido" href="#asesorias" style="--c:var(--magenta)"><span class="dot"></span><span><b>Asesorías en vivo</b><small>Lunes a sábado por Google Meet</small></span></a>
     </div>
   </div>
@@ -372,17 +395,17 @@ dialog img{display:block;width:100%;height:auto}
         <div><dt>Lunes a viernes</dt><dd>10:00–11:00 · 12:00–13:00 · 16:00–17:00</dd></div>
         <div><dt>Sábado</dt><dd>11:00–12:00</dd></div>
       </dl>
-      <a class="boton" href="https://meet.google.com/jgg-ntqd-hzv" target="_blank" rel="noopener">Ingresar a la asesoría</a>
+      <div class="acciones" style="--c:var(--violeta);--cs:var(--violeta-s)"><a class="accion" href="https://meet.google.com/jgg-ntqd-hzv" target="_blank" rel="noopener">Entrar a la sala de Meet</a></div>
     </div>
     <div class="caja">
       <h3>Asesorías personalizadas</h3>
       <p>Para revisar tu aula virtual completa o estructurar una asignatura. Elige fecha y hora y reserva una cita individual.</p>
-      <a class="boton" href="https://sites.google.com/uvp.mx/aprendemas/asesor%C3%ADas" target="_blank" rel="noopener">Agendar una cita</a>
+      <div class="acciones lista" style="--c:var(--violeta);--cs:var(--violeta-s)"><button type="button" class="accion" data-ver="cita1">Agendar con Francisco Tovar</button><button type="button" class="accion sec" data-ver="cita2">Agendar con Flor Hernández</button><button type="button" class="accion sec" data-ver="cita3">Agendar con Diseño Instruccional</button></div>
     </div>
     <div class="caja">
       <h3>Curso de Inducción al EVA 2026</h3>
       <p>Curso autogestionado para docentes: administración del entorno en modo edición y en vivo, configuración de fechas y entregas, y buenas prácticas para contenidos digitales.</p>
-      <a class="boton" href="https://ol.uvp.mx/courses/course-v1:UVP+INDDOC+2026_01_F26_D26/about" target="_blank" rel="noopener">Ir al curso</a>
+      <div class="acciones" style="--c:var(--violeta);--cs:var(--violeta-s)"><a class="accion" href="https://ol.uvp.mx/courses/course-v1:UVP+INDDOC+2026_01_F26_D26/about" target="_blank" rel="noopener">Ir al curso en ol.uvp.mx</a></div>
     </div>
   </div>
   <div class="bloque">
@@ -418,24 +441,45 @@ dialog img{display:block;width:100%;height:auto}
   <span>Nombre provisional · Contacto: coord.diseno.instruccional@uvp.mx</span>
 </div></footer>
 
-<dialog id="visor" aria-label="Vista de la infografía">
-  <div class="dh"><b id="visor-t"></b><button class="x" id="visor-x">Cerrar</button></div>
-  <img id="visor-i" alt="">
+<dialog id="visor" class="visor" aria-labelledby="visor-t">
+  <div class="dh">
+    <b id="visor-t"></b>
+    <span class="dh-acc">
+      <a class="x" id="visor-a" href="#" target="_blank" rel="noopener">Abrir en pestaña nueva ↗</a>
+      <button class="x cerrar" id="visor-x" type="button">Cerrar ✕</button>
+    </span>
+  </div>
+  <p class="visor-nota" id="visor-nota" hidden></p>
+  <div class="visor-cuerpo" id="visor-c"></div>
 </dialog>
 
 <script>
-const ACTUAL = "https://sites.google.com/uvp.mx/aprendemas/";
-const GUIA = "https://claude.ai/artifact/C5mADzJWfYP7SqwS8NU3hZ?sk=KpzgsGX7uuyy3QQYLZn0fQ";
 const I = {
   video:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="m17 10 5-3v10l-5-3"/></svg>',
   info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
   guia:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M4 19V5"/></svg>',
   doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6"/></svg>',
   web:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
-  curso:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 9 12 4 2 9l10 5 10-5Z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>'
+  curso:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 9 12 4 2 9l10 5 10-5Z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>',
+  ojo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>',
+  flecha:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 };
-const TIPO = {video:"Video",info:"Infografía",guia:"Guía interactiva",doc:"Documento",web:"Sitio externo",curso:"Curso"};
+const TIPO = {video:"Video",info:"Ficha paso a paso",guia:"Guía interactiva",doc:"Documento",web:"Sitio",curso:"Curso"};
 const EST = {ok:"Disponible",prep:"En preparación",pend:"Por crear"};
+
+// Cómo se abre cada material dentro del sitio
+const guia  = (t, titulo) => ({tipo:"web", src:"guia/index.html"+(t?"#"+t:""), titulo});
+const video = (n, titulo) => ({tipo:"video", src:`guia/Videos/${n}.mp4`, poster:`guia/Videos/${n}.png`, titulo});
+const ficha = (n, titulo) => ({tipo:"web", src:`fichas/${n}.html`, titulo});
+const doc   = (id, titulo) => ({tipo:"web", src:`https://docs.google.com/document/d/${id}/preview`, abrir:`https://docs.google.com/document/d/${id}/edit`, drive:true, titulo});
+const hoja  = (id, titulo) => ({tipo:"web", src:`https://docs.google.com/spreadsheets/d/${id}/preview`, abrir:`https://docs.google.com/spreadsheets/d/${id}/edit`, drive:true, titulo});
+const FECHAS   = {tipo:"web", src:"https://heyzine.com/flip-book/2f0b05bdc5.html", titulo:"Manual de fechas A26-E27"};
+const CATALOGO = {tipo:"web", src:"catalogo/index.html", titulo:"Catálogo de aplicaciones educativas"};
+const INDUCCION = "https://ol.uvp.mx/courses/course-v1:UVP+INDDOC+2026_01_F26_D26/about";
+
+const GUIONES = [["Escolarizado","1JElynKV7q0KmYJuUShF2Hi1rwcufwlrL"],["Bachillerato","10uDO6zXDzh_puT5irEFnOuxWA0qNXLqy"],["Posgrados","1jS6DMs9qX9P8ahKL5hgOkd9IbQKJ397I"],["Sistema abierto","1URDdFXhHEy1IRM9w5uB51v2B2exjN9mu"],["B-Learning","1R3p080y-E1iyEl56MBH-XCsNHA5xWAvd"],["Online","1Cy4ozBBlZuMt1qKULUieT9s04vu6XKKw"]];
+const REPORTES = [["Administración de Empresas (AE) · 1","1sfA8gSe0J5gXAHVzW6RhprXKleDuujZVVmM4lro5Gs8"],["Administración de Empresas (AE) · 2","1PRjZjlMh7QUw0fKOG9DWaleHI1gtHBPirCHS_0Ti0Hs"],["Agronomía (AG) · 1","1M3JLpayQefMkrSCHdsLrlhJ7FcYde5NTyCeqQutiR-0"],["Agronomía (AG) · 2","1V-Rbro_vmS-R-Z0V3ohGWog_yJFVkVAxf-YxO0OnY3w"],["Arquitectura (AQ) · 1","1SNKNcnPgbDgBb-RwqnoDMbMfrMOnhVqsZDBDmH2Ptuw"],["Arquitectura (AQ) · 2","1Dl5MozaHpsh8qL-20NkJpJlz0KujvLU6NRWvxodKGZA"],["Biomédica (IB)","1be5HPuTohc6WFrKu4ZmzrE-pVolAD3PT9cPQKwUd4KE"],["Cirujano Dentista (H)","1OUrD-tAcDD0jH6bB4MCNsdUQjguQzdcxMRYPUjKFCZM"],["Ingeniería Civil (IC)","12dcXzGubPInie2RSMQXJ3dO9-iPbH92dwEELu8BkMmg"],["Negocios Internacionales (NI)","1qTNhx4zZFLYBxt_sKCB8Lt59xnra_myEYErmq2WAie8"]];
 
 const nuevaDoc = [
   {g:"Antes de iniciar", it:[{t:"Inicio de sesión",tp:"info",e:"pend"},{t:"Recorrido por el curso",tp:"video",e:"pend"},{t:"Configurar fechas de la materia",tp:"video",e:"pend"}]},
@@ -459,39 +503,42 @@ const ESPACIOS = {
     intro:"Tutoriales para configurar y operar tus aulas virtuales, los formatos oficiales del ciclo y herramientas para enriquecer tus clases.",
     tutoriales:{
       edx:[
-        {destacada:{t:"Guía para docentes · ol.uvp.mx",d:"La guía completa, con búsqueda, calculadora de hora, simulador y solución de errores comunes. Empieza aquí si es tu primer ciclo.",niveles:["Primeros pasos","Básico: calificar y ver calificaciones","Avanzado: fechas, cuestionarios, prórrogas","Profesional: videos, PDF, Genially","Práctica y soporte"],link:GUIA}},
+        {destacada:{t:"Guía para docentes · ol.uvp.mx",d:"La guía completa, con búsqueda, calculadora de hora, simulador y solución de errores comunes. Se abre aquí mismo. Empieza aquí si es tu primer ciclo.",niveles:["Primeros pasos","Básico: calificar y ver calificaciones","Avanzado: fechas, cuestionarios, prórrogas","Profesional: videos, PDF, Genially","Práctica y soporte"],acc:[["Abrir la guía",guia("","Guía para docentes · ol.uvp.mx")],["Ver los videotutoriales",guia("t22","Videotutoriales de un minuto"),1]]}},
         {g:"Antes de iniciar", it:[
-          {t:"Inicio de sesión",d:"Da clic en el botón azul “Alumnos y docentes” y entra con tu cuenta @uvp.edu.mx.",tp:"video",e:"ok",dur:"1 min 15 s",link:ACTUAL+"evas/antes-iniciar"},
-          {t:"Configuración de fechas y datos de la materia",d:"La estructura de la materia por semana.",tp:"video",e:"ok",dur:"1 min 15 s",link:ACTUAL+"evas/antes-iniciar"},
-          {t:"Configuración de foros",d:"Cómo preparar el foro de la materia.",tp:"video",e:"ok",link:ACTUAL+"evas/antes-iniciar"}]},
+          {t:"Entrar a ol.uvp.mx",d:"Da clic en el botón azul “Alumnos y docentes” y entra con tu cuenta @uvp.edu.mx.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_01_EntrarAUVPOnline","Entrar a ol.uvp.mx")],["Leer en la guía",guia("t4","Cómo está hecha UVP Online"),1]]},
+          {t:"Cambiar una fecha de entrega",d:"Fechas de inicio y de entrega de cada semana, con la calculadora de hora de Studio.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_05_CambiarUnaFecha","Cambiar una fecha de entrega")],["Leer en la guía",guia("t2","Fechas de entrega"),1]]},
+          {t:"Revisar los foros",d:"Dónde está el foro de la materia y cómo revisarlo.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_07_RevisarLosForos","Revisar los foros")],["Leer en la guía",guia("t19","Foros"),1]]}]},
         {g:"Carga de contenidos", it:[
-          {t:"Insertar un archivo PDF",d:"Subir el archivo en Studio, copiar su URL y mostrarlo con Raw HTML.",tp:"info",e:"ok",img:"img/pdf.jpg"},
-          {t:"Cargar un video de YouTube",d:"Componente Video, URL del video y recorte por duración.",tp:"info",e:"ok",img:"img/video.jpg"},
-          {t:"Crear un cuestionario",d:"Componente Problemas, tipo Single select, puntuación e intentos.",tp:"info",e:"ok",img:"img/cuestionario.jpg"}]},
+          {t:"Insertar un archivo PDF",d:"Subir el archivo en Studio, copiar su dirección y mostrarlo con Raw HTML. Incluye el código listo para copiar.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("pdf","Insertar un archivo PDF")],["Leer en la guía",guia("t11","Archivos PDF"),1]]},
+          {t:"Cargar un video de YouTube",d:"Componente Video, enlace del video y recorte por duración.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("video","Cargar un video de YouTube")],["Leer en la guía",guia("t10","Videos"),1]]},
+          {t:"Crear un cuestionario",d:"Componente Problemas, tipo Single select, puntuación e intentos.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("cuestionario","Crear un cuestionario")],["Leer en la guía",guia("t6","Cuestionarios"),1]]},
+          {t:"Editar y publicar un contenido",d:"Editar, guardar y publicar para que tus alumnos vean los cambios.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_03_EditarYPublicar","Editar y publicar un contenido")],["Leer en la guía",guia("t1","Editar un contenido"),1]]}]},
         {g:"Evaluación y seguimiento", it:[
-          {t:"Un buen arranque: buenas prácticas docentes",d:"Estrategias y recomendaciones para iniciar el ciclo.",tp:"video",e:"ok",dur:"2 min 35 s",link:ACTUAL+"evas/evaluaciones"},
-          {t:"Calificar entregas y ver calificaciones",d:"Incluido en la guía completa, nivel básico.",tp:"guia",e:"ok",link:GUIA},
-          {t:"Calificaciones por parcial",d:"Con plantilla de Excel. Incluido en la guía completa.",tp:"guia",e:"ok",link:GUIA}]}
+          {t:"Calificar una entrega",d:"Abrir la entrega del alumno, calificarla y guardar.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_02_CalificarUnaEntrega","Calificar una entrega")],["Leer en la guía",guia("t15","Calificar una entrega"),1]]},
+          {t:"Ver las calificaciones",d:"El libro de calificaciones y el avance de cada alumno.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_06_VerLasCalificaciones","Ver las calificaciones")],["Leer en la guía",guia("t7","Ver las calificaciones"),1]]},
+          {t:"Dar una prórroga",d:"Más tiempo a un alumno para entregar, desde Instructor › Extensiones.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_04_DarUnaProrroga","Dar una prórroga")],["Leer en la guía",guia("t8","Prórrogas"),1]]},
+          {t:"Calificaciones por parcial",d:"Con plantilla de Excel descargable.",tp:"guia",e:"ok",acc:[["Abrir en la guía",guia("t17","Calificaciones por parcial")]]},
+          {t:"Un buen arranque: buenas prácticas docentes",d:"Estrategias y recomendaciones para iniciar el ciclo.",tp:"video",e:"pend"}]}
       ],
       nueva:nuevaDoc
     },
     materiales:[
       {g:"Planeación", it:[
-        {t:"Guiones instruccionales 2026",d:"Plantillas por modalidad:",chips:["Online","B-Learning","Escolarizado","Bachillerato","Sistema abierto","Posgrados"],tp:"doc",e:"ok",link:ACTUAL+"gesti%C3%B3n-docente/formatos-y-plantillas"},
+        {t:"Guiones instruccionales 2026",d:"Elige tu modalidad para ver la plantilla. Se abre desde Drive con tu cuenta institucional.",tp:"doc",e:"ok",acc:GUIONES.map(([m,id],i)=>[m, doc(id,"Guion instruccional · "+m), i?1:0])},
         {t:"Planeación docente",d:"Formato y tutorial de llenado.",tp:"doc",e:"pend"}]},
       {g:"Ciclo A26-E27", it:[
-        {t:"Manual de fechas A26-E27",d:"Fechas clave del ciclo académico.",tp:"doc",e:"ok",link:ACTUAL+"gesti%C3%B3n-docente/fechas"},
-        {t:"Reportes A26_E27",d:"Reportes y trámites del ciclo.",tp:"doc",e:"ok",link:ACTUAL+"gesti%C3%B3n-docente/reportes"}]},
+        {t:"Manual de fechas A26-E27",d:"Fechas clave del ciclo académico, en formato de libro para hojear.",tp:"doc",e:"ok",acc:[["Ver manual",FECHAS]]},
+        {t:"Reportes de materias en UVP Online",d:"Seguimiento de la carga de materias y del estado de las aulas virtuales, por licenciatura. Para coordinaciones académicas.",tp:"doc",e:"ok",acc:REPORTES.map(([n,id],i)=>[n, hoja(id,"Reporte de materias · "+n), i?1:0])}]},
       {g:"Formación", it:[
-        {t:"Curso de Inducción al EVA 2026",d:"Curso autogestionado sobre el entorno virtual.",tp:"curso",e:"ok",link:"#asesorias"}]}
+        {t:"Curso de Inducción al EVA 2026",d:"Curso autogestionado sobre el entorno virtual. Se abre en ol.uvp.mx con tu cuenta.",tp:"curso",e:"ok",acc:[["Ir al curso",{externo:INDUCCION}]]}]}
     ],
     recursos:[
       {g:"Herramientas digitales", it:[
-        {t:"Comprimir un PDF con I Love PDF",d:"Para archivos que superan el peso permitido.",tp:"info",e:"ok",img:"img/ilovepdf.jpg"},
-        {t:"Comprimir un PDF con Small PDF",d:"Alternativa en línea, sin instalar nada.",tp:"info",e:"ok",img:"img/smallpdf.jpg"},
-        {t:"Genially, Canva y otras páginas",d:"Cómo mostrarlas dentro del curso. Incluido en la guía completa.",tp:"guia",e:"ok",link:GUIA}]},
+        {t:"Comprimir un PDF con I Love PDF",d:"Para archivos que superan el peso permitido.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("ilovepdf","Comprimir un PDF con I Love PDF")]]},
+        {t:"Comprimir un PDF con Small PDF",d:"Alternativa en línea, sin instalar nada.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("smallpdf","Comprimir un PDF con Small PDF")]]},
+        {t:"Genially, Canva y otras páginas",d:"Cómo mostrarlas dentro del curso.",tp:"guia",e:"ok",acc:[["Abrir en la guía",guia("t13","Genially, Canva y otras páginas")]]}]},
       {g:"Aplicaciones educativas", it:[
-        {t:"Catálogo de aplicaciones educativas",d:"Organizadas por materia, nivel formativo y habilidad.",tp:"web",e:"ok",link:ACTUAL+"evas/cat%C3%A1logo-de-aplicaciones-educativas"},
+        {t:"Catálogo de aplicaciones educativas",d:"27 aplicaciones con fichas, formatos de integración en edX, banco de prompts, taller de IA y autoevaluación.",tp:"web",e:"ok",acc:[["Abrir el catálogo",CATALOGO]]},
         {t:"Nuevas recomendaciones",d:"Espacio para las siguientes herramientas que proponga el equipo.",tp:"web",e:"pend"}]}
     ]
   },
@@ -508,8 +555,8 @@ const ESPACIOS = {
     ],
     recursos:[
       {g:"Herramientas digitales", it:[
-        {t:"Comprimir un PDF con I Love PDF",d:"Si tu archivo pesa demasiado para subirlo.",tp:"info",e:"ok",img:"img/ilovepdf.jpg"},
-        {t:"Comprimir un PDF con Small PDF",d:"Alternativa en línea, sin instalar nada.",tp:"info",e:"ok",img:"img/smallpdf.jpg"}]},
+        {t:"Comprimir un PDF con I Love PDF",d:"Si tu archivo pesa demasiado para subirlo.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("ilovepdf","Comprimir un PDF con I Love PDF")]]},
+        {t:"Comprimir un PDF con Small PDF",d:"Alternativa en línea, sin instalar nada.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("smallpdf","Comprimir un PDF con Small PDF")]]}]},
       {g:"Para estudiar mejor", it:[
         {t:"Citar en formato APA",d:"Referencias y citas para tus trabajos.",tp:"web",e:"pend"},
         {t:"Organiza tu tiempo",d:"Planificador semanal para materias en línea.",tp:"info",e:"pend"},
@@ -520,15 +567,22 @@ const ESPACIOS = {
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
+// Registro de lo que abre cada botón
+const ABRIR = [];
+function boton([texto, destino, secundario]){
+  if(destino.externo) return `<a class="accion${secundario?" sec":""}" href="${destino.externo}" target="_blank" rel="noopener">${esc(texto)} ${I.flecha}</a>`;
+  const n = ABRIR.push(destino) - 1;
+  const ico = destino.tipo==="video" ? I.play : I.ojo;
+  return `<button type="button" class="accion${secundario?" sec":""}" data-abrir="${n}">${ico}${esc(texto)}</button>`;
+}
 function tarjeta(x){
   const vacio = x.e === "pend";
-  const img = x.img ? `<button class="img" data-img="${x.img}" data-t="${esc(x.t)}" aria-label="Ampliar infografía: ${esc(x.t)}"><img src="${x.img}" alt="" loading="lazy"></button>` : "";
-  const chips = x.chips ? `<div class="chips">${x.chips.map(c=>`<span>${c}</span>`).join("")}</div>` : "";
-  const ext = x.link && x.link.startsWith("http");
-  const lnk = x.link ? `<a class="lnk" href="${x.link}" ${ext?'target="_blank" rel="noopener"':""}>${x.tp==="guia"?"Abrir la guía":"Ver"} →</a>` : (x.img ? `<a class="lnk" href="#" data-img="${x.img}" data-t="${esc(x.t)}">Ver infografía →</a>` : "");
-  return `<article class="tj${vacio?" vacio":""}">${img}<div class="cuerpo">
-    <h4>${esc(x.t)}</h4>${x.d?`<p>${esc(x.d)}</p>`:""}${chips}
-    <div class="meta"><span class="est ${x.e}">${EST[x.e]}</span><span class="tipo">${I[x.tp]}${TIPO[x.tp]}${x.dur?" · "+esc(x.dur):""}</span>${lnk}</div>
+  const muchas = x.acc && x.acc.length > 3;
+  const acc = x.acc ? `<div class="acciones${muchas?" lista":""}">${x.acc.map(boton).join("")}</div>` : "";
+  return `<article class="tj${vacio?" vacio":""}${muchas?" ancha":""}"><div class="cuerpo">
+    <div class="meta"><span class="est ${x.e}">${EST[x.e]}</span><span class="tipo">${I[x.tp]}${TIPO[x.tp]}${x.dur?" · "+esc(x.dur):""}</span></div>
+    <h4>${esc(x.t)}</h4>${x.d?`<p>${esc(x.d)}</p>`:""}
+    ${acc}
   </div></article>`;
 }
 function destacada(x){
@@ -537,7 +591,8 @@ function destacada(x){
       <span class="tipo">${I[x.tp||"guia"]}${x.etiqueta||"Guía interactiva · recomendada"}</span>
       <h4>${esc(x.t)}</h4><p>${esc(x.d)}</p>
       ${x.niveles?`<ul class="niveles">${x.niveles.map(n=>`<li>${n}</li>`).join("")}</ul>`:""}
-      <div class="meta"><span class="est ${e}">${EST[e]}</span>${x.link?`<a class="lnk" href="${x.link}" target="_blank" rel="noopener">${x.cta||"Abrir la guía"} →</a>`:""}</div>
+      <div class="meta"><span class="est ${e}">${EST[e]}</span></div>
+      ${x.acc?`<div class="acciones grande">${x.acc.map(boton).join("")}</div>`:""}
     </div></article></div>`;
 }
 const AYUDA = `
@@ -660,19 +715,37 @@ function pintarFAQ(k){
 }
 pintarFAQ("docentes"); pintarFAQ("alumnos");
 
-// visor de infografías
-const visor = document.getElementById("visor");
+const CITA = (id, quien) => ({tipo:"web", src:"https://calendar.google.com/calendar/appointments/schedules/"+id+"?gv=true", abrir:"https://calendar.google.com/calendar/appointments/schedules/"+id, titulo:"Agendar asesoría · "+quien});
+const VER = {guia:guia("","Guía para docentes · ol.uvp.mx"), fechas:FECHAS, catalogo:CATALOGO,
+  cita1:CITA("AcZssZ17UrR7az5nnhlWp-iufYXwZl0dazPX6Z40qujVBFKM457i09XPtDKx8Mlz4_d8eeD6mBqT1Rp2","Francisco Tovar"),
+  cita2:CITA("AcZssZ3sAt__aC1xsrxeXGWT5vx0SvO4GJbpy2r0LT3oPadcasY7JLqnMW052ss4qfYBvN_qnS3aIOal","Flor Hernández"),
+  cita3:CITA("AcZssZ1IRTJpC5nx0xS4bvfj3A9zXpTWlty_O8V8k8L5XO6g4-Frt-aWPhCy3e8JhILdsSG_-rOJeX4g","Diseño Instruccional")};
+// visor: abre guías, fichas, videos, documentos e imágenes dentro del sitio
+const visor = document.getElementById("visor"), vc = document.getElementById("visor-c");
+function abrirVisor(d){
+  document.getElementById("visor-t").textContent = d.titulo || "";
+  const nuevo = new URL(d.abrir || d.src, location.href).href;
+  document.getElementById("visor-a").href = nuevo;
+  const nota = document.getElementById("visor-nota");
+  nota.hidden = !d.drive;
+  nota.textContent = d.drive ? "Se abre desde Google Drive. Si no carga o pide permiso, usa «Abrir en pestaña nueva» con tu cuenta institucional." : "";
+  if(d.tipo==="video") vc.innerHTML = `<video controls autoplay playsinline preload="metadata" poster="${d.poster||""}" src="${d.src}"></video>`;
+  else if(d.tipo==="img") vc.innerHTML = `<img src="${d.src}" alt="${esc(d.titulo||"")}">`;
+  else vc.innerHTML = `<iframe src="${d.src}" title="${esc(d.titulo||"Material")}" allow="fullscreen; clipboard-write" allowfullscreen></iframe>`;
+  if(typeof visor.showModal==="function") visor.showModal(); else visor.setAttribute("open","");
+}
+function cerrarVisor(){ vc.innerHTML = ""; if(visor.open) visor.close(); }
 document.addEventListener("click", e => {
+  const b = e.target.closest("[data-abrir]");
+  if(b){ e.preventDefault(); abrirVisor(ABRIR[+b.dataset.abrir]); return; }
+  const v = e.target.closest("[data-ver]");
+  if(v){ e.preventDefault(); abrirVisor(VER[v.dataset.ver]); return; }
   const t = e.target.closest("[data-img]");
-  if(!t) return;
-  e.preventDefault();
-  document.getElementById("visor-i").src = t.dataset.img;
-  document.getElementById("visor-i").alt = "Infografía: " + t.dataset.t;
-  document.getElementById("visor-t").textContent = t.dataset.t;
-  visor.showModal();
+  if(t){ e.preventDefault(); abrirVisor({tipo:"img", src:t.dataset.img, titulo:t.dataset.t}); }
 });
-document.getElementById("visor-x").addEventListener("click", () => visor.close());
-visor.addEventListener("click", e => { if(e.target===visor) visor.close() });
+document.getElementById("visor-x").addEventListener("click", cerrarVisor);
+visor.addEventListener("close", () => { vc.innerHTML = ""; });
+visor.addEventListener("click", e => { if(e.target===visor) cerrarVisor(); });
 
 // navegación por vistas
 const VISTAS = ["faq-docentes","faq-alumnos","inicio","docentes","alumnos","asesorias","faq"];
