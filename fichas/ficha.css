@@ -1,0 +1,96 @@
+/* Fichas de Aprende Más · mismo sistema visual que la Guía para docentes */
+:root{
+  --fondo:#F5F5F7; --hoja:#FFFFFF; --texto:#1D1D1F; --texto2:#6E6E73; --linea:#D2D2D7; --linea2:#E5E5EA;
+  --acento:#6A1B9A; --acento-t:#6A1B9A; --acento-suave:#F4ECF9; --capsula:#EDEDF0;
+  --nota:#FFF7E3; --nota-t:#7A4B00; --barra:rgba(245,245,247,.86);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --fondo:#000000; --hoja:#1C1C1E; --texto:#F5F5F7; --texto2:#A1A1A6; --linea:#3A3A3C; --linea2:#2C2C2E;
+    --acento-t:#D7A8EA; --acento-suave:#2D2134; --capsula:#2C2C2E; --nota:#2C2410; --nota-t:#F2C45A;
+    --barra:rgba(22,22,23,.86); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --fondo:#000000; --hoja:#1C1C1E; --texto:#F5F5F7; --texto2:#A1A1A6; --linea:#3A3A3C; --linea2:#2C2C2E;
+  --acento-t:#D7A8EA; --acento-suave:#2D2134; --capsula:#2C2C2E; --nota:#2C2410; --nota-t:#F2C45A;
+  --barra:rgba(22,22,23,.86); color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--hoja);color:var(--texto);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Arial,sans-serif;font-size:19px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--acento-t)}
+:focus-visible{outline:3px solid var(--acento);outline-offset:2px;border-radius:6px}
+.col{max-width:720px;margin:0 auto;padding-inline:20px}
+img{max-width:100%}
+
+.barra{position:sticky;top:0;z-index:5;background:var(--barra);backdrop-filter:saturate(180%) blur(16px);-webkit-backdrop-filter:saturate(180%) blur(16px);border-bottom:1px solid var(--linea2)}
+.barra .col{display:flex;align-items:center;gap:10px;height:52px;font-size:15px;color:var(--texto2)}
+.barra b{color:var(--texto);font-weight:600}
+.barra .plat{margin-left:auto;font-family:"SF Mono",Consolas,monospace;font-size:14px;font-weight:600;background:var(--capsula);color:var(--acento-t);border-radius:999px;padding:3px 10px}
+
+.tema{padding-block:30px 70px}
+.nivel{font-size:15px;font-weight:600;color:var(--texto2);margin:0 0 6px}
+h1{font-size:34px;line-height:1.15;font-weight:700;letter-spacing:-.4px;margin:0 0 12px;text-wrap:balance}
+.entrada{font-size:21px;line-height:1.5;color:var(--texto2);margin:0 0 22px}
+h2{font-size:23px;font-weight:650;margin:38px 0 12px;letter-spacing:-.2px;text-wrap:balance}
+p{margin:0 0 16px}
+.ruta-t{font-size:14px;color:var(--texto2);margin:0 0 6px}
+.ruta{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 6px;background:var(--capsula);border-radius:12px;padding:8px 14px;font-size:16px;margin:0 0 8px}
+.ruta i{font-style:normal;color:var(--texto2)}
+.b{display:inline;font-weight:600;background:var(--capsula);border-radius:6px;padding:1px 7px;white-space:nowrap}
+
+ol.pasos{list-style:none;counter-reset:paso;padding:0;margin:0 0 20px}
+ol.pasos>li{counter-increment:paso;position:relative;padding-left:46px;margin-bottom:22px}
+ol.pasos>li::before{content:counter(paso);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:50%;background:var(--acento-suave);color:var(--acento-t);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center}
+ul{margin:0 0 18px;padding-left:24px} li{margin-bottom:8px}
+
+.nota,.consejo{border-radius:14px;padding:14px 18px;margin:0 0 22px;font-size:18px}
+.nota{background:var(--nota)}
+.nota>b:first-child{display:block;color:var(--nota-t);margin-bottom:4px}
+.consejo{background:var(--fondo)}
+.consejo>b:first-child{display:block;margin-bottom:4px}
+.nota>:last-child,.consejo>:last-child{margin-bottom:0}
+code{font-family:"SF Mono",Consolas,monospace;font-size:.9em;font-weight:600}
+
+/* Reproducción de pantallas: siempre claras, como la plataforma */
+figure.pantalla{margin:10px 0 8px}
+.marco-p{border:1px solid #D2D2D7;border-radius:14px;overflow:hidden;background:#FFFFFF;color:#1F2937;font-size:14px;line-height:1.45;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.marco-p .cab-p{background:#F3F4F6;border-bottom:1px solid #E5E7EB;padding:7px 12px;font-size:12px;color:#6B7280;display:flex;gap:6px;align-items:center}
+.marco-p .cab-p i{width:9px;height:9px;border-radius:50%;background:#D1D5DB;display:inline-block}
+.marco-p .cuerpo-p{padding:16px;overflow-x:auto}
+figcaption{font-size:15px;color:var(--texto2);margin-top:8px;text-align:center}
+.marca{outline:3px solid #F4A300;outline-offset:2px;border-radius:4px}
+.menu-p{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:#374151}
+.menu-p span{padding:4px 8px;border-radius:6px}
+.lista-p{margin-top:6px;border:1px solid #E5E7EB;border-radius:8px;max-width:240px;overflow:hidden}
+.lista-p div{padding:6px 10px;border-top:1px solid #F3F4F6}
+.lista-p div:first-child{border-top:0}
+.lista-p .sel{background:#1E3A5F;color:#FFFFFF}
+.btn-p{display:inline-flex;align-items:center;gap:6px;border-radius:6px;padding:6px 12px;font-size:13px;font-weight:600;border:1px solid #D1D5DB;background:#FFFFFF;color:#374151}
+.btn-p.azul{background:#1E3A5F;border-color:#1E3A5F;color:#FFFFFF}
+.btn-p.rojo{background:#E5322D;border-color:#E5322D;color:#FFFFFF}
+.btn-p.verde{background:#0E7C3A;border-color:#0E7C3A;color:#FFFFFF}
+.comps{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;max-width:520px}
+.comp{background:#0E7C3A;color:#FFFFFF;border-radius:6px;padding:10px 6px;text-align:center;font-size:12px;font-weight:600}
+.campo{border:1px solid #9CA3AF;border-radius:6px;padding:6px 10px;color:#4B5563;margin-bottom:10px;background:#FFFFFF}
+.etq-p{font-size:12px;color:#6B7280;margin-bottom:4px}
+.fila-p{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.check{width:16px;height:16px;border-radius:3px;border:1px solid #9CA3AF;display:inline-block;flex:none}
+.check.si{background:#0E7C3A;border-color:#0E7C3A}
+.grid-h{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:360px}
+.grid-h div{border:1px solid #E5E7EB;border-radius:6px;padding:8px 4px;text-align:center;font-size:11px;color:#374151}
+
+/* Código para copiar */
+.codigo{position:relative;background:var(--fondo);border:1px solid var(--linea2);border-radius:14px;padding:16px 16px 14px;margin:0 0 12px;overflow-x:auto}
+.codigo pre{margin:0;font-family:"SF Mono",Consolas,monospace;font-size:15px;line-height:1.5;white-space:pre-wrap;word-break:break-all}
+.codigo mark{background:var(--acento-suave);color:var(--acento-t);border-radius:4px;padding:0 3px;font-weight:700}
+.copiar{font:inherit;font-size:16px;font-weight:600;background:var(--acento);color:#FFFFFF;border:0;border-radius:999px;padding:8px 16px;cursor:pointer}
+.copiar:hover{filter:brightness(1.12)}
+.copiado{font-size:15px;color:var(--texto2);margin-left:10px}
+
+.ayuda{margin-top:44px;padding-top:20px;border-top:1px solid var(--linea2);font-size:17px;color:var(--texto2)}
+.ayuda b{color:var(--texto)}
+@media (max-width:560px){ body{font-size:18px} h1{font-size:28px} .entrada{font-size:19px} }

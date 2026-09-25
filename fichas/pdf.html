@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Insertar un PDF en ol.uvp.mx · Aprende Más</title>
+<link rel="stylesheet" href="ficha.css">
+</head>
+<body>
+<header class="barra"><div class="col"><span>Aprende Más · <b>Carga de contenidos</b></span><span class="plat">ol.uvp.mx</span></div></header>
+
+<article class="tema col">
+  <p class="nivel">Para docentes · Carga de contenidos</p>
+  <h1>Insertar un archivo PDF</h1>
+  <p class="entrada">Primero subes el archivo a Studio, luego copias su dirección y al final lo muestras dentro de la página con un bloque de código.</p>
+
+  <p class="ruta-t">Dónde empieza</p>
+  <p class="ruta">Studio <i>›</i> Contenido <i>›</i> Archivos</p>
+
+  <h2>1. Sube el PDF</h2>
+  <ol class="pasos">
+    <li>En Studio, dentro de tu materia, abre el menú <span class="b">Contenido</span> y elige <span class="b">Archivos</span>.
+      <figure class="pantalla"><div class="marco-p"><div class="cab-p"><i></i><i></i><i></i>studio.ol.uvp.mx</div><div class="cuerpo-p">
+        <div class="menu-p"><span class="marca">Contenido ▾</span><span>Configuración ▾</span><span>Herramientas ▾</span></div>
+        <div class="lista-p"><div>Estructura</div><div>Actualizaciones</div><div>Páginas y Recursos</div><div class="sel">Archivos</div></div>
+      </div></div></figure>
+    </li>
+    <li>Da clic en el botón azul <span class="b">Añadir file +</span>, elige el documento en tu computadora y guárdalo.
+      <figure class="pantalla"><div class="marco-p"><div class="cuerpo-p">
+        <div class="fila-p" style="justify-content:space-between"><b style="font-size:15px">Archivos</b><span class="fila-p"><span class="btn-p">Ordenar y filtrar</span><span class="btn-p">Acciones ▾</span><span class="btn-p azul marca">+ Añadir file</span></span></div>
+      </div></div></figure>
+    </li>
+  </ol>
+
+  <h2>2. Copia su dirección</h2>
+  <ol class="pasos">
+    <li>Cuando el archivo termine de cargar, abre sus tres puntos <span class="b">⋮</span> y elige <span class="b">Copiar URL de Studio</span>.
+      <figure class="pantalla"><div class="marco-p"><div class="cuerpo-p">
+        <div class="lista-p"><div class="sel">Copiar URL de Studio</div><div>Copiar URL web</div><div>Bloquear</div><div>Descargar</div><div>Información</div><div>Borrar</div></div>
+      </div></div></figure>
+    </li>
+    <li>Pega esa dirección en un documento de Word o en Notas para no perderla. Se ve así: <code>/static/LISR.pdf</code></li>
+  </ol>
+
+  <h2>3. Muéstralo en la página</h2>
+  <ol class="pasos">
+    <li>Regresa a la sección donde quieres el archivo y elige <span class="b">Añadir nuevo componente</span> <span class="b">Texto</span> <span class="b">Raw HTML</span>.
+      <figure class="pantalla"><div class="marco-p"><div class="cuerpo-p">
+        <div class="etq-p">Añadir nuevo componente</div>
+        <div class="comps"><div class="comp">Avanzado</div><div class="comp">Contenido de librerías</div><div class="comp marca">Texto</div><div class="comp">Respuesta abierta</div><div class="comp">Problemas</div><div class="comp">Video</div><div class="comp">Arrastrar y soltar</div></div>
+      </div></div></figure>
+    </li>
+    <li>Se abre el editor. Borra lo que tenga y pega este código. Cambia las dos partes marcadas por la dirección que copiaste, sin borrar las comillas.
+      <div class="codigo"><pre id="cod">&lt;p&gt;&lt;iframe src="<mark>COLOCAR PDF</mark>" width="100%" height="600" href="<mark>COLOCAR PDF</mark>" internalinstanceid="133"&gt;&lt;/iframe&gt;&lt;/p&gt;</pre></div>
+      <button class="copiar" id="copiar" type="button">Copiar código</button><span class="copiado" id="copiado" aria-live="polite"></span>
+    </li>
+    <li>Así queda con el ejemplo:
+      <div class="codigo"><pre>&lt;p&gt;&lt;iframe src="<mark>/static/LISR.pdf</mark>" width="100%" height="600" href="<mark>/static/LISR.pdf</mark>" internalinstanceid="133"&gt;&lt;/iframe&gt;&lt;/p&gt;</pre></div>
+      Da clic en el botón azul <span class="b">Guardar</span>. El PDF aparece dentro de la página.</li>
+  </ol>
+
+  <div class="nota"><b>No olvides publicar</b>Tus alumnos solo verán el archivo cuando publiques los cambios de la unidad.</div>
+  <div class="consejo"><b>¿Prefieres que te preparemos el código?</b>Envía la dirección del archivo por chat de Gmail o por correo a Diseño Instruccional.</div>
+
+  <p class="ayuda">¿Dudas? Escribe a <b>diseno.instruccional2@uvp.mx</b> o <b>diseno.instruccional3@uvp.mx</b>, o entra a las asesorías en vivo.</p>
+</article>
+
+<script>
+document.getElementById('copiar').addEventListener('click', function(){
+  var txt = document.getElementById('cod').textContent, msg = document.getElementById('copiado');
+  var ok = function(){ msg.textContent = 'Copiado. Ahora cambia COLOCAR PDF.'; };
+  var falla = function(){ var r = document.createRange(); r.selectNodeContents(document.getElementById('cod')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); msg.textContent = 'Selecciónalo y cópialo con Ctrl + C.'; };
+  try { navigator.clipboard.writeText(txt).then(ok, falla); } catch(e){ falla(); }
+});
+</script>
+</body>
+</html>
