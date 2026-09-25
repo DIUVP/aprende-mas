@@ -744,7 +744,7 @@ document.addEventListener("click", e => {
   if(t){ e.preventDefault(); abrirVisor({tipo:"img", src:t.dataset.img, titulo:t.dataset.t}); }
 });
 document.getElementById("visor-x").addEventListener("click", cerrarVisor);
-visor.addEventListener("close", () => { vc.innerHTML = ""; });
+visor.addEventListener("close", () => { if(!visor.open) vc.innerHTML = ""; });
 visor.addEventListener("click", e => { if(e.target===visor) cerrarVisor(); });
 
 // navegación por vistas
