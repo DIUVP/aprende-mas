@@ -6,6 +6,8 @@
     <title>Catálogo de aplicaciones educativas · Aprende Más</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -63,6 +65,43 @@
         .gradient-brand-text{ background:none !important; -webkit-text-fill-color: rgb(var(--b-acento)) !important; color: rgb(var(--b-acento)) !important; }
         .gradient-brand .text-brand-dark, .gradient-brand.text-brand-dark, .gradient-secret .text-white, .gradient-secret.text-white{ color: rgb(var(--b-sobre)) !important; }
         .bg-brand-pink.text-white, .bg-brand-yellow.text-white, .bg-brand-purple.text-white, .bg-brand-violet.text-white, .bg-brand-orange.text-white, .bg-brand-pink .text-white, .bg-brand-yellow .text-white, .gradient-brand .text-white, .bg-brand-pink.text-brand-text, .bg-brand-yellow.text-brand-text { color: rgb(var(--b-sobre)) !important; }
+
+        /* Contraste: texto sobre botones de color sólido (gana a la regla de modo claro) */
+        html body .bg-brand-pink.text-white, html body .gradient-brand .text-white, html body .gradient-secret.text-white, html body .gradient-secret .text-white,
+        html body .hover\:bg-brand-pink:hover, html body [class*="hover:bg-brand-pink"]:hover { color: rgb(var(--b-sobre)) !important; }
+        html body .bg-red-600.text-white, html body .bg-indigo-600.text-white, html body [class*="hover:bg-red-600"]:hover { color:#FFFFFF !important; }
+        /* Al pasar el puntero: "hover:text-white" dejaba texto blanco sobre fondo blanco en modo claro */
+        html:not(.dark) [class*="hover:text-white"]:hover { color:#1D1D1F !important; }
+        html:not(.a11y-x) body [class*="hover:bg-brand-pink"]:hover { background-color: rgb(var(--b-acento)) !important; border-color: rgb(var(--b-acento)) !important; }
+        html:not(.a11y-x) body [class*="hover:bg-brand-pink"]:hover, html:not(.a11y-x) body [class*="hover:bg-brand-pink"]:hover * { color: rgb(var(--b-sobre)) !important; }
+        html:not(.a11y-x) body [class*="hover:bg-red-600"]:hover { background-color:#C81E1E !important; }
+        html:not(.a11y-x) body [class*="hover:bg-red-600"]:hover, html:not(.a11y-x) body [class*="hover:bg-red-600"]:hover * { color:#FFFFFF !important; }
+        html body .bg-red-600 { background-color:#C81E1E !important; }
+        .gradient-secret [class*="text-indigo-1"], .gradient-secret [class*="text-indigo-2"] { color: rgb(var(--b-sobre)) !important; }
+        .gradient-secret .bg-white\/20, .gradient-secret .bg-white\/15 { background: rgb(var(--b-sobre) / .16) !important; border-color: rgb(var(--b-sobre) / .35) !important; }
+        .gradient-secret .bg-white\/15.text-white, .gradient-secret .bg-white\/15 { color: rgb(var(--b-sobre)) !important; }
+
+        /* Colores de estado en modo claro: los tonos originales eran solo para fondo oscuro */
+        html:not(.dark) [class*="text-emerald-"]:not([class*="bg-emerald-5"]):not([class*="bg-emerald-4"]) { color:#16633D !important; }
+        html:not(.dark) [class*="bg-emerald-950"] { background-color:#E4F3EA !important; }
+        html:not(.dark) [class*="border-emerald-5"] { border-color:#8CC9A6 !important; }
+        html:not(.dark) [class*="text-rose-"], html:not(.dark) [class*="text-red-4"] { color:#A61B1B !important; }
+        html:not(.dark) [class*="bg-rose-950"], html:not(.dark) .bg-red-600\/20 { background-color:#FCEAEA !important; }
+        html:not(.dark) [class*="border-rose-5"], html:not(.dark) [class*="border-red-5"] { border-color:#E8A3A3 !important; }
+        html:not(.dark) [class*="text-amber-2"], html:not(.dark) [class*="text-amber-3"] { color:#7A4E00 !important; }
+        html:not(.dark) .gradient-secret [class*="text-amber-3"] { color: rgb(var(--b-sobre)) !important; }
+        html:not(.dark) [class*="bg-amber-400\/"] { background-color:#FFF1CC !important; }
+        html:not(.dark) [class*="text-indigo-1"], html:not(.dark) [class*="text-indigo-2"], html:not(.dark) [class*="text-indigo-3"], html:not(.dark) [class*="text-indigo-4"] { color:#3F2E9E !important; }
+        html:not(.dark) .gradient-secret [class*="text-indigo-1"] { color: rgb(var(--b-sobre)) !important; }
+        html:not(.dark) [class*="bg-indigo-600\/"] { background-color:#ECEAFB !important; }
+        html:not(.dark) [class*="from-indigo-950"], html:not(.dark) [class*="from-purple-950"] { background-image:none !important; background-color:#F6F2FB !important; }
+        html:not(.dark) .text-sky-400 { color:#075985 !important; }
+        html:not(.dark) .text-cyan-300 { color:#0E6173 !important; }
+        html.dark [class*="text-emerald-200"] { color:#A7E3C1 !important; }
+        html.dark [class*="text-rose-200"] { color:#F6B7B7 !important; }
+
+        /* Texto mínimo legible: nada por debajo de 12px */
+        .text-\[9px\], .text-\[10px\], .text-\[11px\] { font-size:12px !important; line-height:1.4 !important; }
     </style>
     <style>        body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif;
@@ -2283,6 +2322,8 @@
                 document.documentElement.classList.add('dark');
                 updateThemeIcon('dark');
             }
+            // El tema o el alto contraste elegidos en el panel de accesibilidad del sitio tienen prioridad
+            if (window.A11Y) { A11Y.aplicar(); updateThemeIcon(document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
         }
 
         function toggleTheme() {
