@@ -58,7 +58,7 @@ code{font-family:"SF Mono",Consolas,monospace;font-size:.9em;font-weight:600}
 /* Reproducción de pantallas: siempre claras, como la plataforma */
 figure.pantalla{margin:10px 0 8px}
 .marco-p{border:1px solid #D2D2D7;border-radius:14px;overflow:hidden;background:#FFFFFF;color:#1F2937;font-size:14px;line-height:1.45;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-.marco-p .cab-p{background:#F3F4F6;border-bottom:1px solid #E5E7EB;padding:7px 12px;font-size:12px;color:#6B7280;display:flex;gap:6px;align-items:center}
+.marco-p .cab-p{background:#F3F4F6;border-bottom:1px solid #E5E7EB;padding:7px 12px;font-size:13px;color:#4B5563;display:flex;gap:6px;align-items:center}
 .marco-p .cab-p i{width:9px;height:9px;border-radius:50%;background:#D1D5DB;display:inline-block}
 .marco-p .cuerpo-p{padding:16px;overflow-x:auto}
 figcaption{font-size:15px;color:var(--texto2);margin-top:8px;text-align:center}
@@ -71,7 +71,7 @@ figcaption{font-size:15px;color:var(--texto2);margin-top:8px;text-align:center}
 .lista-p .sel{background:#1E3A5F;color:#FFFFFF}
 .btn-p{display:inline-flex;align-items:center;gap:6px;border-radius:6px;padding:6px 12px;font-size:13px;font-weight:600;border:1px solid #D1D5DB;background:#FFFFFF;color:#374151}
 .btn-p.azul{background:#1E3A5F;border-color:#1E3A5F;color:#FFFFFF}
-.btn-p.rojo{background:#E5322D;border-color:#E5322D;color:#FFFFFF}
+.btn-p.rojo{background:#C8231F;border-color:#C8231F;color:#FFFFFF}
 .btn-p.verde{background:#0E7C3A;border-color:#0E7C3A;color:#FFFFFF}
 .comps{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;max-width:520px}
 .comp{background:#0E7C3A;color:#FFFFFF;border-radius:6px;padding:10px 6px;text-align:center;font-size:12px;font-weight:600}
