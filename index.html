@@ -59,13 +59,19 @@ p{margin:0}
 /* cabecera */
 header.top{background:var(--hoja);border-bottom:1px solid var(--linea);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
 header.top::after{content:"";display:block;height:4px;background:var(--grad)}
-.top .wrap{display:flex;align-items:center;gap:20px;justify-content:space-between;flex-wrap:wrap;padding-block:12px}
+.top .wrap{display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap;padding-block:12px}
 .marca{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--tinta)}
-.marca svg{flex:none}
+.marca .logo{flex:none;height:34px;width:auto;display:block}
+.marca .logo.o{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .marca .logo.c{display:none}:root:not([data-theme="light"]) .marca .logo.o{display:block}}
+:root[data-theme="dark"] .marca .logo.c{display:none}
+:root[data-theme="dark"] .marca .logo.o{display:block}
+.marca .sep{flex:none;width:1px;height:34px;background:var(--linea)}
+@media (max-width:640px){.marca .logo{height:30px}.marca .sep{height:28px}.marca{gap:10px}}
 .marca .n{font-family:var(--disp);font-weight:700;font-size:21px;letter-spacing:-.01em;display:block;line-height:1.1}
 .marca .s{font-size:13px;color:var(--tinta2);display:block}
-nav.menu{display:flex;gap:4px;flex-wrap:wrap}
-nav.menu a{font-family:var(--disp);font-size:15px;text-decoration:none;color:var(--tinta2);padding:8px 12px;border-radius:8px}
+nav.menu{display:flex;gap:2px;flex-wrap:wrap}
+nav.menu a{font-family:var(--disp);font-size:15px;text-decoration:none;color:var(--tinta2);padding:8px 9px;border-radius:8px}
 nav.menu a:hover{background:var(--violeta-s);color:var(--tinta)}
 nav.menu a[aria-current="page"]{color:var(--tinta);background:var(--violeta-s);font-weight:600}
 nav.menu a.m-alumnos[aria-current="page"]{background:var(--alumno-s)}
@@ -373,9 +379,9 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
 <a class="saltar" href="#contenido">Saltar al contenido</a>
 
 <header class="top"><div class="wrap">
-  <a class="marca" href="#inicio" aria-label="Aprende Más, Centro de Recursos, ir al inicio">
-    <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B3FB8"/><stop offset=".55" stop-color="#C4246B"/><stop offset="1" stop-color="#F0961E"/></linearGradient></defs><rect width="40" height="40" rx="11" fill="url(#g)"/><path d="M10 11 L20 30 L30 11" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 25h8M30 21v8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
-    <span><span class="n">Aprende Más</span><span class="s">Centro de Recursos · Diseño Instruccional UVP</span></span>
+  <a class="marca" href="#inicio" aria-label="Universidad del Valle de Puebla · Aprende Más, Centro de Recursos. Ir al inicio">
+    <img class="logo c" src="img/uvp-logo.png" width="391" height="74" alt="Universidad del Valle de Puebla"><img class="logo o" src="img/uvp-logo-blanco.png" width="391" height="74" alt="Universidad del Valle de Puebla"><span class="sep" aria-hidden="true"></span>
+    <span><span class="n">Aprende Más</span><span class="s">Centro de Recursos · Diseño Instruccional</span></span>
   </a>
   <nav class="menu" aria-label="Principal">
     <a href="#inicio">Inicio</a>
