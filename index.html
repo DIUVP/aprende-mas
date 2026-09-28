@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <base target="_self">
-<title>Aprende Más · Centro de Recursos UVP</title>
+<title>Diseño Instruccional · Centro de Recursos UVP</title>
 <meta name="description" content="Tutoriales, materiales y recursos para docentes, alumnos y coordinaciones de la Universidad del Valle de Puebla.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -379,9 +379,9 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
 <a class="saltar" href="#contenido">Saltar al contenido</a>
 
 <header class="top"><div class="wrap">
-  <a class="marca" href="#inicio" aria-label="Universidad del Valle de Puebla · Aprende Más, Centro de Recursos. Ir al inicio">
+  <a class="marca" href="#inicio" aria-label="Universidad del Valle de Puebla · Diseño Instruccional, Centro de Recursos. Ir al inicio">
     <img class="logo c" src="img/uvp-logo.png" width="391" height="74" alt="Universidad del Valle de Puebla"><img class="logo o" src="img/uvp-logo-blanco.png" width="391" height="74" alt="Universidad del Valle de Puebla"><span class="sep" aria-hidden="true"></span>
-    <span><span class="n">Aprende Más</span><span class="s">Centro de Recursos · Diseño Instruccional</span></span>
+    <span><span class="n">Diseño Instruccional</span><span class="s">Centro de Recursos</span></span>
   </a>
   <nav class="menu" aria-label="Principal">
     <a href="#inicio">Inicio</a>
@@ -1156,7 +1156,7 @@ function ir(){
   const menu = v.startsWith("faq") ? "faq" : v;
   document.querySelectorAll(".vista").forEach(s => s.hidden = s.dataset.vista!==v);
   document.querySelectorAll("nav.menu a").forEach(a => a.getAttribute("href")==="#"+menu ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
-  document.title = (v==="inicio" ? "" : NOMBRES[v] + " · ") + "Aprende Más · Centro de Recursos UVP";
+  document.title = (v==="inicio" ? "" : NOMBRES[v] + " · ") + "Diseño Instruccional · Centro de Recursos UVP";
   if(window.A11Y) A11Y.parar();
   const destino = h!==v ? document.getElementById(h) : null;
   if(destino) destino.scrollIntoView({block:"start"}); else window.scrollTo(0,0);
