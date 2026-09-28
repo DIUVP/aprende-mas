@@ -94,3 +94,8 @@ figcaption{font-size:15px;color:var(--texto2);margin-top:8px;text-align:center}
 .ayuda{margin-top:44px;padding-top:20px;border-top:1px solid var(--linea2);font-size:17px;color:var(--texto2)}
 .ayuda b{color:var(--texto)}
 @media (max-width:560px){ body{font-size:18px} h1{font-size:28px} .entrada{font-size:19px} }
+
+/* Versión solo para docentes (fichas abiertas con ?p=docentes) */
+[data-docentes]{display:none}
+.solo-docentes [data-general]{display:none}
+.solo-docentes [data-docentes]{display:inline}
