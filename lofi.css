@@ -8,7 +8,7 @@
 .td-plato{position:absolute;left:6%;top:8%;width:74%;aspect-ratio:1;border-radius:50%;background:#d8cdd8;box-shadow:inset 0 0 0 4px #c6b9c8,0 3px 8px #0002}
 .td-disco{position:absolute;inset:5%;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,#26222c 0 2px,#1b1820 2px 4px);box-shadow:inset 0 0 0 2px #0006,0 0 0 1px #0004}
 .td-disco::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,#ffffff00 0 12%,#ffffff1f 16%,#ffffff00 22%,#ffffff00 60%,#ffffff17 64%,#ffffff00 70%)}
-.td-disco.gira{animation:td-gira 1.8s linear infinite}
+.td-disco.gira{animation:td-gira 5s linear infinite}
 .td-etq{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle,var(--td2) 0 18%,var(--td1) 19%);display:grid;place-items:center;align-content:center;text-align:center;color:#fff;font-family:var(--disp);line-height:1}
 .td-etq b{font-size:clamp(13px,2.4vw,20px);letter-spacing:.04em}
 .td-etq span{font-size:clamp(9px,1.3vw,11px);opacity:.9}
@@ -34,7 +34,7 @@
 html.a11y-movimiento .td-disco.gira{animation:none}
 
 /* ---------- Retro (inspirada en los reproductores de música de los 90) ---------- */
-.rt{width:min(600px,100%);border-radius:6px;background:linear-gradient(#4a4a5a,#2d2d38);border:1px solid #15151c;box-shadow:inset 1px 1px 0 #7a7a8c,inset -1px -1px 0 #121218,0 10px 28px rgba(20,17,29,.35);color:#d6d6e0;font-family:Tahoma,Verdana,"Segoe UI",sans-serif;overflow:hidden}
+.rt{width:100%;border-radius:6px;background:linear-gradient(#4a4a5a,#2d2d38);border:1px solid #15151c;box-shadow:inset 1px 1px 0 #7a7a8c,inset -1px -1px 0 #121218,0 10px 28px rgba(20,17,29,.35);color:#d6d6e0;font-family:Tahoma,Verdana,"Segoe UI",sans-serif;overflow:hidden}
 .rt-barra{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;background:linear-gradient(90deg,#3c2a6e,#6a3c9a 50%,#3c2a6e);font-size:11px;font-weight:700;letter-spacing:.12em;color:#f2ecff}
 .rt-barra i{display:inline-block;width:9px;height:9px;margin-left:4px;background:#cfc8e0;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #6a6480}
 .rt-cuerpo{padding:10px;display:grid;gap:10px}
@@ -61,3 +61,67 @@ html.a11y-movimiento .td-disco.gira{animation:none}
 @keyframes rt-corre{to{transform:translateX(-100%)}}
 @media (prefers-reduced-motion:reduce){.rt-marquesina span.corre{animation:none;padding-left:0}}
 html.a11y-movimiento .rt-marquesina span.corre{animation:none;padding-left:0}
+
+/* listas de pistas */
+.td-pistas{grid-column:1/-1;display:grid;gap:8px}
+.td-lista,.rt-pistas,.ar-lista{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.td-lista{grid-template-columns:repeat(auto-fill,minmax(min(230px,100%),1fr))}
+.td-lista button{font:inherit;width:100%;text-align:left;display:flex;gap:10px;align-items:center;background:var(--hoja);color:var(--tinta);border:1px solid var(--linea);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:15px}
+.td-lista button span{font-family:var(--disp);font-size:13px;color:var(--tinta2);font-variant-numeric:tabular-nums}
+.td-lista button[aria-current="true"]{border-color:var(--violeta);background:var(--violeta-s);font-weight:600}
+.td-lista button i,.rt-pistas button i,.ar-lista button i{font-style:normal;margin-left:auto;color:var(--magenta)}
+
+/* Retro a todo lo ancho: reproductor a la izquierda, discos y pistas a la derecha */
+.rt-main{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+@media (max-width:760px){.rt-main{grid-template-columns:1fr}}
+.rt-main .rt-lista{border-top:0;border-left:2px solid #15151c;align-content:start}
+@media (max-width:760px){.rt-main .rt-lista{border-left:0;border-top:2px solid #15151c}}
+.rt-tit{margin:6px 8px 2px;font-family:"Courier New",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;color:#9fe3b6}
+.rt-pistas button{font:inherit;font-family:"Courier New",ui-monospace,monospace;font-size:13px;width:100%;display:flex;gap:8px;text-align:left;background:none;border:0;color:#5BE38A;padding:4px 8px;cursor:pointer}
+.rt-pistas button[aria-current="true"]{background:#1f3a8a;color:#fff}
+.rt-pistas button:hover{background:#13261a}
+.rt-espectro{height:84px}
+
+/* ---------- Arcade: máquina de videojuegos ---------- */
+.ar{--neon:#F49AC1;position:relative;display:grid;gap:14px;padding:18px;border-radius:26px 26px 18px 18px;background:linear-gradient(160deg,#3A1D6E,#20103F 55%,#160A2E);box-shadow:inset 0 0 0 3px #5B33A8,inset 0 0 0 7px #160A2E,0 14px 34px rgba(20,10,40,.4);color:#F3ECFF}
+.ar-marq{text-align:center;padding:12px 10px;border-radius:14px;background:linear-gradient(90deg,#F07AA8,#F6E27A,#8AD1F5,#B7A6F2,#F07AA8);background-size:300% 100%;color:#1B0F3A;font-family:"Press Start 2P",monospace;box-shadow:0 0 18px #F49AC188;animation:ar-neon 10s linear infinite}
+.ar-marq b{display:block;font-size:clamp(16px,3vw,26px);letter-spacing:.08em}
+.ar-marq span{font-size:clamp(8px,1.2vw,11px);letter-spacing:.2em}
+.ar-bisel{padding:14px;border-radius:18px;background:#0E0A1C;box-shadow:inset 0 0 0 4px #2A1A55,inset 0 0 30px #000}
+.ar-pant{display:block;width:100%;aspect-ratio:16/7;border-radius:14px;image-rendering:pixelated;background:#0B0820}
+.ar-bisel{position:relative}
+.ar-bisel::after{content:"";position:absolute;inset:14px;border-radius:14px;pointer-events:none;background:repeating-linear-gradient(#ffffff0a 0 2px,transparent 2px 4px);box-shadow:inset 0 0 40px #00000080}
+.ar-panel{display:flex;flex-wrap:wrap;gap:18px 30px;align-items:center;justify-content:space-between;padding:16px 20px;border-radius:16px;background:linear-gradient(#2B1858,#1C0F3C);box-shadow:inset 0 3px 0 #ffffff14}
+.ar-joy{display:flex;align-items:center;gap:10px}
+.ar-joy button{font:inherit;font-family:"Press Start 2P",monospace;font-size:13px;width:44px;height:44px;border-radius:10px;border:0;cursor:pointer;background:#3B2470;color:#F6E27A;box-shadow:0 4px 0 #140A2B}
+.ar-joy button:active{transform:translateY(3px);box-shadow:0 1px 0 #140A2B}
+.ar-palanca{position:relative;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle,#140A2B 0 30%,#2E1A5C 31%)}
+.ar-palanca i{position:absolute;left:50%;bottom:50%;width:8px;height:30px;margin-left:-4px;background:#C9C1D9;border-radius:4px;transform-origin:50% 100%}
+.ar-palanca i::after{content:"";position:absolute;left:50%;top:-14px;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FF9FC7,#E0457E)}
+.ar-bots{display:flex;gap:18px;align-items:flex-start}
+.ar-bot{display:grid;justify-items:center;gap:6px}
+.ar-bot small{font-family:"Press Start 2P",monospace;font-size:8px;letter-spacing:.06em;color:#CFC4EA}
+.ar-b{font:inherit;font-family:"Press Start 2P",monospace;font-size:14px;width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;color:#1B0F3A;box-shadow:0 6px 0 #0006,inset 0 -6px 0 #0003,inset 0 4px 0 #fff6}
+.ar-b:active{transform:translateY(4px);box-shadow:0 2px 0 #0006,inset 0 -3px 0 #0003}
+.ar-a{background:#8EE6A6}.ar-bb{background:#F49AC1}.ar-c{background:#F6E27A}
+.ar-vol{display:flex;align-items:center;gap:10px;font-family:"Press Start 2P",monospace;font-size:9px;color:#CFC4EA}
+.ar-vol input{accent-color:#F49AC1;width:130px}
+.ar-moneda{display:flex;align-items:center;gap:10px;font-family:"Press Start 2P",monospace;font-size:8px;color:#F6E27A}
+.ar-moneda i{width:12px;height:30px;border-radius:3px;background:#0B0820;box-shadow:inset 0 0 0 2px #F6E27A88,0 0 10px #F6E27A44}
+.ar-niveles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:10px}
+.ar-niveles button{font:inherit;text-align:left;cursor:pointer;display:grid;gap:6px;padding:12px;border-radius:12px;background:#24124A;color:#F3ECFF;border:2px solid #3E2878}
+.ar-niveles button span{font-family:"Press Start 2P",monospace;font-size:9px;color:var(--n1)}
+.ar-niveles button b{font-family:var(--disp);font-size:15px;font-weight:600}
+.ar-niveles button[aria-pressed="true"]{border-color:var(--n1);box-shadow:0 0 14px color-mix(in srgb,var(--n1) 55%,transparent)}
+.ar-pistas{display:grid;gap:8px}
+.ar-pistas>span{font-family:"Press Start 2P",monospace;font-size:9px;letter-spacing:.08em;color:#CFC4EA}
+.ar-lista{grid-template-columns:repeat(auto-fill,minmax(min(230px,100%),1fr))}
+.ar-lista button{font:inherit;width:100%;display:flex;gap:10px;align-items:center;text-align:left;cursor:pointer;background:#1A0D38;color:#E9E1FA;border:1px solid #3E2878;border-radius:8px;padding:8px 10px;font-size:14px}
+.ar-lista button span{font-family:"Press Start 2P",monospace;font-size:9px;color:#8AD1F5}
+.ar-lista button[aria-current="true"]{border-color:#F6E27A;color:#fff}
+.ar button:focus-visible,.ar input:focus-visible{outline:3px solid #F6E27A;outline-offset:2px}
+@keyframes ar-neon{to{background-position:300% 0}}
+@media (prefers-reduced-motion:reduce){.ar-marq{animation:none}}
+html.a11y-movimiento .ar-marq{animation:none}
+@media (max-width:640px){.ar{padding:12px}.ar-panel{justify-content:center}.ar-b{width:50px;height:50px}}
+.rt-lista .rt-pistas button{justify-content:flex-start}

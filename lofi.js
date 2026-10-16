@@ -3,25 +3,26 @@
    ruido de vinilo y un ligero vaivén de cinta. Cada pista se arma al momento y nunca se repite igual.
    Dos máscaras para elegir: Tocadiscos y Retro (inspirada en los reproductores de música de los 90). */
 (function(){
+  var RAIZ = (document.currentScript && document.currentScript.src || "").replace(/lofi.js.*$/, "");
   var cont = document.getElementById("bienestar-lofi"); if(!cont || !window.DIAudio) return;
   var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   var reduce = DIAudio.reduce;
 
   /* ---------- discos: cada uno con su tempo, progresiones y escala para la melodía ---------- */
   var DISCOS = [
-    {k:"cafe", n:"Café", d:"Tarde tranquila con una taza en la mano.", bpm:80, swing:.17, color:"#E9A178", color2:"#F6D3B8",
+    {k:"cafe", n:"Café entre clases", d:"Diez minutos de calma antes del siguiente grupo.", pistas:["Pizarrón en blanco","Receso de diez minutos","Tiza y café","La pregunta de la última fila","Lista de asistencia","Hora libre"], bpm:80, swing:.17, color:"#E9A178", color2:"#F6D3B8",
      prog:[[[53,57,60,64],41],[[52,55,59,62],40],[[50,53,57,60],38],[[48,52,55,59],36]],
      prog2:[[[50,53,57,60],38],[[55,59,62,65],43],[[48,52,55,59],36],[[57,60,64,67],45]],
      esc:[65,67,69,72,74,77,79], lluvia:false},
-    {k:"lluvia", n:"Lluvia en la ventana", d:"Gotas suaves de fondo y acordes que flotan.", bpm:72, swing:.15, color:"#7FB0D9", color2:"#CFE3F3",
+    {k:"lluvia", n:"Lluvia sobre la biblioteca", d:"Gotas en la ventana de la sala de lectura.", pistas:["Silencio en la sala de lectura","Fichas bibliográficas","Página doblada","Notas al margen","Estante de consulta","Préstamo a domicilio"], bpm:72, swing:.15, color:"#7FB0D9", color2:"#CFE3F3",
      prog:[[[57,60,64,67,71],45],[[53,57,60,64],41],[[48,52,55,59],36],[[55,59,62,64],43]],
      prog2:[[[53,57,60,64],41],[[52,55,59,62],40],[[57,60,64,67],45],[[55,59,62,65],43]],
      esc:[69,72,74,76,79,81,84], lluvia:true},
-    {k:"noche", n:"Noche de estudio", d:"Jazz bajito para concentrarte.", bpm:76, swing:.19, color:"#8E7BD8", color2:"#D9D0F5",
+    {k:"noche", n:"Apuntes a medianoche", d:"Jazz bajito para concentrarte y repasar.", pistas:["Subrayado amarillo","Mapa conceptual","Una taza más","Resumen de la unidad","Repaso final","La idea de las dos de la mañana"], bpm:76, swing:.19, color:"#8E7BD8", color2:"#D9D0F5",
      prog:[[[50,53,57,60,64],38],[[53,59,64],43],[[52,55,59,62],36],[[55,61,64,70],45]],
      prog2:[[[53,57,60,64],41],[[52,56,59,62],40],[[50,53,57,60],38],[[53,59,64],43]],
      esc:[64,67,69,72,74,76,79], lluvia:false},
-    {k:"domingo", n:"Domingo", d:"Luz de mañana y nada de prisa.", bpm:84, swing:.16, color:"#E58FB4", color2:"#F7D4E3",
+    {k:"domingo", n:"Planeando el lunes", d:"Luz de domingo para preparar la semana sin prisa.", pistas:["Planeación didáctica","Objetivo de aprendizaje","Secuencia didáctica","Rúbrica en borrador","Retroalimentación","Primer día de clases"], bpm:84, swing:.16, color:"#E58FB4", color2:"#F7D4E3",
      prog:[[[51,55,58,62],39],[[48,51,55,58],36],[[53,56,60,63],41],[[50,56,58,62],34]],
      prog2:[[[53,56,60,63],41],[[50,56,58,62],34],[[51,55,58,62],39],[[48,51,55,58],36]],
      esc:[63,65,67,70,72,75,77], lluvia:false}
@@ -110,12 +111,13 @@
       L.paso++; L.tSig += s16;
       if(L.paso % 16 === 0){
         L.compas++;
-        if(L.compas % 8 === 0){ L.var2 = !L.var2; L.pista++; pinta(); }
+        if(L.compas % 8 === 0){ L.var2 = !L.var2; L.pista++; pinta(); DIAudio.estado(); }
         L.sinBateria = L.compas % 16 === 15 && Math.random() < .7;
       }
     }
   }
-  function nombre(){ return DISCOS[L.d].n; }
+  function tituloPista(){ var D = DISCOS[L.d]; return D.pistas[(L.pista - 1) % D.pistas.length]; }
+  function nombre(){ return tituloPista(); }
   function reproduce(){
     if(!prepara()) return;
     DIAudio.pausarJuego();
@@ -131,70 +133,142 @@
   }
   function detener(sinEstado){ pausa(true); L.transcurrido = 0; L.pista = 1; L.compas = 0; pinta(); if(!sinEstado) DIAudio.estado(); }
   function eligeDisco(i){ var seguia = L.on; if(seguia) pausa(true); L.d = (i + DISCOS.length) % DISCOS.length; L.transcurrido = 0; L.pista = 1; L.compas = 0; L.var2 = false; if(seguia) reproduce(); else pinta(); }
-  function siguiente(){ if(L.on){ L.var2 = !L.var2; L.compas = 0; L.pista++; pinta(); } else eligeDisco(L.d + 1); }
+  function siguiente(){ L.var2 = !L.var2; L.compas = 0; L.pista++; pinta(); DIAudio.estado(); }
+  function eligePista(i){ L.pista = i + 1; L.var2 = i % 2 === 1; L.compas = 0; if(!L.on) reproduce(); else { pinta(); DIAudio.estado(); } }
 
   /* ---------- máscaras ---------- */
+  var MASCARAS = [["tocadiscos", "Tocadiscos"], ["retro", "Retro"], ["arcade", "Arcade"]];
   var mascara = "tocadiscos";
-  try{ var m = localStorage.getItem("di-lofi-mascara"); if(m === "retro" || m === "tocadiscos") mascara = m; }catch(e){}
+  try{ var m = localStorage.getItem("di-lofi-mascara"); if(MASCARAS.some(function(x){ return x[0] === m; })) mascara = m; }catch(e){}
   function tiempo(){ var s = L.on && ctx ? ctx.currentTime - L.inicio : L.transcurrido; s = Math.max(0, Math.floor(s)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
   var I = {play:"▶", pausa:"❚❚", sig:"⏭", ant:"⏮", stop:"■"};
+  function listaPistas(D, clase){
+    return '<ol class="' + clase + '" aria-label="Pistas de ' + esc(D.n) + '">' + D.pistas.map(function(p, i){ var act = i === (L.pista - 1) % D.pistas.length;
+      return '<li><button type="button" data-lofi="pista" data-i="' + i + '"' + (act ? ' aria-current="true"' : '') + '><span>' + String(i + 1).padStart(2, "0") + '</span>' + esc(p) + (act && L.on ? '<i aria-hidden="true">♪</i>' : '') + '</button></li>'; }).join("") + '</ol>';
+  }
   function tocadiscosHTML(D){
     return '<div class="td" style="--td1:' + D.color + ';--td2:' + D.color2 + '">' +
       '<div class="td-base"><div class="td-plato"><div class="td-disco' + (L.on ? " gira" : "") + '"><div class="td-etq"><b>DI</b><span>lo-fi</span></div></div></div>' +
       '<svg class="td-brazo' + (L.on ? " sobre" : "") + '" viewBox="0 0 100 220" aria-hidden="true"><circle cx="70" cy="22" r="16" fill="#cfc8da" stroke="#9a90ab" stroke-width="3"/><circle cx="70" cy="22" r="6" fill="#7d7390"/><path d="M70 22 L70 150 L46 196" fill="none" stroke="#b8afc6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="34" y="188" width="22" height="16" rx="3" transform="rotate(-30 45 196)" fill="#6f6680"/></svg>' +
       '<div class="td-perillas" aria-hidden="true"><i></i><i></i></div></div>' +
-      '<div class="td-info"><span class="td-k">' + (L.on ? "Sonando" : "Disco listo") + '</span><b>' + esc(D.n) + '</b><span>Pista ' + L.pista + ' · ' + D.bpm + ' BPM · <span data-lofi="tiempo">' + tiempo() + '</span></span></div>' +
+      '<div class="td-info"><span class="td-k">' + (L.on ? "Sonando" : "Disco listo") + ' · ' + esc(D.n) + '</span><b>' + esc(tituloPista()) + '</b><span>Pista ' + L.pista + ' · ' + D.bpm + ' BPM · <span data-lofi="tiempo">' + tiempo() + '</span></span></div>' +
       '<div class="td-ctl"><button type="button" class="accion" data-lofi="play">' + (L.on ? I.pausa + " Pausa" : I.play + " Reproducir") + '</button>' +
       '<button type="button" class="accion sec" data-lofi="sig">' + I.sig + ' Otra pista</button>' +
       '<label class="td-vol">Volumen <input type="range" min="0" max="100" value="' + Math.round(L.vol * 100) + '" data-lofi="vol"></label></div>' +
+      '<div class="td-pistas"><span class="td-k">Lado A · ' + esc(D.n) + '</span>' + listaPistas(D, "td-lista") + '</div>' +
       '<div class="td-discos" role="group" aria-label="Elige un disco">' + DISCOS.map(function(x, i){ return '<button type="button" class="td-funda" data-lofi="disco" data-i="' + i + '" aria-pressed="' + (i === L.d) + '" style="--f1:' + x.color + ';--f2:' + x.color2 + '"><i aria-hidden="true"></i><b>' + esc(x.n) + '</b><span>' + esc(x.d) + '</span></button>'; }).join("") + '</div></div>';
   }
   function retroHTML(D){
     return '<div class="rt" role="group" aria-label="Reproductor retro">' +
       '<div class="rt-barra"><span>DISEÑO INSTRUCCIONAL · LO-FI</span><span aria-hidden="true"><i></i><i></i><i></i></span></div>' +
-      '<div class="rt-cuerpo"><div class="rt-lcd"><div class="rt-fila"><span class="rt-estado">' + (L.on ? "▶" : "❚❚") + '</span><span class="rt-tiempo" data-lofi="tiempo">' + tiempo() + '</span></div>' +
-        '<div class="rt-marquesina"><span' + (L.on && !reduce() ? ' class="corre"' : '') + '>' + esc((L.d + 1) + ". " + D.n + " · pista " + L.pista + " · lo-fi generativo de Diseño Instruccional · ") + '</span></div>' +
+      '<div class="rt-main"><div class="rt-cuerpo"><div class="rt-lcd"><div class="rt-fila"><span class="rt-estado">' + (L.on ? "▶" : "❚❚") + '</span><span class="rt-tiempo" data-lofi="tiempo">' + tiempo() + '</span></div>' +
+        '<div class="rt-marquesina"><span' + (L.on && !reduce() ? ' class="corre"' : '') + '>' + esc(String(L.pista).padStart(2, "0") + ". " + tituloPista() + " · " + D.n + " · lo-fi generativo de Diseño Instruccional · ") + '</span></div>' +
         '<div class="rt-datos"><span>' + D.bpm + ' BPM</span><span>LO-FI</span><span>GENERATIVO</span></div>' +
         '<canvas class="rt-espectro" data-lofi="espectro" aria-hidden="true"></canvas></div>' +
       '<div class="rt-botones"><button type="button" data-lofi="ant" aria-label="Disco anterior">' + I.ant + '</button><button type="button" data-lofi="play" aria-label="' + (L.on ? "Pausa" : "Reproducir") + '">' + (L.on ? I.pausa : I.play) + '</button><button type="button" data-lofi="stop" aria-label="Detener">' + I.stop + '</button><button type="button" data-lofi="sig" aria-label="Otra pista">' + I.sig + '</button>' +
         '<label class="rt-vol"><span>VOL</span><input type="range" min="0" max="100" value="' + Math.round(L.vol * 100) + '" data-lofi="vol" aria-label="Volumen"></label></div></div>' +
-      '<div class="rt-lista" role="group" aria-label="Lista de discos">' + DISCOS.map(function(x, i){ return '<button type="button" data-lofi="disco" data-i="' + i + '" aria-pressed="' + (i === L.d) + '"><span>' + (i + 1) + '. ' + esc(x.n) + '</span><span>' + x.bpm + ' BPM</span></button>'; }).join("") + '</div></div>';
+      '<div class="rt-lista"><p class="rt-tit">DISCOS</p><div role="group" aria-label="Lista de discos">' + DISCOS.map(function(x, i){ return '<button type="button" data-lofi="disco" data-i="' + i + '" aria-pressed="' + (i === L.d) + '"><span>' + (i + 1) + '. ' + esc(x.n) + '</span><span>' + x.bpm + ' BPM</span></button>'; }).join("") + '</div>' +
+        '<p class="rt-tit">PISTAS</p>' + listaPistas(D, "rt-pistas") + '</div></div></div>';
   }
+  function arcadeHTML(D){
+    return '<div class="ar" style="--ar1:' + D.color + '">' +
+      '<div class="ar-marq"><b>DI ARCADE</b><span>LO-FI GENERATIVO</span></div>' +
+      '<div class="ar-bisel"><canvas class="ar-pant" data-lofi="arcade" role="img" aria-label="Pantalla de la máquina: ' + esc(tituloPista()) + ', ' + (L.on ? "sonando" : "en pausa") + '"></canvas></div>' +
+      '<div class="ar-panel">' +
+        '<div class="ar-joy" role="group" aria-label="Palanca: cambia de nivel"><button type="button" data-lofi="ant" aria-label="Nivel anterior">◀</button><span class="ar-palanca" aria-hidden="true"><i></i></span><button type="button" data-lofi="dsig" aria-label="Nivel siguiente">▶</button></div>' +
+        '<div class="ar-bots"><span class="ar-bot"><button type="button" class="ar-b ar-a" data-lofi="play" aria-label="' + (L.on ? "Pausa" : "Jugar") + '">A</button><small>' + (L.on ? "PAUSA" : "JUGAR") + '</small></span>' +
+          '<span class="ar-bot"><button type="button" class="ar-b ar-bb" data-lofi="sig" aria-label="Otra pista">B</button><small>OTRA PISTA</small></span>' +
+          '<span class="ar-bot"><button type="button" class="ar-b ar-c" data-lofi="stop" aria-label="Detener">C</button><small>SALIR</small></span></div>' +
+        '<label class="ar-vol"><span>VOL</span><input type="range" min="0" max="100" value="' + Math.round(L.vol * 100) + '" data-lofi="vol" aria-label="Volumen"></label>' +
+        '<div class="ar-moneda" aria-hidden="true"><i></i><span>JUEGO LIBRE</span></div></div>' +
+      '<div class="ar-niveles" role="group" aria-label="Elige un nivel">' + DISCOS.map(function(x, i){ return '<button type="button" data-lofi="disco" data-i="' + i + '" aria-pressed="' + (i === L.d) + '" style="--n1:' + x.color + '"><span>NIVEL ' + (i + 1) + '</span><b>' + esc(x.n) + '</b></button>'; }).join("") + '</div>' +
+      '<div class="ar-pistas"><span>PISTAS DEL NIVEL ' + (L.d + 1) + '</span>' + listaPistas(D, "ar-lista") + '</div></div>';
+  }
+  var fuenteArcade = false;
   function pinta(){
     var D = DISCOS[L.d], zona = cont.querySelector(".lofi-zona"); if(!zona) return;
-    zona.innerHTML = mascara === "retro" ? retroHTML(D) : tocadiscosHTML(D);
+    if(mascara === "arcade" && !fuenteArcade){ fuenteArcade = true; var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"; document.head.appendChild(l); }
+    zona.innerHTML = mascara === "retro" ? retroHTML(D) : mascara === "arcade" ? arcadeHTML(D) : tocadiscosHTML(D);
     cont.querySelectorAll("[data-masc]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.masc === mascara); });
-    var c = zona.querySelector("[data-lofi=espectro]"); if(c){ var r = c.getBoundingClientRect(), dpr = devicePixelRatio || 1; c.width = r.width * dpr; c.height = r.height * dpr; }
-    if(L.on) animar(); else dibujaEspectro(true);
+    zona.querySelectorAll("canvas").forEach(function(c){ var r = c.getBoundingClientRect(), dpr = devicePixelRatio || 1; c.width = Math.max(1, r.width * dpr); c.height = Math.max(1, r.height * dpr); });
+    if(L.on) animar(); else { dibujaEspectro(true); dibujaArcade(true); }
   }
   var raf = null;
+  function niveles(n){
+    var datos = new Uint8Array(analizador ? analizador.frequencyBinCount : 64), out = []; if(analizador && L.on) analizador.getByteFrequencyData(datos);
+    for(var i = 0; i < n; i++) out.push(L.on ? datos[Math.min(datos.length - 1, Math.floor(Math.pow(i / n, 1.6) * datos.length))] / 255 : 0);
+    return out;
+  }
   function dibujaEspectro(vacio){
     var c = cont.querySelector("[data-lofi=espectro]"); if(!c) return; var g = c.getContext("2d"), W = c.width, H = c.height; g.clearRect(0, 0, W, H);
-    var n = 24, datos = new Uint8Array(analizador ? analizador.frequencyBinCount : 64); if(analizador && !vacio) analizador.getByteFrequencyData(datos);
-    var w = W / n;
-    for(var i = 0; i < n; i++){ var v = vacio ? 0 : datos[Math.min(datos.length - 1, Math.floor(Math.pow(i / n, 1.6) * datos.length))] / 255, h = Math.max(H * .04, v * H);
+    var n = 32, v = niveles(n), w = W / n;
+    for(var i = 0; i < n; i++){ var h = Math.max(H * .04, (vacio ? 0 : v[i]) * H);
       for(var y = 0; y < h; y += H / 14){ var f = y / H; g.fillStyle = f > .75 ? "#E8E36A" : f > .5 ? "#B6E36A" : "#5BE38A"; g.fillRect(i * w + 1, H - y - H / 14 + 1, w - 2, H / 14 - 2); } }
+  }
+  /* pantalla de la máquina: estrellas, cuadrícula retro, ecualizador de bloques y Sable en pixel art */
+  var estrellas = [], spr = {}, pix = {};
+  ["a", "b"].forEach(function(k){ var i = new Image(); i.src = RAIZ + "img/sable-aud-" + k + ".png"; spr[k] = i; });
+  function pixelado(k){
+    if(pix[k]) return pix[k]; var i = spr[k]; if(!i || !i.complete || !i.naturalWidth) return null;
+    var cv = document.createElement("canvas"); cv.width = cv.height = 56; var g = cv.getContext("2d"); g.imageSmoothingEnabled = true; g.drawImage(i, 0, 0, 56, 56); return (pix[k] = cv);
+  }
+  function dibujaArcade(quieto){
+    var c = cont.querySelector("[data-lofi=arcade]"); if(!c) return; var g = c.getContext("2d"), W = c.width, H = c.height, t = performance.now() / 1000, D = DISCOS[L.d], beat = t * D.bpm / 60;
+    var px = Math.max(2, Math.round(W / 320));
+    g.imageSmoothingEnabled = false; g.fillStyle = "#0B0820"; g.fillRect(0, 0, W, H);
+    if(!estrellas.length) for(var s = 0; s < 70; s++) estrellas.push({x:Math.random(), y:Math.random() * .62, v:.02 + Math.random() * .08, c:["#F6E27A", "#9FD8FF", "#F49AC1", "#B7A6F2"][s % 4]});
+    estrellas.forEach(function(e){ if(L.on && !reduce() && !quieto) e.x -= e.v / 60; if(e.x < 0) e.x += 1; g.fillStyle = e.c; g.fillRect(Math.round(e.x * W / px) * px, Math.round(e.y * H / px) * px, px, px); });
+    // sol de atardecer y cuadrícula en perspectiva
+    var hz = H * .62; var sol = g.createLinearGradient(0, hz - H * .3, 0, hz); sol.addColorStop(0, "#F6E27A"); sol.addColorStop(1, "#F07AA8");
+    g.fillStyle = sol; for(var r = 0; r < H * .26; r += px * 3){ var w2 = Math.sqrt(Math.max(0, (H * .26) * (H * .26) - (H * .26 - r) * (H * .26 - r))); if((r / px) % 9 < 6) g.fillRect(W * .72 - w2, hz - r - px * 2, w2 * 2, px * 2); }
+    g.fillStyle = "#1B0F3A"; g.fillRect(0, hz, W, H - hz);
+    g.strokeStyle = "#E85FB0"; g.lineWidth = px;
+    var avance = (L.on && !reduce() && !quieto) ? (beat % 1) : 0;
+    for(var k = 0; k < 9; k++){ var f = (k + avance) / 9, y = hz + (H - hz) * f * f; g.beginPath(); g.moveTo(0, Math.round(y)); g.lineTo(W, Math.round(y)); g.stroke(); }
+    for(var j = -8; j <= 8; j++){ g.beginPath(); g.moveTo(W / 2 + j * W * .02, hz); g.lineTo(W / 2 + j * W * .16, H); g.stroke(); }
+    // ecualizador de bloques
+    var n = 16, v = niveles(n), bw = Math.floor(W * .5 / n / px) * px, bx = W * .44;
+    for(var i = 0; i < n; i++){ var alto = Math.round((quieto ? .05 : Math.max(.05, v[i])) * 10); for(var b = 0; b < alto; b++){ g.fillStyle = b > 7 ? "#F6E27A" : b > 4 ? "#F49AC1" : "#8AD1F5"; g.fillRect(bx + i * bw, hz - px * 3 - b * px * 3, bw - px, px * 2); } }
+    // Sable bailando en pixel art
+    var cuadro = pixelado(L.on && Math.floor(beat) % 4 !== 3 ? "a" : "b"), tam = Math.round(H * .5 / px) * px, sx = W * .06, sy = H - tam - (L.on && !reduce() ? Math.abs(Math.sin(beat * Math.PI)) * px * 4 : 0);
+    if(cuadro) g.drawImage(cuadro, Math.round(sx), Math.round(sy), tam, tam);
+    // textos
+    var fz = Math.max(8, Math.round(W / 46)); g.font = fz + 'px "Press Start 2P", monospace'; g.textBaseline = "top";
+    g.fillStyle = "#F6E27A"; g.textAlign = "left"; g.fillText("NIVEL " + (L.d + 1) + "-" + L.pista, px * 6, px * 6);
+    g.textAlign = "right"; g.fillStyle = "#9FD8FF"; g.fillText("TIEMPO " + tiempo(), W - px * 6, px * 6);
+    g.textAlign = "center"; g.fillStyle = "#FFFFFF"; g.fillText(tituloPista().normalize("NFD").replace(/[0300-036f]/g, "").toUpperCase(), W / 2, px * 6 + fz * 2);
+    if(!L.on && Math.floor(t * 2) % 2 === 0){ g.fillStyle = "#F49AC1"; g.fillText("PRESIONA A PARA JUGAR", W / 2, H * .32); }
+    if(L.on && !reduce() && !quieto){ g.fillStyle = "#F6E27A"; g.fillText("♪", sx + tam * .95, sy + tam * .1 - (beat % 1) * px * 8); }
   }
   function animar(){
     if(raf) return;
-    (function paso(){ raf = null; if(!L.on) return; cont.querySelectorAll("[data-lofi=tiempo]").forEach(function(e){ e.textContent = tiempo(); }); dibujaEspectro(false); if(cont.offsetParent !== null) raf = requestAnimationFrame(paso); else raf = setTimeout(function(){ raf = null; animar(); }, 1000); })();
+    (function paso(){
+      raf = null;
+      cont.querySelectorAll("[data-lofi=tiempo]").forEach(function(e){ e.textContent = tiempo(); });
+      dibujaEspectro(!L.on); dibujaArcade(!L.on);
+      var visible = cont.offsetParent !== null;
+      if(L.on || mascara === "arcade") raf = visible ? requestAnimationFrame(paso) : setTimeout(function(){ raf = null; animar(); }, 1000);
+    })();
   }
 
   /* ---------- armado ---------- */
   cont.innerHTML = '<div class="sec-t"><div><h2>Reproductor lo-fi</h2><p>Música chill para trabajar: acordes de jazz, una batería suave y el crujido de un disco de vinilo. Cada pista se crea al momento en tu navegador y nunca se repite igual.</p></div>' +
-    '<div><span class="k-m">Máscara</span><div class="opc" role="group" aria-label="Máscara del reproductor"><button type="button" data-masc="tocadiscos" aria-pressed="true">Tocadiscos</button><button type="button" data-masc="retro" aria-pressed="false">Retro</button></div></div></div>' +
+    '<div><span class="k-m">Máscara</span><div class="opc" role="group" aria-label="Máscara del reproductor">' + MASCARAS.map(function(x){ return '<button type="button" data-masc="' + x[0] + '" aria-pressed="' + (x[0] === mascara) + '">' + x[1] + '</button>'; }).join("") + '</div></div></div>' +
     '<div class="lofi-zona"></div>';
   cont.addEventListener("click", function(e){
-    var b = e.target.closest("[data-masc]"); if(b){ mascara = b.dataset.masc; try{ localStorage.setItem("di-lofi-mascara", mascara); }catch(x){} pinta(); return; }
+    var b = e.target.closest("[data-masc]"); if(b){ mascara = b.dataset.masc; try{ localStorage.setItem("di-lofi-mascara", mascara); }catch(x){} pinta(); animar(); return; }
     var a = e.target.closest("[data-lofi]"); if(!a) return;
     var k = a.dataset.lofi;
     if(k === "play") L.on ? pausa() : reproduce();
     else if(k === "stop") detener();
     else if(k === "sig") siguiente();
     else if(k === "ant") eligeDisco(L.d - 1);
+    else if(k === "dsig") eligeDisco(L.d + 1);
     else if(k === "disco") eligeDisco(+a.dataset.i);
+    else if(k === "pista") eligePista(+a.dataset.i);
   });
   cont.addEventListener("input", function(e){ if(e.target.dataset.lofi === "vol"){ L.vol = e.target.value / 100; if(ctx && L.on){ salida.gain.cancelScheduledValues(ctx.currentTime); salida.gain.setValueAtTime(L.vol, ctx.currentTime); } } });
-  pinta();
+  addEventListener("resize", function(){ var z = cont.querySelector(".lofi-zona canvas"); if(z) pinta(); });
+  pinta(); if(mascara === "arcade") animar();
   window.DILofi = {on:function(){ return L.on; }, nombre:nombre, parar:function(silencioso){ pausa(silencioso); }, disco:function(){ return L.d; }, pista:function(){ return L.pista; }};
 })();
