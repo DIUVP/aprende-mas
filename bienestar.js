@@ -368,14 +368,14 @@
     var gr = g.createLinearGradient(0, cv.height * .78, 0, cv.height); gr.addColorStop(0, "rgba(0,0,0,0)"); gr.addColorStop(1, "rgba(0,0,0,1)");
     g.fillStyle = gr; g.fillRect(0, 0, cv.width, cv.height); return (fundidos[s] = cv);
   }
-  var sableY = 0, sableTam = 100, GLIFOS = ["♪", "♫", "♩", "♬"], TINTAS = ["#D2559A", "#E07B3A", "#C49A12", "#2F9E6B", "#3A8FD1", "#7C62D6"];
+  var sableY = 0, sableTam = 100, sableCx = 60, GLIFOS = ["♪", "♫", "♩", "♬"], TINTAS = ["#D2559A", "#E07B3A", "#C49A12", "#2F9E6B", "#3A8FD1", "#7C62D6"];
   function sueltaNota(n, cuando){
     if(reduce() || M.rafaga.length > 18) return;
     var lado = Math.random() < .5 ? -1 : 1;
-    M.rafaga.push({t0:cuando, x:sableX + lado * sableTam * .38, y:sableY, dx:lado * 18, fase:Math.random() * 6, g:GLIFOS[Math.floor(Math.random() * GLIFOS.length)], color:TINTAS[Math.floor(Math.random() * TINTAS.length)]});
+    M.rafaga.push({t0:cuando, x:sableCx + lado * sableTam * .36, y:sableY, dx:lado * 18, fase:Math.random() * 6, g:GLIFOS[Math.floor(Math.random() * GLIFOS.length)], color:TINTAS[Math.floor(Math.random() * TINTAS.length)]});
   }
   // las notas caen en líneas (grados impares) y espacios (pares) de un pentagrama de cinco líneas
-  function yDe(grado){ var arriba = H * .32, abajo = H * .88; return abajo - (abajo - arriba) * grado / (GRADOS - 1); }
+  function yDe(grado){ var arriba = H * .14, abajo = H * .74; return abajo - (abajo - arriba) * grado / (GRADOS - 1); }
   function ahora(){ return ctx ? ctx.currentTime : 0; }
   function programa(){
     if(!M.on) return;
@@ -408,24 +408,19 @@
       c2.strokeStyle = osc ? "#ffffff55" : "#ffffffcc"; c2.lineWidth = 2; c2.beginPath(); c2.arc(x, y, r, 0, 7); c2.stroke();
       if(n.tuya){ c2.fillStyle = "#fff"; c2.font = "bold " + Math.round(r * 1.3) + "px sans-serif"; c2.textAlign = "center"; c2.textBaseline = "middle"; c2.fillText("✦", x, y + 1); }
     });
-    // Sable camina sobre las notas: salta de la última que pasó a la siguiente
-    var prev = null, next = null;
-    for(var k = 0; k < mel.length; k++){ if(mel[k].t <= t) prev = mel[k]; else { next = mel[k]; break; } }
-    var yA = prev ? yDe(prev.grado) : H * .62, yB = next ? yDe(next.grado) : yA, tA = prev ? prev.t : t - 1, tB = next ? next.t : t + 1;
-    var p = Math.min(1, Math.max(0, (t - tA) / Math.max(.2, tB - tA))), alto = reduce() ? 0 : Math.min(40, 14 + Math.abs(yB - yA) * .4);
-    var yS = yA + (yB - yA) * p - Math.sin(p * Math.PI) * alto;
-    // Sable baila: se mece al ritmo y abre los ojos de vez en cuando; las notas le salen de los audífonos
-    var tam = Math.max(76, Math.min(140, H * .35)), pulso = t * ANIMOS[M.animo].bpm / 60;
-    yS = Math.max(yS, tam * .96);
+    // línea de lectura: las notas suenan al cruzarla
+    var lg = c2.createLinearGradient(sableX - 14, 0, sableX + 14, 0); lg.addColorStop(0, "rgba(255,255,255,0)"); lg.addColorStop(.5, osc ? "rgba(214,190,255,.22)" : "rgba(138,107,224,.16)"); lg.addColorStop(1, "rgba(255,255,255,0)");
+    c2.fillStyle = lg; c2.fillRect(sableX - 14, 0, 28, H);
+    // Sable baila fijo en la esquina inferior izquierda: se mece al ritmo, abre los ojos de vez en cuando y le salen notas de los audífonos
+    var tam = Math.max(90, Math.min(170, H * .42)), pulso = t * ANIMOS[M.animo].bpm / 60, sx = tam * .55 + 8, yS = H + tam * .02;
     var im = desvanecido(M.on ? (Math.floor(pulso) % 4 === 3 ? CUADROS[1] : CUADROS[0]) : CUADROS[1]);
     var mece = (M.on && !reduce()) ? Math.sin(pulso * Math.PI) * .07 : 0, rebote = (M.on && !reduce()) ? Math.abs(Math.sin(pulso * Math.PI)) * tam * .04 : 0;
     c2.imageSmoothingEnabled = true;
-    c2.fillStyle = osc ? "#00000055" : "#3A2B4A22"; c2.beginPath(); c2.ellipse(sableX, yS + 2, tam * .26, tam * .05, 0, 0, 7); c2.fill();
-    var halo = c2.createRadialGradient(sableX, yS - tam * .5, tam * .1, sableX, yS - tam * .5, tam * .7);
-    halo.addColorStop(0, osc ? "rgba(214,190,255,.32)" : "rgba(255,255,255,.75)"); halo.addColorStop(1, "rgba(255,255,255,0)");
-    c2.fillStyle = halo; c2.beginPath(); c2.arc(sableX, yS - tam * .5, tam * .7, 0, 7); c2.fill();
-    if(im){ c2.save(); c2.translate(sableX, yS - rebote); c2.rotate(mece); c2.drawImage(im, -tam / 2, -tam, tam, tam); c2.restore(); }
-    sableY = yS - tam * .62; sableTam = tam;
+    var halo = c2.createRadialGradient(sx, yS - tam * .5, tam * .1, sx, yS - tam * .5, tam * .72);
+    halo.addColorStop(0, osc ? "rgba(214,190,255,.32)" : "rgba(255,255,255,.8)"); halo.addColorStop(1, "rgba(255,255,255,0)");
+    c2.fillStyle = halo; c2.beginPath(); c2.arc(sx, yS - tam * .5, tam * .72, 0, 7); c2.fill();
+    if(im){ c2.save(); c2.translate(sx, yS - rebote); c2.rotate(mece); c2.drawImage(im, -tam / 2, -tam, tam, tam); c2.restore(); }
+    sableY = yS - tam * .7; sableTam = tam; sableCx = sx;
     // notas musicales flotando
     M.rafaga = M.rafaga.filter(function(q){ return t - q.t0 < 2.4; });
     M.rafaga.forEach(function(q){
@@ -435,15 +430,16 @@
       c2.fillText(q.g, q.x + Math.sin(e * 6 + q.fase) * 10 + q.dx * e, q.y - e * tam * .9);
     });
     c2.globalAlpha = 1;
-    if(!M.on){ c2.fillStyle = osc ? "#EEEAF6" : "#221D3D"; c2.font = "600 " + Math.round(Math.max(15, H * .05)) + "px Lexend, sans-serif"; c2.textAlign = "center"; c2.textBaseline = "middle"; c2.fillText("Da clic en «Crear música» y Sable empezará a caminar", W / 2, H * .12); }
+    if(!M.on){ c2.fillStyle = osc ? "#EEEAF6" : "#221D3D"; c2.font = "600 " + Math.round(Math.max(15, H * .05)) + "px Lexend, sans-serif"; c2.textAlign = "center"; c2.textBaseline = "middle"; c2.fillText("Da clic en «Crear música» y Sable empezará a bailar", W / 2, H * .12); }
     if(M.on) raf = requestAnimationFrame(dibuja);
   }
   function ajusta(){
     if(!lienzo) return; var r = lienzo.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
-    W = r.width; H = r.height; if(!W) return; lienzo.width = W * dpr; lienzo.height = H * dpr; c2.setTransform(dpr, 0, 0, dpr, 0, 0); sableX = Math.max(70, W * .22);
+    W = r.width; H = r.height; if(!W) return; lienzo.width = W * dpr; lienzo.height = H * dpr; c2.setTransform(dpr, 0, 0, dpr, 0, 0); sableX = Math.max(150, W * .24);
     if(!raf) raf = requestAnimationFrame(dibuja);
   }
   function arranca(){
+    if(window.DILofi) DILofi.parar(true);   // el lo-fi y el pentagrama no suenan a la vez
     preparaAudio(); if(!ctx) return;
     M.on = true; musOut.gain.cancelScheduledValues(ctx.currentTime); musOut.gain.setValueAtTime(0, ctx.currentTime); musOut.gain.linearRampToValueAtTime(M.vol, ctx.currentTime + 1.5);
     if(M.tSig < ctx.currentTime) M.tSig = ctx.currentTime + .3;
@@ -457,7 +453,7 @@
   function siembra(ev){
     if(!M.on) arranca(); if(!ctx) return;
     var r = lienzo.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top, b = 60 / ANIMOS[M.animo].bpm;
-    var g = Math.round((H * .88 - y) / (H * .56) * (GRADOS - 1)); g = Math.max(0, Math.min(GRADOS - 1, g));
+    var g = Math.round((H * .74 - y) / (H * .6) * (GRADOS - 1)); g = Math.max(0, Math.min(GRADOS - 1, g));
     var t = ahora() + Math.max(.35, (x - sableX) / VEL); t = Math.max(ahora() + .3, Math.round(t / (b / 2)) * (b / 2));
     M.notas.push({t:t, grado:g, dur:b, hecho:false, tuya:true, color:COLORES[g % COLORES.length]}); M.tuyas++;
     var a = $("#mus-anuncio"); if(a) a.textContent = "Sembraste una nota.";
@@ -468,8 +464,8 @@
   function pintarMusica(){
     var el = document.getElementById("panel-bien-mus"); if(!el) return;
     el.innerHTML =
-      '<div class="sec" id="bienestar-musica"><div class="sec-t"><div><h2>Música que se crea sola</h2><p>El pentagrama avanza y la música se compone nota por nota mientras lo escuchas: nunca suena igual dos veces. Sable camina sobre las notas. Toca el pentagrama para sembrar las tuyas.</p></div></div>' +
-      '<div class="juego-m"><canvas id="mus-lienzo" class="mus-lienzo" role="img" aria-label="Pentagrama de colores: las notas avanzan de derecha a izquierda y Sable, con audífonos, camina sobre ellas. Toca el pentagrama para sembrar una nota."></canvas>' +
+      '<div class="sec" id="bienestar-musica"><div class="sec-t"><div><h2>Música que se crea sola</h2><p>El pentagrama avanza y la música se compone nota por nota mientras lo escuchas: nunca suena igual dos veces. Las notas suenan al cruzar la línea de lectura y Sable baila al ritmo. Toca el pentagrama para sembrar las tuyas.</p></div></div>' +
+      '<div class="juego-m"><canvas id="mus-lienzo" class="mus-lienzo" role="img" aria-label="Pentagrama de colores: las notas avanzan de derecha a izquierda y suenan al cruzar la línea de lectura; Sable, con audífonos, baila en la esquina inferior izquierda. Toca el pentagrama para sembrar una nota."></canvas>' +
       '<p class="a11y-oculto" id="mus-anuncio" aria-live="polite"></p></div>' +
       '<div class="mus-ctl">' +
         '<div class="acciones"><button type="button" class="accion" id="mus-play">▶ Crear música</button></div>' +
@@ -479,7 +475,8 @@
       '</div>' +
       '<p class="chico-m" id="mus-cuenta" aria-live="off">Notas creadas: 0</p>' +
       '<p class="chico-m">Con el teclado: <kbd>Espacio</kbd> crea o pausa la música y las teclas <kbd>1</kbd> a <kbd>8</kbd> siembran notas, de la más grave a la más aguda. Puedes cambiar de sección: la música sigue sonando y un pequeño reproductor con Sable te acompaña.</p>' +
-      '<p class="chico-m">Con audífonos, mejor bajito: la OMS recomienda no pasar del 60 % del volumen máximo de tu dispositivo.</p></div>';
+      '<p class="chico-m">Con audífonos, mejor bajito: la OMS recomienda no pasar del 60 % del volumen máximo de tu dispositivo.</p></div>' +
+      '<div class="sec" id="bienestar-lofi"></div>';
     lienzo = $("#mus-lienzo"); c2 = lienzo.getContext("2d");
     lienzo.addEventListener("pointerdown", siembra);
     $("#mus-play").onclick = function(){ M.on ? detiene() : arranca(); };
@@ -500,17 +497,17 @@
   function vistaActual(){ var v = document.querySelector(".vista:not([hidden])"); return v ? v.dataset.vista : ""; }
   function enMusica(){ var p = document.getElementById("panel-bien-mus"); return vistaActual() === "bienestar" && p && !p.hidden; }
   function estado(){
-    var suena = M.on || !!SON.k, b = $("#mus-play");
+    var lofi = window.DILofi && DILofi.on(), suena = M.on || !!SON.k || lofi, b = $("#mus-play");
     if(b) b.textContent = M.on ? "❚❚ Pausar la música" : "▶ Crear música";
     document.querySelectorAll("[data-fondo]").forEach(function(x){ x.setAttribute("aria-pressed", (x.dataset.fondo || null) === SON.k); });
     var m = $(".mini-mus");
     if(!suena || enMusica()){ if(m) m.hidden = true; return; }
     if(!m){ m = document.createElement("div"); m.className = "mini-mus"; m.setAttribute("role", "region"); m.setAttribute("aria-label", "Música sonando"); document.body.appendChild(m); }
-    var nom = (M.on ? "Música · " + ANIMOS[M.animo].n : "") + (M.on && SON.k ? " + " : "") + (SON.k ? FONDOS.filter(function(f){ return f[0] === SON.k; })[0][1] : "");
+    var partes = []; if(M.on) partes.push("Música · " + ANIMOS[M.animo].n); if(lofi) partes.push("Lo-fi · " + DILofi.nombre()); if(SON.k) partes.push(FONDOS.filter(function(f){ return f[0] === SON.k; })[0][1]); var nom = partes.join(" + ");
     m.hidden = false;
     m.innerHTML = sable(56, " suena") + '<div class="txt"><span>Sonando</span><b>' + esc(nom) + '</b></div>' +
       '<button type="button" data-mm="parar">Detener</button><a class="x-ir" href="#bienestar-musica">Volver</a>';
-    m.querySelector('[data-mm="parar"]').onclick = function(){ detiene(); parar(); };
+    m.querySelector('[data-mm="parar"]').onclick = function(){ detiene(); parar(); if(window.DILofi) DILofi.parar(); };
   }
   function muestraPanel(cual, enfocar){
     var v = document.getElementById("v-bienestar"); if(!v) return;
@@ -530,5 +527,7 @@
     estado();
   }
   addEventListener("hashchange", alCambiar); alCambiar();
-  window.DIMusica = {sonando:function(){ return M.on || !!SON.k; }, animo:function(){ return M.animo; }, notas:function(){ return M.total; }, fondo:function(){ return SON.k; }};
+  // para el reproductor lo-fi (lofi.js): comparte el audio, el estado y el mini reproductor
+  window.DIAudio = {ctx:function(){ return audio(); }, master:function(){ return master; }, estado:function(){ estado(); }, pausarJuego:function(){ if(M.on) detiene(); }, reduce:reduce};
+  window.DIMusica = {sonando:function(){ return M.on || !!SON.k || !!(window.DILofi && DILofi.on()); }, animo:function(){ return M.animo; }, notas:function(){ return M.total; }, fondo:function(){ return SON.k; }};
 })();

@@ -1,0 +1,63 @@
+/* Diseño Instruccional · Reproductor lo-fi: máscaras Tocadiscos y Retro */
+
+/* ---------- Tocadiscos ---------- */
+.td{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px 28px;align-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--td1) 22%,var(--hoja)),var(--hoja) 75%);border:1px solid var(--linea);border-radius:22px;padding:24px}
+.td-base{grid-row:1/3}.td-info{align-self:end}.td-ctl{align-self:start}
+@media (max-width:760px){.td{grid-template-columns:1fr}.td-base{grid-row:auto}}
+.td-base{position:relative;aspect-ratio:1.12;border-radius:22px;background:linear-gradient(160deg,#f3eadf,#e3d3c2);box-shadow:inset 0 2px 0 #fff9,inset 0 -6px 0 #0000000f,0 10px 26px rgba(60,40,70,.18);padding:7%}
+.td-plato{position:absolute;left:6%;top:8%;width:74%;aspect-ratio:1;border-radius:50%;background:#d8cdd8;box-shadow:inset 0 0 0 4px #c6b9c8,0 3px 8px #0002}
+.td-disco{position:absolute;inset:5%;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,#26222c 0 2px,#1b1820 2px 4px);box-shadow:inset 0 0 0 2px #0006,0 0 0 1px #0004}
+.td-disco::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,#ffffff00 0 12%,#ffffff1f 16%,#ffffff00 22%,#ffffff00 60%,#ffffff17 64%,#ffffff00 70%)}
+.td-disco.gira{animation:td-gira 1.8s linear infinite}
+.td-etq{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle,var(--td2) 0 18%,var(--td1) 19%);display:grid;place-items:center;align-content:center;text-align:center;color:#fff;font-family:var(--disp);line-height:1}
+.td-etq b{font-size:clamp(13px,2.4vw,20px);letter-spacing:.04em}
+.td-etq span{font-size:clamp(9px,1.3vw,11px);opacity:.9}
+.td-brazo{position:absolute;right:4%;top:6%;width:26%;transform-origin:70% 10%;transform:rotate(-26deg);transition:transform .8s ease}
+.td-brazo.sobre{transform:rotate(-4deg)}
+.td-perillas{position:absolute;right:8%;bottom:9%;display:flex;gap:8px}
+.td-perillas i{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#bfb2c3);box-shadow:0 1px 3px #0003}
+.td-info{display:grid;gap:4px}
+.td-k{font-family:var(--disp);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta2);font-weight:600}
+.td-info b{font-family:var(--disp);font-size:26px;font-weight:600;line-height:1.15}
+.td-info>span:last-child{color:var(--tinta2);font-size:15px;font-variant-numeric:tabular-nums}
+.td-ctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;--c:var(--violeta);--cs:var(--violeta-s)}
+.td-vol{display:flex;gap:10px;align-items:center;font-size:15px}
+.td-vol input{accent-color:var(--violeta);width:min(180px,100%)}
+.td-discos{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:12px}
+.td-funda{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:52px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;background:var(--hoja);color:var(--tinta);border:1.5px solid var(--linea);border-radius:14px;padding:10px 12px}
+.td-funda i{grid-row:1/3;width:52px;height:52px;border-radius:8px;background:radial-gradient(circle at 70% 50%,#1b1820 0 36%,transparent 37%),linear-gradient(135deg,var(--f1),var(--f2));box-shadow:inset 0 0 0 1px #0001}
+.td-funda b{font-family:var(--disp);font-weight:600;font-size:15px}
+.td-funda span{font-size:13px;color:var(--tinta2)}
+.td-funda[aria-pressed="true"]{border-color:var(--violeta);background:var(--violeta-s)}
+@keyframes td-gira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.td-disco.gira{animation:none}.td-brazo{transition:none}}
+html.a11y-movimiento .td-disco.gira{animation:none}
+
+/* ---------- Retro (inspirada en los reproductores de música de los 90) ---------- */
+.rt{width:min(600px,100%);border-radius:6px;background:linear-gradient(#4a4a5a,#2d2d38);border:1px solid #15151c;box-shadow:inset 1px 1px 0 #7a7a8c,inset -1px -1px 0 #121218,0 10px 28px rgba(20,17,29,.35);color:#d6d6e0;font-family:Tahoma,Verdana,"Segoe UI",sans-serif;overflow:hidden}
+.rt-barra{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;background:linear-gradient(90deg,#3c2a6e,#6a3c9a 50%,#3c2a6e);font-size:11px;font-weight:700;letter-spacing:.12em;color:#f2ecff}
+.rt-barra i{display:inline-block;width:9px;height:9px;margin-left:4px;background:#cfc8e0;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #6a6480}
+.rt-cuerpo{padding:10px;display:grid;gap:10px}
+.rt-lcd{background:#06090a;border:2px solid #000;box-shadow:inset 0 0 0 1px #2a2f33;border-radius:2px;padding:8px 10px;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-family:"Courier New",ui-monospace,monospace;color:#5BE38A}
+.rt-fila{display:flex;align-items:center;gap:10px;grid-row:1/3}
+.rt-estado{font-size:14px}
+.rt-tiempo{font-size:34px;font-weight:700;letter-spacing:.06em;text-shadow:0 0 6px #5be38a66;font-variant-numeric:tabular-nums}
+.rt-marquesina{overflow:hidden;white-space:nowrap;font-size:13px;border:1px solid #1b2a20;padding:2px 4px;background:#020403}
+.rt-marquesina span{display:inline-block;padding-left:100%}
+.rt-marquesina span.corre{animation:rt-corre 14s linear infinite}
+.rt-marquesina span:not(.corre){padding-left:0}
+.rt-datos{display:flex;gap:10px;font-size:11px;color:#9fe3b6;flex-wrap:wrap}
+.rt-espectro{grid-column:1/-1;width:100%;height:56px;display:block}
+.rt-botones{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.rt-botones button{font:inherit;font-size:14px;min-width:44px;height:30px;cursor:pointer;color:#1a1a22;background:linear-gradient(#e4e4ec,#b4b4c2);border:1px solid #20202a;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #8a8a9a;border-radius:2px}
+.rt-botones button:active{box-shadow:inset -1px -1px 0 #fff,inset 1px 1px 0 #8a8a9a}
+.rt-vol{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.1em;color:#cfcfe0}
+.rt-vol input{accent-color:#5BE38A;width:120px}
+.rt-lista{display:grid;background:#06090a;border-top:2px solid #15151c;padding:4px}
+.rt-lista button{font:inherit;font-family:"Courier New",ui-monospace,monospace;font-size:13px;display:flex;justify-content:space-between;gap:10px;text-align:left;background:none;border:0;color:#5BE38A;padding:5px 8px;cursor:pointer}
+.rt-lista button[aria-pressed="true"]{background:#1f3a8a;color:#fff}
+.rt-lista button:hover{background:#13261a}
+.rt button:focus-visible,.rt input:focus-visible{outline:2px solid #ffd84d;outline-offset:1px}
+@keyframes rt-corre{to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){.rt-marquesina span.corre{animation:none;padding-left:0}}
+html.a11y-movimiento .rt-marquesina span.corre{animation:none;padding-left:0}
