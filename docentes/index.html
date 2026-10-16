@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <link rel="stylesheet" href="../a11y.css">
+<link rel="stylesheet" href="../bienestar.css">
 <script src="../a11y.js"></script>
 <style>
 html,body{margin:0}
@@ -67,11 +68,12 @@ header.top::after{content:"";display:block;height:4px;background:var(--grad)}
 :root[data-theme="dark"] .marca .logo.c{display:none}
 :root[data-theme="dark"] .marca .logo.o{display:block}
 .marca .sep{flex:none;width:1px;height:34px;background:var(--linea)}
-@media (max-width:640px){.marca .logo{height:30px}.marca .sep{height:28px}.marca{gap:10px}}
+@media (max-width:640px){.marca .logo{height:30px}.marca .sep{height:28px}.marca{gap:10px}.marca .n{font-size:17px}.marca .s{font-size:12px}.marca>span:last-child{min-width:0}}
+@media (max-width:400px){.marca .logo{height:22px}.marca .sep{height:22px}.marca{gap:8px}.marca .n{font-size:15px}}
 .marca .n{font-family:var(--disp);font-weight:700;font-size:21px;letter-spacing:-.01em;display:block;line-height:1.1}
 .marca .s{font-size:13px;color:var(--tinta2);display:block}
 nav.menu{display:flex;gap:2px;flex-wrap:wrap}
-nav.menu a{font-family:var(--disp);font-size:15px;text-decoration:none;color:var(--tinta2);padding:8px 9px;border-radius:8px}
+nav.menu a{font-family:var(--disp);font-size:15px;text-decoration:none;color:var(--tinta2);padding:8px 8px;border-radius:8px}
 nav.menu a:hover{background:var(--violeta-s);color:var(--tinta)}
 nav.menu a[aria-current="page"]{color:var(--tinta);background:var(--violeta-s);font-weight:600}
 nav.menu a.m-alumnos[aria-current="page"]{background:var(--alumno-s)}
@@ -385,10 +387,11 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
     <span><span class="n">Diseño Instruccional</span><span class="s">Centro de Recursos para docentes</span></span>
   </a>
   <nav class="menu" aria-label="Principal">
-    <a href="#inicio">Inicio</a>
     <a href="#docentes">Docentes</a>
     <a href="#coordinaciones">Coordinaciones</a>
     <a href="#asesorias">Asesorías</a>
+    <a href="#bienestar">Bienestar</a>
+    <a href="#musica">Música</a>
     <a href="#faq-docentes">Preguntas frecuentes</a>
   </nav>
 </div></header>
@@ -461,6 +464,7 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
       <a class="rapido" href="#docentes-recursos" data-ver="catalogo" aria-haspopup="dialog" style="--c:var(--alumno)"><span class="dot"></span><span><b>Catálogo de aplicaciones</b><small>27 herramientas digitales con fichas y prompts</small></span></a>
       <a class="rapido" href="#docentes-materiales"><span class="dot"></span><span><b>Guiones instruccionales 2026</b><small>Plantillas oficiales por modalidad</small></span></a>
       <a class="rapido" href="#asesorias" style="--c:var(--magenta)"><span class="dot"></span><span><b>Asesorías en vivo</b><small>Lunes a sábado por Google Meet</small></span></a>
+      <a class="rapido" href="#bienestar" style="--c:var(--ok)"><span class="dot"></span><span><b>Bienestar digital</b><small>Pausas, respiración y la playlist del equipo</small></span></a>
     </div>
   </div>
 </section>
@@ -468,6 +472,8 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
 <!-- ESPACIOS (se llenan desde datos) -->
 <section class="vista esp" id="v-docentes" data-vista="docentes" hidden></section>
 <section class="vista esp coord" id="v-coordinaciones" data-vista="coordinaciones" hidden></section>
+<section class="vista esp bien" id="v-bienestar" data-vista="bienestar" hidden></section>
+<section class="vista esp musica" id="v-musica" data-vista="musica" hidden></section>
 
 <!-- ACCESIBILIDAD -->
 <section class="vista" id="v-accesibilidad" data-vista="accesibilidad" hidden>
@@ -704,10 +710,12 @@ const REPORTES = {
   }
 };
 
+const nueva = (n, titulo) => ({tipo:"web", src:`../nueva/${n}.html`, titulo});
 const nuevaDoc = [
-  {g:"Antes de iniciar", it:[{t:"Inicio de sesión",tp:"info",e:"pend"},{t:"Recorrido por el curso",tp:"video",e:"pend"},{t:"Configurar fechas de la materia",tp:"video",e:"pend"}]},
-  {g:"Carga de contenidos", it:[{t:"Insertar un PDF",tp:"info",e:"pend"},{t:"Insertar un video",tp:"info",e:"pend"},{t:"Crear un cuestionario",tp:"info",e:"pend"}]},
-  {g:"Evaluación y seguimiento", it:[{t:"Calificar entregas",tp:"video",e:"pend"},{t:"Descargar calificaciones",tp:"info",e:"pend"},{t:"Comunicarte con tu grupo",tp:"info",e:"pend"}]}
+  {destacada:{t:"Guía rápida de UVP Online para docentes · online.uvp.mx",d:"La guía y los tutoriales de la plataforma nueva: cómo entrar, armar tu curso con bloques, crear actividades, calificar y comunicarte con tu grupo. Es la misma que encuentras en «Conoce tu plataforma» dentro de tus materias.",etiqueta:"Guía interactiva · plataforma nueva",niveles:["Accede a la plataforma","Arma tu curso","Actividades y calificaciones","Las palabras de la plataforma","Preguntas rápidas"],acc:[["Abrir la guía rápida",nueva("guia-docentes","Guía rápida de UVP Online para docentes · online.uvp.mx")],["Practicar en el simulador",nueva("practica-docentes","Primeros clics para docentes · online.uvp.mx"),1]],para:"Para aprender a usar online.uvp.mx a tu ritmo: cada tarea viene explicada paso a paso, con preguntas rápidas y un simulador para practicar sin miedo a mover tus materias."}},
+  {g:"Antes de iniciar el curso", it:[
+    {t:"Amoxtli digital: proyecto formativo y firmas",d:"Llena el proyecto formativo integrador, firma la constancia de enterado y agrega las firmas de tus estudiantes, todo dentro de tu materia.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("amoxtli-docente","Amoxtli digital: proyecto formativo y firmas")]],para:"Para entregar tu Amoxtli completo, con tu nombre, tu firma y la relación de estudiantes enterados, sin imprimir ni escanear."},
+    {t:"Practica: Primeros clics",d:"Un simulador de la plataforma con juegos de práctica, medallas, preguntas a Sable y la Sala de calma. Nada de lo que hagas ahí afecta tus materias.",tp:"guia",e:"ok",acc:[["Abrir el simulador",nueva("practica-docentes","Primeros clics para docentes · online.uvp.mx")]],para:"Para ensayar los primeros clics en un entorno que se ve como la plataforma, antes de hacerlo en tu materia real."}]}
 ];
 
 const ESPACIOS = {
@@ -815,7 +823,7 @@ function grupos(lista){
   return lista.map(gr => gr.destacada ? destacada(gr.destacada)
     : `<div class="grupo"><h3>${gr.g}</h3><div class="tarjetas">${gr.it.map(tarjeta).join("")}</div></div>`).join("");
 }
-const AVISO_NUEVA = `<div class="aviso"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg><span>Espacio reservado para la plataforma nueva, <b>online.uvp.mx</b>. Los tutoriales se publicarán conforme se elaboren y siguen la misma estructura que los de ol.uvp.mx para que encuentres lo mismo en el mismo lugar.</span></div>`;
+const AVISO_NUEVA = `<div class="aviso"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg><span>Tutoriales de la plataforma nueva, <b>online.uvp.mx</b>. Son los mismos que encuentras en «Conoce tu plataforma» dentro de tus materias.</span></div>`;
 
 function pintarEspacio(k){
   const E = ESPACIOS[k], el = document.getElementById("v-"+k);
@@ -923,6 +931,7 @@ const FAQ = {
         [OL+" Aparece el error 403","Significa “sin permiso”: la plataforma no te deja ver los contenidos de la materia. Escribe a Diseño Instruccional para que revise tus permisos en el curso."],
         [OL+" No tengo acceso a mi curso, pero mis alumnos sí","Escribe a Diseño Instruccional para que revise tu rol en el curso."]]},
       {g:"Contenidos y fechas", q:[
+        [ON+" ¿Cómo lleno y firmo el Amoxtli?","En tu materia, dentro de «Acerca del curso», abre la página «Solo docentes: Hoja digital del Amoxtli». Ahí firmas la constancia de enterado, llenas el proyecto formativo integrador y los avances, y das clic en «Enviar». El paso a paso está en <a href=\"#docentes-tutoriales\">Docentes → Tutoriales → online.uvp.mx</a>."],
         ["¿Cuáles son los formatos permitidos para subir lecturas y archivos?","Se recomienda subir todos los documentos en PDF para que los estudiantes puedan leerlos desde cualquier dispositivo. Para presentaciones o videos largos, es preferible enlazarlos desde Google Drive, Canva o YouTube."],
         ["¿Dónde puedo obtener los formatos oficiales para mi asignatura?","En <a href=\"#docentes-materiales\">Docentes → Materiales</a> están los guiones instruccionales 2026 de cada modalidad."],
         ["Coordino una licenciatura, ¿dónde veo el reporte de materias?","En <a href=\"#coordinaciones\">Coordinaciones</a>. Elige tu plantel (Puebla, Tehuacán o Tlaxcala) y busca tu licenciatura. Cada reporte es de uso exclusivo de su coordinación."],
@@ -1057,8 +1066,8 @@ document.querySelector(".saltar").addEventListener("click", e => { e.preventDefa
 function anunciar(t){ const a = document.getElementById("anuncio"); a.textContent = ""; setTimeout(() => a.textContent = t, 60); }
 
 // navegación por vistas
-const VISTAS = ["faq-docentes","inicio","docentes","coordinaciones","asesorias","accesibilidad"];
-const NOMBRES = {inicio:"Inicio", docentes:"Docentes", coordinaciones:"Coordinaciones", asesorias:"Asesorías", "faq-docentes":"Preguntas frecuentes", accesibilidad:"Accesibilidad"};
+const VISTAS = ["faq-docentes","inicio","docentes","coordinaciones","asesorias","bienestar","musica","accesibilidad"];
+const NOMBRES = {inicio:"Inicio", docentes:"Docentes", coordinaciones:"Coordinaciones", asesorias:"Asesorías", bienestar:"Bienestar digital", musica:"Música", "faq-docentes":"Preguntas frecuentes", accesibilidad:"Accesibilidad"};
 let primera = true;
 function ir(){
   let h = location.hash.slice(1) || "inicio";
@@ -1081,5 +1090,6 @@ function ir(){
 }
 addEventListener("hashchange", ir); ir();
 </script>
+<script src="../bienestar.js"></script>
 </body>
 </html>
