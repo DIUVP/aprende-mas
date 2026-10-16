@@ -1,9 +1,8 @@
 /* Diseño Instruccional · Bienestar digital y Música.
-   Llena las vistas #v-bienestar y #v-musica del sitio. El contenido y las fuentes vienen de la
+   Llena la vista #v-bienestar del sitio (dos pestañas: Ejercicios de bienestar digital y Música). El contenido y las fuentes vienen de la
    Sala de calma del curso de inducción para docentes (investigación verificada el 25/09/2026). */
 (function(){
   var RAIZ = (document.currentScript && document.currentScript.src || "").replace(/bienestar\.js.*$/, "");
-  var PLAYLIST = "2UlI14wEnGnRvgNLmzMHHM";      // playlist de Spotify de Diseño Instruccional
   var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   var ayuda = function(t){ return typeof pqs === "function" ? pqs(t) : ""; };
   var reduce = function(){ return (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) || document.documentElement.classList.contains("a11y-movimiento"); };
@@ -95,17 +94,10 @@
     ["acordes", "Acordes", "Acordes largos y graves que cambian despacio."]
   ];
 
-  /* ---------- Sable con audífonos ---------- */
-  var AUD = '<svg class="aud" viewBox="0 0 120 120" shape-rendering="crispEdges" aria-hidden="true" focusable="false">' +
-    '<g fill="#1A0F24"><rect x="35" y="25" width="5" height="13"/><rect x="80" y="25" width="5" height="13"/><rect x="37" y="21" width="6" height="6"/><rect x="77" y="21" width="6" height="6"/><rect x="41" y="17" width="38" height="5"/><rect x="29" y="33" width="11" height="19"/><rect x="80" y="33" width="11" height="19"/></g>' +
-    '<g fill="#6A1B9A"><rect x="36" y="26" width="3" height="12"/><rect x="81" y="26" width="3" height="12"/><rect x="38" y="22" width="4" height="4"/><rect x="78" y="22" width="4" height="4"/><rect x="42" y="18" width="36" height="3"/></g>' +
-    '<rect x="46" y="18" width="26" height="1" fill="#9C4DCC"/>' +
-    '<g fill="#D81B60"><rect x="30" y="34" width="9" height="17"/><rect x="81" y="34" width="9" height="17"/></g>' +
-    '<g fill="#8E1240"><rect x="30" y="46" width="9" height="5"/><rect x="81" y="46" width="9" height="5"/></g>' +
-    '<g fill="#F4A300"><rect x="31" y="36" width="2" height="10"/><rect x="87" y="36" width="2" height="10"/></g></svg>';
+  /* ---------- Sable con audífonos (ilustraciones de Diseño Instruccional: ojos abiertos y cerrados) ---------- */
   function sable(t, extra){
     return '<div class="sable' + (extra || "") + '" style="--t:' + t + 'px" role="img" aria-label="Sable, la pantera de la UVP, con audífonos">' +
-      '<div class="cuerpo"><img class="ojos-a" src="' + RAIZ + 'img/sable-16.png" alt=""><img class="ojos-c" src="' + RAIZ + 'img/sable-18.png" alt="">' + AUD + '</div>' +
+      '<div class="cuerpo"><img class="ojos-a" src="' + RAIZ + 'img/sable-aud-b.png" alt=""><img class="ojos-c" src="' + RAIZ + 'img/sable-aud-a.png" alt=""></div>' +
       '<div class="notas" aria-hidden="true"><i>♪</i><i>♫</i><i>♪</i></div></div>';
   }
 
@@ -113,10 +105,14 @@
   function pintarBienestar(){
     var el = document.getElementById("v-bienestar"); if(!el) return;
     el.innerHTML =
-      '<div class="cab-esp"><span class="eyebrow">Para cuidarte mientras trabajas en línea</span><h1>Bienestar digital</h1>' +
-      '<p>Pausas cortas, una respiración guiada y lo que dice la evidencia sobre pantallas, postura, sueño y avisos. Elige lo que necesites ahora y deja el resto: aquí no hay puntos ni prisa.</p>' +
-      '<nav class="subnav" aria-label="Secciones de Bienestar"><a href="#bienestar-pausa">Haz una pausa</a><a href="#bienestar-evidencia">Lo que dice la evidencia</a><a href="#bienestar-chequeo">¿Cómo vas?</a><a href="#musica">Música para trabajar</a></nav>' +
-      ayuda("Para cuidar tu vista, tu cuerpo y tu atención mientras preparas clases o calificas frente a la pantalla. Las herramientas funcionan aquí mismo y no guardan ningún dato tuyo.") + '</div>' +
+      '<div class="cab-esp"><span class="eyebrow">Para cuidarte mientras trabajas en línea</span><h1>Bienestar</h1>' +
+      '<p>Ejercicios de bienestar digital para tu vista, tu cuerpo y tu atención, y un rincón de música que se crea sola mientras trabajas. Elige lo que necesites ahora y deja el resto: aquí no hay puntos ni prisa.</p>' +
+      ayuda("Para cuidar tu vista, tu cuerpo y tu atención mientras preparas clases o calificas frente a la pantalla, y para trabajar con música tranquila de fondo. Todo funciona aquí mismo y no guarda ningún dato tuyo.") +
+      '<div class="switch" role="tablist" aria-label="Secciones de Bienestar" style="justify-self:start">' +
+        '<button role="tab" id="tab-bien-ej" aria-controls="panel-bien-ej" aria-selected="true" tabindex="0" data-bien="ej">Ejercicios de bienestar digital</button>' +
+        '<button role="tab" id="tab-bien-mus" aria-controls="panel-bien-mus" aria-selected="false" tabindex="-1" data-bien="mus">Música</button></div></div>' +
+      '<div id="panel-bien-ej" role="tabpanel" aria-labelledby="tab-bien-ej" class="panel-bien">' +
+      '<nav class="subnav" aria-label="Ejercicios"><a href="#bienestar-pausa">Haz una pausa</a><a href="#bienestar-evidencia">Lo que dice la evidencia</a><a href="#bienestar-chequeo">¿Cómo vas?</a></nav>' +
 
       '<div class="sec" id="bienestar-pausa"><div class="sec-t"><div><h2>Haz una pausa</h2><p>Úsala antes de empezar si llegas acelerado, a media sesión si llevas rato sin moverte o después de calificar, que es cuando más cuesta parar.</p></div>' +
       '<div class="opc"><button type="button" id="b-sonido" aria-pressed="true">Avisar con sonido</button></div></div>' +
@@ -162,7 +158,8 @@
       '<div class="sec" id="bienestar-chequeo"><div class="sec-t"><div><h2>¿Cómo vas?</h2><p>Marca lo que te pasa con frecuencia. Te sugerimos un paso pequeño para cada cosa. No se guarda ni se envía nada.</p></div></div>' +
       '<div class="chequeo">' + CHEQUEO.map(function(c, i){ return '<label><input type="checkbox" data-ch="' + i + '"><span>' + c[0] + '</span></label>'; }).join("") + '</div>' +
       '<div class="plan" id="b-plan" hidden aria-live="polite"></div>' +
-      '<div class="aviso"><span><b>Si llevas días con el ánimo bajo</b> o te reconoces en varias de las cuatro señales de la OMS, habla con alguien de confianza y busca apoyo profesional. Si algo de tu carga de trabajo te rebasa, platícalo con tu coordinación.</span></div></div>';
+      '<div class="aviso"><span><b>Si llevas días con el ánimo bajo</b> o te reconoces en varias de las cuatro señales de la OMS, habla con alguien de confianza y busca apoyo profesional. Si algo de tu carga de trabajo te rebasa, platícalo con tu coordinación.</span></div></div></div>' +
+      '<div id="panel-bien-mus" role="tabpanel" aria-labelledby="tab-bien-mus" class="panel-bien" hidden></div>';
 
     // respiración
     var rk = "calma", R = null, segRes = 0;
@@ -295,84 +292,243 @@
     salida = null; if(!sinEstado) estado();
   }
 
-  /* ---------- Spotify (sigue sonando al cambiar de sección) ---------- */
-  var SP = {ctl:null, sonando:false, cargando:false};
-  function cargaSpotify(){
-    if(SP.ctl || SP.cargando) return; SP.cargando = true;
-    var dock = document.getElementById("spot-dock"); dock.hidden = false;
-    var hueco = document.createElement("div"); dock.appendChild(hueco);
-    window.onSpotifyIframeApiReady = function(API){
-      API.createController(hueco, {uri:"spotify:playlist:" + PLAYLIST, width:"100%", height:"100%"}, function(c){
-        SP.ctl = c; var f = dock.querySelector("iframe"); if(f){ f.title = "Playlist de Spotify de Diseño Instruccional"; f.setAttribute("allow", "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"); }
-        c.addListener("playback_update", function(e){ var ahora = !!(e && e.data && !e.data.isPaused); if(ahora) SP.usado = true; if(ahora !== SP.sonando){ SP.sonando = ahora; estado(); } });
-        coloca();
-      });
-    };
-    var s = document.createElement("script"); s.src = "https://open.spotify.com/embed/iframe-api/v1"; s.async = true;
-    s.onerror = function(){ var l = $("#spot-lugar"); if(l) l.innerHTML = '<p>No se pudo cargar Spotify. Ábrela directamente: <a href="https://open.spotify.com/playlist/' + PLAYLIST + '" target="_blank" rel="noopener">playlist en Spotify ↗</a></p>'; };
-    document.head.appendChild(s);
+  /* ---------- Música: pentagrama de colores con música generativa y Sable caminando sobre las notas ----------
+     La música la compone el navegador al momento (un pequeño modelo de cadenas de Márkov sobre escalas pentatónicas,
+     con acordes que cambian cada cuatro tiempos). No se descarga ni se envía nada. */
+  var ANIMOS = {
+    calma:   {n:"Calma",    bpm:64, raiz:261.63, esc:[0,2,4,7,9],  acordes:[[0,4,7],[9,12,16],[5,9,12],[7,11,14]], onda:"sine",     dens:.62},
+    amanecer:{n:"Amanecer", bpm:76, raiz:293.66, esc:[0,2,4,7,9],  acordes:[[0,4,7],[5,9,12],[2,5,9],[7,11,14]],   onda:"triangle", dens:.7},
+    noche:   {n:"Noche",    bpm:56, raiz:220.00, esc:[0,3,5,7,10], acordes:[[0,3,7],[5,8,12],[3,7,10],[7,10,14]],  onda:"sine",     dens:.5},
+    foco:    {n:"Foco",     bpm:84, raiz:246.94, esc:[0,2,5,7,9],  acordes:[[0,4,7],[2,5,9],[5,9,12],[0,4,7]],     onda:"triangle", dens:.45}
+  };
+  var COLORES = ["#F49AC1", "#F7B98B", "#F3DD8C", "#9FDCB8", "#8CC8EE", "#B7A6F2", "#E3A6E8"];
+  var GRADOS = 11;                       // dos octavas de la escala pentatónica (0 = la nota más grave)
+  var VEL = 64;                          // píxeles por segundo que avanza el pentagrama
+  var M = {on:false, animo:"calma", notas:[], beat:0, tSig:0, grado:4, total:0, tuyas:0, acorde:0, fondo:null, vol:.6, rafaga:[]};
+  var musOut = null, reverb = null, eco = null;
+
+  function preparaAudio(){
+    if(!audio() || musOut) return;
+    musOut = ganancia(M.vol); musOut.connect(master);
+    // reverberación suave: impulso de ruido que se desvanece
+    reverb = ctx.createConvolver(); var len = ctx.sampleRate * 3, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for(var c = 0; c < 2; c++){ var d = ir.getChannelData(c); for(var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    reverb.buffer = ir; var rg = ganancia(.35); reverb.connect(rg); rg.connect(musOut);
+    eco = ctx.createDelay(1.5); var fb = ganancia(.28), eg = ganancia(.22); eco.connect(fb); fb.connect(eco); eco.connect(eg); eg.connect(musOut);
   }
-  function vistaActual(){ var v = document.querySelector(".vista:not([hidden])"); return v ? v.dataset.vista : ""; }
-  var mini = false;   // el docente minimizó el reproductor de Spotify
-  function coloca(){
-    var dock = document.getElementById("spot-dock"); if(!dock || !SP.ctl) return;
-    var lugar = $("#spot-lugar");
-    if(vistaActual() === "musica" && lugar){
-      var r = lugar.getBoundingClientRect();
-      dock.className = ""; dock.style.top = (r.top + scrollY) + "px"; dock.style.left = (r.left + scrollX) + "px"; dock.style.width = r.width + "px"; dock.style.height = r.height + "px";
-    } else {
-      dock.style.top = dock.style.left = dock.style.width = dock.style.height = "";
-      dock.className = "mini" + ((SP.usado && !mini) ? "" : " fuera");
-    }
-    estado(true);
+  function frec(grado){ var A = ANIMOS[M.animo], o = Math.floor(grado / 5), g = ((grado % 5) + 5) % 5; return A.raiz * Math.pow(2, (A.esc[g] + 12 * o) / 12); }
+  function tocaNota(n){
+    var t = Math.max(n.t, ctx.currentTime + .01), o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), A = ANIMOS[M.animo], f = frec(n.grado);
+    o.type = A.onda; o.frequency.value = f; o2.type = "sine"; o2.frequency.value = f * 2; var g2 = ganancia(.12);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(n.tuya ? .2 : .15, t + .04); g.gain.exponentialRampToValueAtTime(.0008, t + n.dur + 1.6);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(musOut); g.connect(reverb); g.connect(eco);
+    o.start(t); o2.start(t); o.stop(t + n.dur + 1.8); o2.stop(t + n.dur + 1.8);
   }
-  function nombreSonando(){ var n = []; if(SP.sonando) n.push("Playlist de Diseño Instruccional"); if(SON.k) n.push(ESTACIONES.filter(function(e){ return e[0] === SON.k; })[0][1]); return n.join(" + "); }
-  function estado(sinColocar){
-    var suena = SP.sonando || !!SON.k;
-    document.querySelectorAll(".sable").forEach(function(s){ s.classList.toggle("suena", suena); });
-    document.querySelectorAll("[data-est]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.est === SON.k); });
-    var m = $(".mini-mus"), enMusica = vistaActual() === "musica";
-    if(!(suena || SP.usado) || enMusica){ if(m) m.hidden = true; }
-    else {
-      if(!m){ m = document.createElement("div"); m.className = "mini-mus"; m.setAttribute("role", "region"); m.setAttribute("aria-label", "Reproductor de música"); document.body.appendChild(m); }
-      m.hidden = false; m.classList.toggle("con-spot", SP.usado && !mini);
-      m.innerHTML = sable(56, suena ? " suena" : "") + '<div class="txt"><span>' + (suena ? "Sonando" : "En pausa") + '</span><b>' + esc(nombreSonando() || "Playlist de Diseño Instruccional") + '</b></div>' +
-        (SP.usado ? '<button type="button" data-mm="mini">' + (mini ? "Ver controles" : "Ocultar") + '</button>' : "") +
-        '<button type="button" data-mm="parar">Detener</button><a class="x-ir" href="#musica" style="font-size:13px;font-weight:600;border-radius:999px;padding:6px 10px;text-decoration:none;background:var(--magenta);color:var(--sobre)">Música</a>';
-      m.querySelector('[data-mm="parar"]').onclick = function(){ if(SP.ctl && SP.sonando) SP.ctl.pause(); SP.usado = false; SP.sonando = false; parar(); coloca(); };
-      var bm = m.querySelector('[data-mm="mini"]'); if(bm) bm.onclick = function(){ mini = !mini; coloca(); };
+  function tocaAcorde(t, idx){
+    var A = ANIMOS[M.animo], ac = A.acordes[idx % A.acordes.length], dur = 4 * 60 / A.bpm;
+    ac.forEach(function(semi){
+      var o = ctx.createOscillator(), g = ctx.createGain(), lp = filtro("lowpass", 900);
+      o.type = "triangle"; o.frequency.value = A.raiz / 2 * Math.pow(2, semi / 12); o.detune.value = (Math.random() - .5) * 10;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.045, t + dur * .4); g.gain.linearRampToValueAtTime(0, t + dur + .8);
+      o.connect(lp); lp.connect(g); g.connect(musOut); g.connect(reverb); o.start(t); o.stop(t + dur + 1);
+    });
+  }
+  // compositor: una caminata por la escala con pasos cortos, silencios al final de cada frase y regreso al centro
+  var PASOS = [[-3,.05],[-2,.13],[-1,.27],[0,.07],[1,.27],[2,.14],[3,.07]];
+  function siguienteGrado(){
+    var r = Math.random(), a = 0, paso = 0;
+    for(var i = 0; i < PASOS.length; i++){ a += PASOS[i][1]; if(r <= a){ paso = PASOS[i][0]; break; } }
+    if(M.grado > 8) paso = -Math.abs(paso); if(M.grado < 2) paso = Math.abs(paso);
+    M.grado = Math.max(0, Math.min(GRADOS - 1, M.grado + paso)); return M.grado;
+  }
+  function compone(hasta){
+    var A = ANIMOS[M.animo], b = 60 / A.bpm;
+    while(M.tSig < hasta){
+      var t = M.tSig, enFrase = M.beat % 16;
+      if(M.beat % 4 === 0) M.notas.push({t:t, acorde:true, idx:M.acorde++, hecho:false});
+      if(enFrase < 14 && Math.random() < A.dens){
+        var dur = Math.random() < .25 ? b * 2 : b;
+        M.notas.push({t:t, grado:siguienteGrado(), dur:dur, hecho:false, color:COLORES[Math.floor(Math.random() * COLORES.length)]});
+        if(Math.random() < .18 && enFrase % 2 === 0) M.notas.push({t:t + b / 2, grado:siguienteGrado(), dur:b / 2, hecho:false, color:COLORES[Math.floor(Math.random() * COLORES.length)]});
+      }
+      M.beat++; M.tSig += b;
     }
-    if(!sinColocar && SP.ctl && !enMusica) coloca();
-    var l = $("#mus-estado"); if(l) l.textContent = suena ? "Sonando: " + nombreSonando() + "." : "Nada sonando.";
+  }
+  var lienzo = null, c2 = null, W = 0, H = 0, sableX = 0, raf = null, reloj = null;
+  var imgs = {};
+  // cuadros de Sable caminando: cuando lleguen las imágenes de Sable bailando, basta con poner sus nombres aquí
+  var CUADROS = ["img/sable-aud-a.png", "img/sable-aud-b.png"];   // a: ojos cerrados, b: ojos abiertos
+  CUADROS.forEach(function(s){ var i = new Image(); i.src = RAIZ + s; imgs[s] = i; });
+  // la ilustración termina en un corte recto a la altura del pecho: se desvanece hacia abajo para que «flote» sobre las notas
+  var fundidos = {};
+  function desvanecido(s){
+    if(fundidos[s]) return fundidos[s]; var i = imgs[s]; if(!i || !i.complete || !i.naturalWidth) return null;
+    var cv = document.createElement("canvas"); cv.width = i.naturalWidth; cv.height = i.naturalHeight; var g = cv.getContext("2d");
+    g.drawImage(i, 0, 0); g.globalCompositeOperation = "destination-out";
+    var gr = g.createLinearGradient(0, cv.height * .78, 0, cv.height); gr.addColorStop(0, "rgba(0,0,0,0)"); gr.addColorStop(1, "rgba(0,0,0,1)");
+    g.fillStyle = gr; g.fillRect(0, 0, cv.width, cv.height); return (fundidos[s] = cv);
+  }
+  var sableY = 0, sableTam = 100, GLIFOS = ["♪", "♫", "♩", "♬"], TINTAS = ["#D2559A", "#E07B3A", "#C49A12", "#2F9E6B", "#3A8FD1", "#7C62D6"];
+  function sueltaNota(n, cuando){
+    if(reduce() || M.rafaga.length > 18) return;
+    var lado = Math.random() < .5 ? -1 : 1;
+    M.rafaga.push({t0:cuando, x:sableX + lado * sableTam * .38, y:sableY, dx:lado * 18, fase:Math.random() * 6, g:GLIFOS[Math.floor(Math.random() * GLIFOS.length)], color:TINTAS[Math.floor(Math.random() * TINTAS.length)]});
+  }
+  // las notas caen en líneas (grados impares) y espacios (pares) de un pentagrama de cinco líneas
+  function yDe(grado){ var arriba = H * .32, abajo = H * .88; return abajo - (abajo - arriba) * grado / (GRADOS - 1); }
+  function ahora(){ return ctx ? ctx.currentTime : 0; }
+  function programa(){
+    if(!M.on) return;
+    var t = ahora(); compone(t + (W - sableX) / VEL + 1);
+    M.notas.forEach(function(n){ if(!n.hecho && n.t < t + 1.5){ n.hecho = true; if(n.acorde) tocaAcorde(Math.max(n.t, t + .01), n.idx); else { tocaNota(n); M.total++; if(Math.random() < .8 || n.tuya) sueltaNota(n, n.t); } } });
+    M.notas = M.notas.filter(function(n){ return n.t > t - 6; });
+    var cont = $("#mus-cuenta"); if(cont) cont.textContent = "Notas creadas: " + M.total + (M.tuyas ? " · sembradas por ti: " + M.tuyas : "");
+  }
+  function dibuja(){
+    raf = null; if(!lienzo || !lienzo.isConnected) return;
+    var vis = lienzo.offsetParent !== null; if(!vis) return;
+    var t = ahora(), osc = document.documentElement.getAttribute("data-theme") === "dark" || (!document.documentElement.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
+    var bg = c2.createLinearGradient(0, 0, W, H);
+    if(osc){ bg.addColorStop(0, "#1E1830"); bg.addColorStop(1, "#2A1E36"); } else { bg.addColorStop(0, "#F6F1FC"); bg.addColorStop(1, "#FDF1EA"); }
+    c2.fillStyle = bg; c2.fillRect(0, 0, W, H);
+    // franjas suaves de cada acorde
+    M.notas.forEach(function(n){ if(!n.acorde) return; var x = sableX + (n.t - t) * VEL, w = 4 * 60 / ANIMOS[M.animo].bpm * VEL; c2.fillStyle = COLORES[n.idx % COLORES.length] + (osc ? "14" : "22"); c2.fillRect(x, 0, w, H); });
+    // pentagrama de colores
+    for(var i = 0; i < 5; i++){ var y = yDe(1 + 2 * i); c2.strokeStyle = COLORES[i + 1] + (osc ? "99" : "cc"); c2.lineWidth = 2.5; c2.beginPath(); c2.moveTo(0, y); c2.lineTo(W, y); c2.stroke(); }
+    // notas
+    var mel = M.notas.filter(function(n){ return !n.acorde; }).sort(function(a, b){ return a.t - b.t; });
+    mel.forEach(function(n){
+      var x = sableX + (n.t - t) * VEL, y = yDe(n.grado), r = Math.max(7, H * .028);
+      if(x < -40 || x > W + 40) return;
+      var pasada = n.t <= t;
+      if(pasada && !reduce()){ var e = (t - n.t); if(e < 1.6){ c2.strokeStyle = n.color; c2.globalAlpha = Math.max(0, 1 - e / 1.6); c2.lineWidth = 2; c2.beginPath(); c2.arc(x, y, r + e * 26, 0, 7); c2.stroke(); c2.globalAlpha = 1; } }
+      var gl = c2.createRadialGradient(x, y, 1, x, y, r * 2.4); gl.addColorStop(0, n.color + "aa"); gl.addColorStop(1, n.color + "00");
+      c2.fillStyle = gl; c2.beginPath(); c2.arc(x, y, r * 2.4, 0, 7); c2.fill();
+      c2.fillStyle = n.color; c2.beginPath(); c2.arc(x, y, r, 0, 7); c2.fill();
+      c2.strokeStyle = osc ? "#ffffff55" : "#ffffffcc"; c2.lineWidth = 2; c2.beginPath(); c2.arc(x, y, r, 0, 7); c2.stroke();
+      if(n.tuya){ c2.fillStyle = "#fff"; c2.font = "bold " + Math.round(r * 1.3) + "px sans-serif"; c2.textAlign = "center"; c2.textBaseline = "middle"; c2.fillText("✦", x, y + 1); }
+    });
+    // Sable camina sobre las notas: salta de la última que pasó a la siguiente
+    var prev = null, next = null;
+    for(var k = 0; k < mel.length; k++){ if(mel[k].t <= t) prev = mel[k]; else { next = mel[k]; break; } }
+    var yA = prev ? yDe(prev.grado) : H * .62, yB = next ? yDe(next.grado) : yA, tA = prev ? prev.t : t - 1, tB = next ? next.t : t + 1;
+    var p = Math.min(1, Math.max(0, (t - tA) / Math.max(.2, tB - tA))), alto = reduce() ? 0 : Math.min(40, 14 + Math.abs(yB - yA) * .4);
+    var yS = yA + (yB - yA) * p - Math.sin(p * Math.PI) * alto;
+    // Sable baila: se mece al ritmo y abre los ojos de vez en cuando; las notas le salen de los audífonos
+    var tam = Math.max(76, Math.min(140, H * .35)), pulso = t * ANIMOS[M.animo].bpm / 60;
+    yS = Math.max(yS, tam * .96);
+    var im = desvanecido(M.on ? (Math.floor(pulso) % 4 === 3 ? CUADROS[1] : CUADROS[0]) : CUADROS[1]);
+    var mece = (M.on && !reduce()) ? Math.sin(pulso * Math.PI) * .07 : 0, rebote = (M.on && !reduce()) ? Math.abs(Math.sin(pulso * Math.PI)) * tam * .04 : 0;
+    c2.imageSmoothingEnabled = true;
+    c2.fillStyle = osc ? "#00000055" : "#3A2B4A22"; c2.beginPath(); c2.ellipse(sableX, yS + 2, tam * .26, tam * .05, 0, 0, 7); c2.fill();
+    var halo = c2.createRadialGradient(sableX, yS - tam * .5, tam * .1, sableX, yS - tam * .5, tam * .7);
+    halo.addColorStop(0, osc ? "rgba(214,190,255,.32)" : "rgba(255,255,255,.75)"); halo.addColorStop(1, "rgba(255,255,255,0)");
+    c2.fillStyle = halo; c2.beginPath(); c2.arc(sableX, yS - tam * .5, tam * .7, 0, 7); c2.fill();
+    if(im){ c2.save(); c2.translate(sableX, yS - rebote); c2.rotate(mece); c2.drawImage(im, -tam / 2, -tam, tam, tam); c2.restore(); }
+    sableY = yS - tam * .62; sableTam = tam;
+    // notas musicales flotando
+    M.rafaga = M.rafaga.filter(function(q){ return t - q.t0 < 2.4; });
+    M.rafaga.forEach(function(q){
+      var e = (t - q.t0) / 2.4; if(e < 0) return;
+      c2.globalAlpha = Math.max(0, e < .15 ? e / .15 : 1 - (e - .15) / .85);
+      c2.fillStyle = q.color; c2.font = "700 " + Math.round(tam * .3 * (1 + e * .3)) + "px sans-serif"; c2.textAlign = "center"; c2.textBaseline = "middle"; c2.lineWidth = 3; c2.strokeStyle = osc ? "#1E1830" : "#ffffff"; c2.strokeText(q.g, q.x + Math.sin(e * 6 + q.fase) * 10 + q.dx * e, q.y - e * tam * .9);
+      c2.fillText(q.g, q.x + Math.sin(e * 6 + q.fase) * 10 + q.dx * e, q.y - e * tam * .9);
+    });
+    c2.globalAlpha = 1;
+    if(!M.on){ c2.fillStyle = osc ? "#EEEAF6" : "#221D3D"; c2.font = "600 " + Math.round(Math.max(15, H * .05)) + "px Lexend, sans-serif"; c2.textAlign = "center"; c2.textBaseline = "middle"; c2.fillText("Da clic en «Crear música» y Sable empezará a caminar", W / 2, H * .12); }
+    if(M.on) raf = requestAnimationFrame(dibuja);
+  }
+  function ajusta(){
+    if(!lienzo) return; var r = lienzo.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    W = r.width; H = r.height; if(!W) return; lienzo.width = W * dpr; lienzo.height = H * dpr; c2.setTransform(dpr, 0, 0, dpr, 0, 0); sableX = Math.max(70, W * .22);
+    if(!raf) raf = requestAnimationFrame(dibuja);
+  }
+  function arranca(){
+    preparaAudio(); if(!ctx) return;
+    M.on = true; musOut.gain.cancelScheduledValues(ctx.currentTime); musOut.gain.setValueAtTime(0, ctx.currentTime); musOut.gain.linearRampToValueAtTime(M.vol, ctx.currentTime + 1.5);
+    if(M.tSig < ctx.currentTime) M.tSig = ctx.currentTime + .3;
+    clearInterval(reloj); reloj = setInterval(programa, 120); programa(); if(!raf) raf = requestAnimationFrame(dibuja); estado();
+  }
+  function detiene(){
+    M.on = false; clearInterval(reloj);
+    if(ctx && musOut){ musOut.gain.cancelScheduledValues(ctx.currentTime); musOut.gain.setValueAtTime(musOut.gain.value, ctx.currentTime); musOut.gain.linearRampToValueAtTime(0, ctx.currentTime + .8); }
+    M.notas = M.notas.filter(function(n){ return n.hecho; }); M.tSig = 0; M.beat = 0; estado(); if(!raf) raf = requestAnimationFrame(dibuja);
+  }
+  function siembra(ev){
+    if(!M.on) arranca(); if(!ctx) return;
+    var r = lienzo.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top, b = 60 / ANIMOS[M.animo].bpm;
+    var g = Math.round((H * .88 - y) / (H * .56) * (GRADOS - 1)); g = Math.max(0, Math.min(GRADOS - 1, g));
+    var t = ahora() + Math.max(.35, (x - sableX) / VEL); t = Math.max(ahora() + .3, Math.round(t / (b / 2)) * (b / 2));
+    M.notas.push({t:t, grado:g, dur:b, hecho:false, tuya:true, color:COLORES[g % COLORES.length]}); M.tuyas++;
+    var a = $("#mus-anuncio"); if(a) a.textContent = "Sembraste una nota.";
+  }
+  function siembraTecla(n){ if(!M.on) arranca(); if(!ctx) return; var b = 60 / ANIMOS[M.animo].bpm, t = Math.ceil((ahora() + 1) / (b / 2)) * (b / 2); M.notas.push({t:t, grado:Math.min(GRADOS - 1, n * 1.25 | 0), dur:b, hecho:false, tuya:true, color:COLORES[n % COLORES.length]}); M.tuyas++; }
+
+  var FONDOS = [["", "Sin fondo"], ["lluvia", "Lluvia"], ["mar", "Mar"], ["bosque", "Bosque"]];
+  function pintarMusica(){
+    var el = document.getElementById("panel-bien-mus"); if(!el) return;
+    el.innerHTML =
+      '<div class="sec" id="bienestar-musica"><div class="sec-t"><div><h2>Música que se crea sola</h2><p>El pentagrama avanza y la música se compone nota por nota mientras lo escuchas: nunca suena igual dos veces. Sable camina sobre las notas. Toca el pentagrama para sembrar las tuyas.</p></div></div>' +
+      '<div class="juego-m"><canvas id="mus-lienzo" class="mus-lienzo" role="img" aria-label="Pentagrama de colores: las notas avanzan de derecha a izquierda y Sable, con audífonos, camina sobre ellas. Toca el pentagrama para sembrar una nota."></canvas>' +
+      '<p class="a11y-oculto" id="mus-anuncio" aria-live="polite"></p></div>' +
+      '<div class="mus-ctl">' +
+        '<div class="acciones"><button type="button" class="accion" id="mus-play">▶ Crear música</button></div>' +
+        '<div><span class="k-m">Ambiente</span><div class="opc" role="group" aria-label="Ambiente de la música">' + Object.keys(ANIMOS).map(function(k, i){ return '<button type="button" data-animo="' + k + '" aria-pressed="' + (i ? "false" : "true") + '">' + ANIMOS[k].n + '</button>'; }).join("") + '</div></div>' +
+        '<div><span class="k-m">Fondo</span><div class="opc" role="group" aria-label="Sonido de fondo">' + FONDOS.map(function(f, i){ return '<button type="button" data-fondo="' + f[0] + '" aria-pressed="' + (i ? "false" : "true") + '">' + f[1] + '</button>'; }).join("") + '</div></div>' +
+        '<div class="vol"><label for="mus-vol">Volumen</label><input id="mus-vol" type="range" min="0" max="100" value="60"></div>' +
+      '</div>' +
+      '<p class="chico-m" id="mus-cuenta" aria-live="off">Notas creadas: 0</p>' +
+      '<p class="chico-m">Con el teclado: <kbd>Espacio</kbd> crea o pausa la música y las teclas <kbd>1</kbd> a <kbd>8</kbd> siembran notas, de la más grave a la más aguda. Puedes cambiar de sección: la música sigue sonando y un pequeño reproductor con Sable te acompaña.</p>' +
+      '<p class="chico-m">Con audífonos, mejor bajito: la OMS recomienda no pasar del 60 % del volumen máximo de tu dispositivo.</p></div>';
+    lienzo = $("#mus-lienzo"); c2 = lienzo.getContext("2d");
+    lienzo.addEventListener("pointerdown", siembra);
+    $("#mus-play").onclick = function(){ M.on ? detiene() : arranca(); };
+    el.querySelectorAll("[data-animo]").forEach(function(b){ b.onclick = function(){ M.animo = b.dataset.animo; el.querySelectorAll("[data-animo]").forEach(function(x){ x.setAttribute("aria-pressed", x === b); }); M.notas = M.notas.filter(function(n){ return n.hecho; }); if(ctx) M.tSig = ahora() + .3; M.beat = 0; }; });
+    el.querySelectorAll("[data-fondo]").forEach(function(b){ b.onclick = function(){ el.querySelectorAll("[data-fondo]").forEach(function(x){ x.setAttribute("aria-pressed", x === b); }); if(b.dataset.fondo) sonar(b.dataset.fondo); else parar(); }; });
+    $("#mus-vol").oninput = function(){ M.vol = this.value / 100; SON.vol = M.vol * .8; if(ctx){ if(musOut && M.on){ musOut.gain.cancelScheduledValues(ctx.currentTime); musOut.gain.setValueAtTime(M.vol, ctx.currentTime); } if(salida){ salida.gain.cancelScheduledValues(ctx.currentTime); salida.gain.setValueAtTime(SON.vol, ctx.currentTime); } } };
+    el.addEventListener("keydown", function(e){
+      if(e.target.closest("input,button")) { if(e.key !== " ") return; if(e.target.closest("button")) return; }
+      if(e.key === " "){ e.preventDefault(); M.on ? detiene() : arranca(); }
+      else if(/^[1-8]$/.test(e.key)) siembraTecla(+e.key);
+    });
+    lienzo.tabIndex = 0;
+    if(window.ResizeObserver) new ResizeObserver(ajusta).observe(lienzo); else addEventListener("resize", ajusta);
+    setTimeout(ajusta, 50);
   }
 
-  /* ---------- vista Música ---------- */
-  function pintarMusica(){
-    var el = document.getElementById("v-musica"); if(!el) return;
-    el.innerHTML =
-      '<div class="cab-esp"><span class="eyebrow">Para acompañar tu trabajo</span><h1>Música</h1>' +
-      '<p>La playlist del equipo de Diseño Instruccional y paisajes de sonido para concentrarte. Puedes seguir navegando por el sitio: la música no se detiene al cambiar de sección.</p>' +
-      ayuda("Para trabajar con música o con un sonido de fondo que te ayude a concentrarte. Elige la playlist o una estación; mientras suena, un pequeño reproductor con Sable te acompaña en las demás secciones para pausar o volver aquí.") + '</div>' +
-      '<div class="sec" id="musica-playlist"><div class="sec-t"><div><h2>Playlist de Diseño Instruccional</h2><p>Dale play en el reproductor. Si tienes sesión abierta en Spotify en este navegador, se escucha completa; si no, Spotify solo reproduce fragmentos de 30 segundos.</p></div></div>' +
-        '<div class="mus-top"><div class="spot-lugar" id="spot-lugar"><p>Cargando la playlist…</p></div>' +
-        '<div class="mus-sable">' + sable(150) + '<p id="mus-estado" aria-live="polite">Nada sonando.</p><p>Sable se pone a bailar cuando suena algo.</p>' +
-        '<a class="accion sec" href="https://open.spotify.com/playlist/' + PLAYLIST + '" target="_blank" rel="noopener">Abrir en Spotify ↗</a></div></div></div>' +
-      '<div class="sec" id="musica-sonidos"><div class="sec-t"><div><h2>Paisajes de sonido</h2><p>Nada de esto es una grabación: se genera en tu navegador en el momento, así que no consume datos. Puedes mezclar una estación con la playlist.</p></div></div>' +
-        '<div class="estaciones">' + ESTACIONES.map(function(e){ return '<button type="button" class="est-b" data-est="' + e[0] + '" aria-pressed="false"><b>' + e[1] + '</b><span>' + e[2] + '</span></button>'; }).join("") + '</div>' +
-        '<div class="vol"><label for="mus-vol">Volumen de los paisajes</label><input id="mus-vol" type="range" min="0" max="100" value="50"><button type="button" class="accion sec" id="mus-parar">Apagar paisajes</button></div>' +
-        '<p class="chico" style="color:var(--tinta2);font-size:14px">Con audífonos, mejor bajito: la OMS recomienda no pasar del 60 % del volumen máximo de tu dispositivo.</p></div>';
-    el.querySelectorAll("[data-est]").forEach(function(b){ b.onclick = function(){ if(SON.k === b.dataset.est) parar(); else sonar(b.dataset.est); }; });
-    $("#mus-vol").oninput = function(){ SON.vol = this.value / 100; if(salida && ctx){ salida.gain.cancelScheduledValues(ctx.currentTime); salida.gain.setValueAtTime(SON.vol, ctx.currentTime); } };
-    $("#mus-parar").onclick = function(){ parar(); };
+  /* ---------- estado, mini reproductor y pestañas ---------- */
+  function vistaActual(){ var v = document.querySelector(".vista:not([hidden])"); return v ? v.dataset.vista : ""; }
+  function enMusica(){ var p = document.getElementById("panel-bien-mus"); return vistaActual() === "bienestar" && p && !p.hidden; }
+  function estado(){
+    var suena = M.on || !!SON.k, b = $("#mus-play");
+    if(b) b.textContent = M.on ? "❚❚ Pausar la música" : "▶ Crear música";
+    document.querySelectorAll("[data-fondo]").forEach(function(x){ x.setAttribute("aria-pressed", (x.dataset.fondo || null) === SON.k); });
+    var m = $(".mini-mus");
+    if(!suena || enMusica()){ if(m) m.hidden = true; return; }
+    if(!m){ m = document.createElement("div"); m.className = "mini-mus"; m.setAttribute("role", "region"); m.setAttribute("aria-label", "Música sonando"); document.body.appendChild(m); }
+    var nom = (M.on ? "Música · " + ANIMOS[M.animo].n : "") + (M.on && SON.k ? " + " : "") + (SON.k ? FONDOS.filter(function(f){ return f[0] === SON.k; })[0][1] : "");
+    m.hidden = false;
+    m.innerHTML = sable(56, " suena") + '<div class="txt"><span>Sonando</span><b>' + esc(nom) + '</b></div>' +
+      '<button type="button" data-mm="parar">Detener</button><a class="x-ir" href="#bienestar-musica">Volver</a>';
+    m.querySelector('[data-mm="parar"]').onclick = function(){ detiene(); parar(); };
+  }
+  function muestraPanel(cual, enfocar){
+    var v = document.getElementById("v-bienestar"); if(!v) return;
+    v.querySelectorAll("[data-bien]").forEach(function(t){ var s = t.dataset.bien === cual; t.setAttribute("aria-selected", s); t.tabIndex = s ? 0 : -1; });
+    document.getElementById("panel-bien-ej").hidden = cual !== "ej"; document.getElementById("panel-bien-mus").hidden = cual !== "mus";
+    if(cual === "mus") setTimeout(ajusta, 30);
+    estado();
   }
 
   /* ---------- arranque ---------- */
-  var dock = document.createElement("div"); dock.id = "spot-dock"; dock.hidden = true; document.body.appendChild(dock);
   pintarBienestar(); pintarMusica();
-  function alCambiar(){ if(vistaActual() === "musica") cargaSpotify(); setTimeout(coloca, 30); estado(true); }
-  addEventListener("hashchange", alCambiar); addEventListener("resize", function(){ coloca(); });
-  if(window.ResizeObserver) new ResizeObserver(function(){ if(vistaActual() === "musica") coloca(); }).observe(document.getElementById("contenido") || document.body);
-  alCambiar();
-  // para pruebas y para que otras partes del sitio sepan si hay música sonando
-  window.DIMusica = {spotify:function(){ return SP.ctl; }, sonando:function(){ return SP.sonando || !!SON.k; }, estacion:function(){ return SON.k; }};
+  document.querySelectorAll("#v-bienestar [data-bien]").forEach(function(t){ t.addEventListener("click", function(){ muestraPanel(t.dataset.bien); }); });
+  function alCambiar(){
+    var h = location.hash.slice(1);
+    if(h === "musica" || h === "bienestar-musica"){ if(h === "musica") history.replaceState(null, "", "#bienestar-musica"); muestraPanel("mus"); setTimeout(function(){ var s = document.getElementById("bienestar-musica"); if(s) s.scrollIntoView({block:"start"}); }, 0); }
+    else if(/^bienestar-(pausa|evidencia|chequeo)$/.test(h) || h === "bienestar") muestraPanel("ej");
+    estado();
+  }
+  addEventListener("hashchange", alCambiar); alCambiar();
+  window.DIMusica = {sonando:function(){ return M.on || !!SON.k; }, animo:function(){ return M.animo; }, notas:function(){ return M.total; }, fondo:function(){ return SON.k; }};
 })();
