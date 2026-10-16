@@ -1,4 +1,4 @@
-/* Diseño Instruccional · Reproductor lo-fi: máscaras Tocadiscos y Retro */
+/* Diseño Instruccional · Reproductor lo-fi: máscaras Tocadiscos, Retro y Arcade */
 
 /* ---------- Tocadiscos ---------- */
 .td{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px 28px;align-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--td1) 22%,var(--hoja)),var(--hoja) 75%);border:1px solid var(--linea);border-radius:22px;padding:24px}
@@ -9,9 +9,8 @@
 .td-disco{position:absolute;inset:5%;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,#26222c 0 2px,#1b1820 2px 4px);box-shadow:inset 0 0 0 2px #0006,0 0 0 1px #0004}
 .td-disco::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,#ffffff00 0 12%,#ffffff1f 16%,#ffffff00 22%,#ffffff00 60%,#ffffff17 64%,#ffffff00 70%)}
 .td-disco.gira{animation:td-gira 5s linear infinite}
-.td-etq{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle,var(--td2) 0 18%,var(--td1) 19%);display:grid;place-items:center;align-content:center;text-align:center;color:#fff;font-family:var(--disp);line-height:1}
-.td-etq b{font-size:clamp(13px,2.4vw,20px);letter-spacing:.04em}
-.td-etq span{font-size:clamp(9px,1.3vw,11px);opacity:.9}
+.td-etq{position:absolute;inset:28%;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 40%,var(--td2),var(--td1) 70%);box-shadow:inset 0 0 0 3px #ffffff55,0 0 0 2px #0005}
+.td-etq img{position:absolute;left:7%;top:10%;width:86%;height:86%;object-fit:contain}
 .td-brazo{position:absolute;right:4%;top:6%;width:26%;transform-origin:70% 10%;transform:rotate(-26deg);transition:transform .8s ease}
 .td-brazo.sobre{transform:rotate(-4deg)}
 .td-perillas{position:absolute;right:8%;bottom:9%;display:flex;gap:8px}
@@ -25,7 +24,8 @@
 .td-vol input{accent-color:var(--violeta);width:min(180px,100%)}
 .td-discos{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:12px}
 .td-funda{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:52px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;background:var(--hoja);color:var(--tinta);border:1.5px solid var(--linea);border-radius:14px;padding:10px 12px}
-.td-funda i{grid-row:1/3;width:52px;height:52px;border-radius:8px;background:radial-gradient(circle at 70% 50%,#1b1820 0 36%,transparent 37%),linear-gradient(135deg,var(--f1),var(--f2));box-shadow:inset 0 0 0 1px #0001}
+.td-funda i{grid-row:1/3;position:relative;overflow:hidden;width:52px;height:52px;border-radius:8px;background:linear-gradient(135deg,var(--f1),var(--f2));box-shadow:inset 0 0 0 1px #0001}
+.td-funda i img{position:absolute;left:4%;top:8%;width:92%;height:92%;object-fit:contain}
 .td-funda b{font-family:var(--disp);font-weight:600;font-size:15px}
 .td-funda span{font-size:13px;color:var(--tinta2)}
 .td-funda[aria-pressed="true"]{border-color:var(--violeta);background:var(--violeta-s)}
@@ -106,8 +106,15 @@ html.a11y-movimiento .rt-marquesina span.corre{animation:none;padding-left:0}
 .ar-a{background:#8EE6A6}.ar-bb{background:#F49AC1}.ar-c{background:#F6E27A}
 .ar-vol{display:flex;align-items:center;gap:10px;font-family:"Press Start 2P",monospace;font-size:9px;color:#CFC4EA}
 .ar-vol input{accent-color:#F49AC1;width:130px}
-.ar-moneda{display:flex;align-items:center;gap:10px;font-family:"Press Start 2P",monospace;font-size:8px;color:#F6E27A}
-.ar-moneda i{width:12px;height:30px;border-radius:3px;background:#0B0820;box-shadow:inset 0 0 0 2px #F6E27A88,0 0 10px #F6E27A44}
+/* moneda de juego libre: botón con ranura; al hacer clic una moneda gira y entra */
+.ar-moneda{font:inherit;display:flex;align-items:center;gap:10px;font-family:"Press Start 2P",monospace;font-size:8px;color:#F6E27A;background:#140A2B;border:2px solid #3E2878;border-radius:10px;padding:8px 12px 8px 10px;cursor:pointer}
+.ar-moneda:hover{border-color:#F6E27A}
+.ar-ranura{position:relative;width:12px;height:30px}
+.ar-ranura i{position:absolute;inset:0;border-radius:3px;background:#0B0820;box-shadow:inset 0 0 0 2px #F6E27A88,0 0 10px #F6E27A44}
+.ar-ranura.traga i{animation:ar-traga .7s ease-out .45s}
+.ar-coin{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;display:grid;place-items:center;font-family:"Press Start 2P",monospace;font-size:7px;color:#8A5A00;background:radial-gradient(circle at 35% 30%,#FFF6B8,#F6C84A 45%,#C98A12);box-shadow:inset 0 0 0 2px #E0A422,inset 0 0 0 4px #FFE58A;pointer-events:none;z-index:2;animation:ar-moneda .62s cubic-bezier(.5,0,.75,.4) forwards}
+@keyframes ar-moneda{0%{transform:translate(0,-46px) rotateY(0) scale(.6);opacity:0}18%{opacity:1;transform:translate(0,-40px) rotateY(180deg) scale(1)}62%{transform:translate(0,-18px) rotateY(540deg) scale(1)}80%{transform:translate(0,-4px) rotateY(630deg) scaleX(.12);opacity:1}100%{transform:translate(0,6px) rotateY(720deg) scaleX(.08) scaleY(.3);opacity:0}}
+@keyframes ar-traga{0%{box-shadow:inset 0 0 0 2px #F6E27A,0 0 18px 4px #F6E27Acc;background:#F6E27A55}100%{box-shadow:inset 0 0 0 2px #F6E27A88,0 0 10px #F6E27A44;background:#0B0820}}
 .ar-niveles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:10px}
 .ar-niveles button{font:inherit;text-align:left;cursor:pointer;display:grid;gap:6px;padding:12px;border-radius:12px;background:#24124A;color:#F3ECFF;border:2px solid #3E2878}
 .ar-niveles button span{font-family:"Press Start 2P",monospace;font-size:9px;color:var(--n1)}
@@ -121,7 +128,7 @@ html.a11y-movimiento .rt-marquesina span.corre{animation:none;padding-left:0}
 .ar-lista button[aria-current="true"]{border-color:#F6E27A;color:#fff}
 .ar button:focus-visible,.ar input:focus-visible{outline:3px solid #F6E27A;outline-offset:2px}
 @keyframes ar-neon{to{background-position:300% 0}}
-@media (prefers-reduced-motion:reduce){.ar-marq{animation:none}}
-html.a11y-movimiento .ar-marq{animation:none}
+@media (prefers-reduced-motion:reduce){.ar-marq,.ar-ranura.traga i{animation:none}}
+html.a11y-movimiento .ar-marq,html.a11y-movimiento .ar-ranura.traga i{animation:none}
 @media (max-width:640px){.ar{padding:12px}.ar-panel{justify-content:center}.ar-b{width:50px;height:50px}}
 .rt-lista .rt-pistas button{justify-content:flex-start}

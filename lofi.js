@@ -1,7 +1,8 @@
 /* Diseño Instruccional · Reproductor lo-fi generativo (Bienestar › Música).
    Todo el sonido se genera en el navegador: acordes de jazz con piano eléctrico, bajo, batería suave con swing,
    ruido de vinilo y un ligero vaivén de cinta. Cada pista se arma al momento y nunca se repite igual.
-   Dos máscaras para elegir: Tocadiscos y Retro (inspirada en los reproductores de música de los 90). */
+   Tres máscaras para elegir: Tocadiscos (con Sable en la etiqueta de cada disco), Retro (inspirada en los reproductores
+   de los 90) y Arcade (máquina de videojuegos con moneda de «juego libre»). */
 (function(){
   var RAIZ = (document.currentScript && document.currentScript.src || "").replace(/lofi.js.*$/, "");
   var cont = document.getElementById("bienestar-lofi"); if(!cont || !window.DIAudio) return;
@@ -27,7 +28,7 @@
      prog2:[[[53,56,60,63],41],[[50,56,58,62],34],[[51,55,58,62],39],[[48,51,55,58],36]],
      esc:[63,65,67,70,72,75,77], lluvia:false}
   ];
-  var L = {on:false, d:0, paso:0, compas:0, tSig:0, pista:1, inicio:0, transcurrido:0, vol:.7, reloj:null, var2:false, sinBateria:false};
+  var L = {on:false, d:0, paso:0, compas:0, tSig:0, pista:1, inicio:0, transcurrido:0, vol:.7, reloj:null, var2:false, sinBateria:false, creditos:0, tMoneda:-9};
   var ctx = null, bus = null, epBus = null, bajoBus = null, batBus = null, wow = null, salida = null, analizador = null, vinilo = [], timers = [];
   var mtof = function(m){ return 440 * Math.pow(2, (m - 69) / 12); };
 
@@ -148,7 +149,7 @@
   }
   function tocadiscosHTML(D){
     return '<div class="td" style="--td1:' + D.color + ';--td2:' + D.color2 + '">' +
-      '<div class="td-base"><div class="td-plato"><div class="td-disco' + (L.on ? " gira" : "") + '"><div class="td-etq"><b>DI</b><span>lo-fi</span></div></div></div>' +
+      '<div class="td-base"><div class="td-plato"><div class="td-disco' + (L.on ? " gira" : "") + '"><div class="td-etq"><img src="' + RAIZ + 'img/sable-disco-' + (L.d + 1) + '.png" alt="" width="280" height="280"></div></div></div>' +
       '<svg class="td-brazo' + (L.on ? " sobre" : "") + '" viewBox="0 0 100 220" aria-hidden="true"><circle cx="70" cy="22" r="16" fill="#cfc8da" stroke="#9a90ab" stroke-width="3"/><circle cx="70" cy="22" r="6" fill="#7d7390"/><path d="M70 22 L70 150 L46 196" fill="none" stroke="#b8afc6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="34" y="188" width="22" height="16" rx="3" transform="rotate(-30 45 196)" fill="#6f6680"/></svg>' +
       '<div class="td-perillas" aria-hidden="true"><i></i><i></i></div></div>' +
       '<div class="td-info"><span class="td-k">' + (L.on ? "Sonando" : "Disco listo") + ' · ' + esc(D.n) + '</span><b>' + esc(tituloPista()) + '</b><span>Pista ' + L.pista + ' · ' + D.bpm + ' BPM · <span data-lofi="tiempo">' + tiempo() + '</span></span></div>' +
@@ -156,7 +157,7 @@
       '<button type="button" class="accion sec" data-lofi="sig">' + I.sig + ' Otra pista</button>' +
       '<label class="td-vol">Volumen <input type="range" min="0" max="100" value="' + Math.round(L.vol * 100) + '" data-lofi="vol"></label></div>' +
       '<div class="td-pistas"><span class="td-k">Lado A · ' + esc(D.n) + '</span>' + listaPistas(D, "td-lista") + '</div>' +
-      '<div class="td-discos" role="group" aria-label="Elige un disco">' + DISCOS.map(function(x, i){ return '<button type="button" class="td-funda" data-lofi="disco" data-i="' + i + '" aria-pressed="' + (i === L.d) + '" style="--f1:' + x.color + ';--f2:' + x.color2 + '"><i aria-hidden="true"></i><b>' + esc(x.n) + '</b><span>' + esc(x.d) + '</span></button>'; }).join("") + '</div></div>';
+      '<div class="td-discos" role="group" aria-label="Elige un disco">' + DISCOS.map(function(x, i){ return '<button type="button" class="td-funda" data-lofi="disco" data-i="' + i + '" aria-pressed="' + (i === L.d) + '" style="--f1:' + x.color + ';--f2:' + x.color2 + '"><i aria-hidden="true"><img src="' + RAIZ + 'img/sable-disco-' + (i + 1) + '.png" alt="" loading="lazy"></i><b>' + esc(x.n) + '</b><span>' + esc(x.d) + '</span></button>'; }).join("") + '</div></div>';
   }
   function retroHTML(D){
     return '<div class="rt" role="group" aria-label="Reproductor retro">' +
@@ -180,7 +181,7 @@
           '<span class="ar-bot"><button type="button" class="ar-b ar-bb" data-lofi="sig" aria-label="Otra pista">B</button><small>OTRA PISTA</small></span>' +
           '<span class="ar-bot"><button type="button" class="ar-b ar-c" data-lofi="stop" aria-label="Detener">C</button><small>SALIR</small></span></div>' +
         '<label class="ar-vol"><span>VOL</span><input type="range" min="0" max="100" value="' + Math.round(L.vol * 100) + '" data-lofi="vol" aria-label="Volumen"></label>' +
-        '<div class="ar-moneda" aria-hidden="true"><i></i><span>JUEGO LIBRE</span></div></div>' +
+        '<button type="button" class="ar-moneda" data-lofi="moneda" aria-label="Insertar moneda (juego libre). Créditos: ' + L.creditos + '"><span class="ar-ranura" aria-hidden="true"><i></i></span><span aria-hidden="true">JUEGO LIBRE</span></button></div>' +
       '<div class="ar-niveles" role="group" aria-label="Elige un nivel">' + DISCOS.map(function(x, i){ return '<button type="button" data-lofi="disco" data-i="' + i + '" aria-pressed="' + (i === L.d) + '" style="--n1:' + x.color + '"><span>NIVEL ' + (i + 1) + '</span><b>' + esc(x.n) + '</b></button>'; }).join("") + '</div>' +
       '<div class="ar-pistas"><span>PISTAS DEL NIVEL ' + (L.d + 1) + '</span>' + listaPistas(D, "ar-lista") + '</div></div>';
   }
@@ -190,17 +191,24 @@
     if(mascara === "arcade" && !fuenteArcade){ fuenteArcade = true; var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"; document.head.appendChild(l); }
     zona.innerHTML = mascara === "retro" ? retroHTML(D) : mascara === "arcade" ? arcadeHTML(D) : tocadiscosHTML(D);
     cont.querySelectorAll("[data-masc]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.masc === mascara); });
-    zona.querySelectorAll("canvas").forEach(function(c){ var r = c.getBoundingClientRect(), dpr = devicePixelRatio || 1; c.width = Math.max(1, r.width * dpr); c.height = Math.max(1, r.height * dpr); });
     if(L.on) animar(); else { dibujaEspectro(true); dibujaArcade(true); }
   }
-  var raf = null;
+  /* mide el lienzo justo antes de dibujar: si la pestaña está oculta (ancho 0) no dibuja, así nunca se queda
+     con un tamaño de 1 px que el navegador estira (la «pantalla rosa» al volver de otra pestaña) */
+  function mide(c){
+    var w = c.clientWidth, h = c.clientHeight; if(!w || !h) return false;
+    var dpr = devicePixelRatio || 1, W = Math.round(w * dpr), H = Math.round(h * dpr);
+    if(c.width !== W || c.height !== H){ c.width = W; c.height = H; }
+    return true;
+  }
+  var raf = null, espera = null;
   function niveles(n){
     var datos = new Uint8Array(analizador ? analizador.frequencyBinCount : 64), out = []; if(analizador && L.on) analizador.getByteFrequencyData(datos);
     for(var i = 0; i < n; i++) out.push(L.on ? datos[Math.min(datos.length - 1, Math.floor(Math.pow(i / n, 1.6) * datos.length))] / 255 : 0);
     return out;
   }
   function dibujaEspectro(vacio){
-    var c = cont.querySelector("[data-lofi=espectro]"); if(!c) return; var g = c.getContext("2d"), W = c.width, H = c.height; g.clearRect(0, 0, W, H);
+    var c = cont.querySelector("[data-lofi=espectro]"); if(!c || !mide(c)) return; var g = c.getContext("2d"), W = c.width, H = c.height; g.clearRect(0, 0, W, H);
     var n = 32, v = niveles(n), w = W / n;
     for(var i = 0; i < n; i++){ var h = Math.max(H * .04, (vacio ? 0 : v[i]) * H);
       for(var y = 0; y < h; y += H / 14){ var f = y / H; g.fillStyle = f > .75 ? "#E8E36A" : f > .5 ? "#B6E36A" : "#5BE38A"; g.fillRect(i * w + 1, H - y - H / 14 + 1, w - 2, H / 14 - 2); } }
@@ -213,7 +221,7 @@
     var cv = document.createElement("canvas"); cv.width = cv.height = 56; var g = cv.getContext("2d"); g.imageSmoothingEnabled = true; g.drawImage(i, 0, 0, 56, 56); return (pix[k] = cv);
   }
   function dibujaArcade(quieto){
-    var c = cont.querySelector("[data-lofi=arcade]"); if(!c) return; var g = c.getContext("2d"), W = c.width, H = c.height, t = performance.now() / 1000, D = DISCOS[L.d], beat = t * D.bpm / 60;
+    var c = cont.querySelector("[data-lofi=arcade]"); if(!c || !mide(c)) return; var g = c.getContext("2d"), W = c.width, H = c.height, t = performance.now() / 1000, D = DISCOS[L.d], beat = t * D.bpm / 60;
     var px = Math.max(2, Math.round(W / 320));
     g.imageSmoothingEnabled = false; g.fillStyle = "#0B0820"; g.fillRect(0, 0, W, H);
     if(!estrellas.length) for(var s = 0; s < 70; s++) estrellas.push({x:Math.random(), y:Math.random() * .62, v:.02 + Math.random() * .08, c:["#F6E27A", "#9FD8FF", "#F49AC1", "#B7A6F2"][s % 4]});
@@ -236,20 +244,39 @@
     var fz = Math.max(8, Math.round(W / 46)); g.font = fz + 'px "Press Start 2P", monospace'; g.textBaseline = "top";
     g.fillStyle = "#F6E27A"; g.textAlign = "left"; g.fillText("NIVEL " + (L.d + 1) + "-" + L.pista, px * 6, px * 6);
     g.textAlign = "right"; g.fillStyle = "#9FD8FF"; g.fillText("TIEMPO " + tiempo(), W - px * 6, px * 6);
-    g.textAlign = "center"; g.fillStyle = "#FFFFFF"; g.fillText(tituloPista().normalize("NFD").replace(/[0300-036f]/g, "").toUpperCase(), W / 2, px * 6 + fz * 2);
-    if(!L.on && Math.floor(t * 2) % 2 === 0){ g.fillStyle = "#F49AC1"; g.fillText("PRESIONA A PARA JUGAR", W / 2, H * .32); }
+    g.textAlign = "center"; g.fillStyle = "#FFFFFF"; g.fillText(tituloPista().normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase(), W / 2, px * 6 + fz * 2);
+    var tm = t - L.tMoneda;
+    if(tm < 1.6){ g.fillStyle = Math.floor(tm * 8) % 2 ? "#FFFFFF" : "#F6E27A"; g.fillText("+1 CREDITO", W / 2, H * .32); }
+    else if(!L.on && Math.floor(t * 2) % 2 === 0){ g.fillStyle = "#F49AC1"; g.fillText("PRESIONA A PARA JUGAR", W / 2, H * .32); }
+    if(L.creditos){ g.textAlign = "right"; g.fillStyle = "#F6E27A"; g.fillText("CREDITOS " + Math.min(L.creditos, 99), W - px * 6, H - px * 6 - fz); }
     if(L.on && !reduce() && !quieto){ g.fillStyle = "#F6E27A"; g.fillText("♪", sx + tam * .95, sy + tam * .1 - (beat % 1) * px * 8); }
   }
   function animar(){
-    if(raf) return;
+    if(raf || espera) return;
     (function paso(){
       raf = null;
       cont.querySelectorAll("[data-lofi=tiempo]").forEach(function(e){ e.textContent = tiempo(); });
       dibujaEspectro(!L.on); dibujaArcade(!L.on);
       var visible = cont.offsetParent !== null;
-      if(L.on || mascara === "arcade") raf = visible ? requestAnimationFrame(paso) : setTimeout(function(){ raf = null; animar(); }, 1000);
+      if(L.on || mascara === "arcade"){ if(visible) raf = requestAnimationFrame(paso); else espera = setTimeout(function(){ espera = null; animar(); }, 1000); }
     })();
   }
+
+  /* moneda de «juego libre»: aparece sobre la ranura, gira y se mete; suena el clásico «ding-ding» */
+  function moneda(boton){
+    L.creditos++; L.tMoneda = performance.now() / 1000;
+    boton.setAttribute("aria-label", "Insertar moneda (juego libre). Créditos: " + L.creditos);
+    var ranura = boton.querySelector(".ar-ranura");
+    if(!reduce()){ var m = document.createElement("b"); m.className = "ar-coin"; m.setAttribute("aria-hidden", "true"); m.textContent = "DI"; ranura.appendChild(m);
+      m.addEventListener("animationend", function(){ m.remove(); }); setTimeout(function(){ m.remove(); }, 1500); }
+    ranura.classList.remove("traga"); void ranura.offsetWidth; ranura.classList.add("traga");
+    if(prepara()){ var t = ctx.currentTime + (reduce() ? 0 : .5), dest = DIAudio.master();
+      [[988, 0, .07], [1319, .07, .38]].forEach(function(n){ var o = ctx.createOscillator(), g = ctx.createGain(); o.type = "square"; o.frequency.value = n[0];
+        g.gain.setValueAtTime(0, t + n[1]); g.gain.linearRampToValueAtTime(.09 * L.vol, t + n[1] + .005); g.gain.setValueAtTime(.09 * L.vol, t + n[1] + n[2] * .4); g.gain.exponentialRampToValueAtTime(.001, t + n[1] + n[2]);
+        o.connect(g); g.connect(dest); o.start(t + n[1]); o.stop(t + n[1] + n[2] + .02); }); }
+    animar();
+  }
+  function redibuja(){ dibujaEspectro(!L.on); dibujaArcade(!L.on); }
 
   /* ---------- armado ---------- */
   cont.innerHTML = '<div class="sec-t"><div><h2>Reproductor lo-fi</h2><p>Música chill para trabajar: acordes de jazz, una batería suave y el crujido de un disco de vinilo. Cada pista se crea al momento en tu navegador y nunca se repite igual.</p></div>' +
@@ -266,9 +293,16 @@
     else if(k === "dsig") eligeDisco(L.d + 1);
     else if(k === "disco") eligeDisco(+a.dataset.i);
     else if(k === "pista") eligePista(+a.dataset.i);
+    else if(k === "moneda") moneda(a);
   });
   cont.addEventListener("input", function(e){ if(e.target.dataset.lofi === "vol"){ L.vol = e.target.value / 100; if(ctx && L.on){ salida.gain.cancelScheduledValues(ctx.currentTime); salida.gain.setValueAtTime(L.vol, ctx.currentTime); } } });
-  addEventListener("resize", function(){ var z = cont.querySelector(".lofi-zona canvas"); if(z) pinta(); });
+  // al volver a la pestaña Música (o cambiar el ancho de la ventana) el reproductor cambia de tamaño: se vuelve a dibujar
+  if(window.ResizeObserver) new ResizeObserver(function(){ redibuja(); if(mascara === "arcade") animar(); }).observe(cont);
+  else addEventListener("resize", redibuja);
+  function alMostrar(){ setTimeout(function(){ redibuja(); if(espera){ clearTimeout(espera); espera = null; } animar(); }, 0); }
+  addEventListener("hashchange", alMostrar);
+  document.addEventListener("visibilitychange", alMostrar);
+  document.addEventListener("click", function(e){ if(e.target.closest && e.target.closest("[data-bien]")) alMostrar(); });
   pinta(); if(mascara === "arcade") animar();
   window.DILofi = {on:function(){ return L.on; }, nombre:nombre, parar:function(silencioso){ pausa(silencioso); }, disco:function(){ return L.d; }, pista:function(){ return L.pista; }};
 })();
