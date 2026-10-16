@@ -391,7 +391,6 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
     <a href="#coordinaciones">Coordinaciones</a>
     <a href="#asesorias">Asesorías</a>
     <a href="#bienestar">Bienestar</a>
-    <a href="#musica">Música</a>
     <a href="#faq-docentes">Preguntas frecuentes</a>
   </nav>
 </div></header>
@@ -464,7 +463,7 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
       <a class="rapido" href="#docentes-recursos" data-ver="catalogo" aria-haspopup="dialog" style="--c:var(--alumno)"><span class="dot"></span><span><b>Catálogo de aplicaciones</b><small>27 herramientas digitales con fichas y prompts</small></span></a>
       <a class="rapido" href="#docentes-materiales"><span class="dot"></span><span><b>Guiones instruccionales 2026</b><small>Plantillas oficiales por modalidad</small></span></a>
       <a class="rapido" href="#asesorias" style="--c:var(--magenta)"><span class="dot"></span><span><b>Asesorías en vivo</b><small>Lunes a sábado por Google Meet</small></span></a>
-      <a class="rapido" href="#bienestar" style="--c:var(--ok)"><span class="dot"></span><span><b>Bienestar digital</b><small>Pausas, respiración y la playlist del equipo</small></span></a>
+      <a class="rapido" href="#bienestar" style="--c:var(--ok)"><span class="dot"></span><span><b>Bienestar digital</b><small>Pausas, respiración y música que se crea sola</small></span></a>
     </div>
   </div>
 </section>
@@ -473,7 +472,6 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
 <section class="vista esp" id="v-docentes" data-vista="docentes" hidden></section>
 <section class="vista esp coord" id="v-coordinaciones" data-vista="coordinaciones" hidden></section>
 <section class="vista esp bien" id="v-bienestar" data-vista="bienestar" hidden></section>
-<section class="vista esp musica" id="v-musica" data-vista="musica" hidden></section>
 
 <!-- ACCESIBILIDAD -->
 <section class="vista" id="v-accesibilidad" data-vista="accesibilidad" hidden>
@@ -1066,12 +1064,13 @@ document.querySelector(".saltar").addEventListener("click", e => { e.preventDefa
 function anunciar(t){ const a = document.getElementById("anuncio"); a.textContent = ""; setTimeout(() => a.textContent = t, 60); }
 
 // navegación por vistas
-const VISTAS = ["faq-docentes","inicio","docentes","coordinaciones","asesorias","bienestar","musica","accesibilidad"];
-const NOMBRES = {inicio:"Inicio", docentes:"Docentes", coordinaciones:"Coordinaciones", asesorias:"Asesorías", bienestar:"Bienestar digital", musica:"Música", "faq-docentes":"Preguntas frecuentes", accesibilidad:"Accesibilidad"};
+const VISTAS = ["faq-docentes","inicio","docentes","coordinaciones","asesorias","bienestar","accesibilidad"];
+const NOMBRES = {inicio:"Inicio", docentes:"Docentes", coordinaciones:"Coordinaciones", asesorias:"Asesorías", bienestar:"Bienestar", "faq-docentes":"Preguntas frecuentes", accesibilidad:"Accesibilidad"};
 let primera = true;
 function ir(){
   let h = location.hash.slice(1) || "inicio";
   if(h === "faq") h = "faq-docentes";
+  if(h === "musica") h = "bienestar-musica";
   if(h === "contenido") return;
   const v = VISTAS.find(x => h===x || h.startsWith(x+"-")) || "inicio";
   const menu = v;
