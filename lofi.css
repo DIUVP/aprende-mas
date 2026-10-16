@@ -98,6 +98,18 @@ html.a11y-movimiento .rt-marquesina span.corre{animation:none;padding-left:0}
 .ar-palanca{position:relative;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle,#140A2B 0 30%,#2E1A5C 31%)}
 .ar-palanca i{position:absolute;left:50%;bottom:50%;width:8px;height:30px;margin-left:-4px;background:#C9C1D9;border-radius:4px;transform-origin:50% 100%}
 .ar-palanca i::after{content:"";position:absolute;left:50%;top:-14px;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FF9FC7,#E0457E)}
+/* la palanca se mece al ritmo mientras suena y se inclina al cambiar de nivel */
+.ar-palanca{cursor:grab;touch-action:none}
+.ar-palanca:active{cursor:grabbing}
+.ar-palanca.baila i{animation:ar-mece var(--beat,1.5s) ease-in-out infinite}
+.ar-palanca.izq i{animation:ar-izq .5s cubic-bezier(.3,1.6,.5,1)}
+.ar-palanca.der i{animation:ar-der .5s cubic-bezier(.3,1.6,.5,1)}
+.ar-palanca:active i{transform:scaleY(.9)}
+@keyframes ar-mece{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes ar-izq{0%{transform:rotate(0)}35%{transform:rotate(-32deg)}70%{transform:rotate(6deg)}100%{transform:rotate(0)}}
+@keyframes ar-der{0%{transform:rotate(0)}35%{transform:rotate(32deg)}70%{transform:rotate(-6deg)}100%{transform:rotate(0)}}
+@media (prefers-reduced-motion:reduce){.ar-palanca.baila i,.ar-palanca.izq i,.ar-palanca.der i{animation:none}}
+html.a11y-movimiento .ar-palanca.baila i,html.a11y-movimiento .ar-palanca.izq i,html.a11y-movimiento .ar-palanca.der i{animation:none}
 .ar-bots{display:flex;gap:18px;align-items:flex-start}
 .ar-bot{display:grid;justify-items:center;gap:6px}
 .ar-bot small{font-family:"Press Start 2P",monospace;font-size:8px;letter-spacing:.06em;color:#CFC4EA}

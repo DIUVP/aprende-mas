@@ -176,7 +176,7 @@
       '<div class="ar-marq"><b>DI ARCADE</b><span>LO-FI GENERATIVO</span></div>' +
       '<div class="ar-bisel"><canvas class="ar-pant" data-lofi="arcade" role="img" aria-label="Pantalla de la máquina: ' + esc(tituloPista()) + ', ' + (L.on ? "sonando" : "en pausa") + '"></canvas></div>' +
       '<div class="ar-panel">' +
-        '<div class="ar-joy" role="group" aria-label="Palanca: cambia de nivel"><button type="button" data-lofi="ant" aria-label="Nivel anterior">◀</button><span class="ar-palanca" aria-hidden="true"><i></i></span><button type="button" data-lofi="dsig" aria-label="Nivel siguiente">▶</button></div>' +
+        '<div class="ar-joy" role="group" aria-label="Palanca: cambia de nivel"><button type="button" data-lofi="ant" aria-label="Nivel anterior">◀</button><span class="ar-palanca' + (L.on ? ' baila' : '') + '" aria-hidden="true" title="Jala la palanca para cambiar de nivel" style="--beat:' + (120 / D.bpm).toFixed(2) + 's"><i></i></span><button type="button" data-lofi="dsig" aria-label="Nivel siguiente">▶</button></div>' +
         '<div class="ar-bots"><span class="ar-bot"><button type="button" class="ar-b ar-a" data-lofi="play" aria-label="' + (L.on ? "Pausa" : "Jugar") + '">A</button><small>' + (L.on ? "PAUSA" : "JUGAR") + '</small></span>' +
           '<span class="ar-bot"><button type="button" class="ar-b ar-bb" data-lofi="sig" aria-label="Otra pista">B</button><small>OTRA PISTA</small></span>' +
           '<span class="ar-bot"><button type="button" class="ar-b ar-c" data-lofi="stop" aria-label="Detener">C</button><small>SALIR</small></span></div>' +
@@ -276,6 +276,17 @@
         o.connect(g); g.connect(dest); o.start(t + n[1]); o.stop(t + n[1] + n[2] + .02); }); }
     animar();
   }
+  /* palanca del arcade: cambia de nivel y se inclina hacia ese lado (también se puede jalar o tocar) */
+  function palanca(dir){
+    eligeDisco(L.d + dir);
+    var p = cont.querySelector(".ar-palanca"); if(!p) return;
+    p.classList.add(dir < 0 ? "izq" : "der");
+    p.addEventListener("animationend", function(e){ if(/ar-(izq|der)/.test(e.animationName)) p.classList.remove("izq", "der"); });
+  }
+  var jalon = null;
+  cont.addEventListener("pointerdown", function(e){ var p = e.target.closest(".ar-palanca"); if(!p) return; e.preventDefault(); var r = p.getBoundingClientRect(); jalon = {x:e.clientX, centro:r.left + r.width / 2}; });
+  addEventListener("pointerup", function(e){ if(!jalon) return; var dx = e.clientX - jalon.x, dir = Math.abs(dx) > 8 ? dx : e.clientX - jalon.centro; jalon = null; palanca(dir < 0 ? -1 : 1); });
+  addEventListener("pointercancel", function(){ jalon = null; });
   function redibuja(){ dibujaEspectro(!L.on); dibujaArcade(!L.on); }
 
   /* ---------- armado ---------- */
@@ -289,8 +300,8 @@
     if(k === "play") L.on ? pausa() : reproduce();
     else if(k === "stop") detener();
     else if(k === "sig") siguiente();
-    else if(k === "ant") eligeDisco(L.d - 1);
-    else if(k === "dsig") eligeDisco(L.d + 1);
+    else if(k === "ant") palanca(-1);
+    else if(k === "dsig") palanca(1);
     else if(k === "disco") eligeDisco(+a.dataset.i);
     else if(k === "pista") eligePista(+a.dataset.i);
     else if(k === "moneda") moneda(a);
