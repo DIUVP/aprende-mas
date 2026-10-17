@@ -713,8 +713,7 @@ const nueva = (n, titulo) => ({tipo:"web", src:`../nueva/${n}.html`, titulo});
 const nuevaDoc = [
   {destacada:{t:"Guía rápida de UVP Online para docentes · online.uvp.mx",d:"La guía y los tutoriales de la plataforma nueva: cómo entrar, armar tu curso con bloques, crear actividades, calificar y comunicarte con tu grupo. Es la misma que encuentras en «Conoce tu plataforma» dentro de tus materias.",etiqueta:"Guía interactiva · plataforma nueva",niveles:["Accede a la plataforma","Arma tu curso","Actividades y calificaciones","Las palabras de la plataforma","Preguntas rápidas"],acc:[["Abrir la guía rápida",nueva("guia-docentes","Guía rápida de UVP Online para docentes · online.uvp.mx")],["Practicar en el simulador",nueva("practica-docentes","Primeros clics para docentes · online.uvp.mx"),1]],para:"Para aprender a usar online.uvp.mx a tu ritmo: cada tarea viene explicada paso a paso, con preguntas rápidas y un simulador para practicar sin miedo a mover tus materias."}},
   {g:"Antes de iniciar el curso", it:[
-    {t:"Amoxtli digital: proyecto formativo y firmas",d:"Llena el proyecto formativo integrador, firma la constancia de enterado y agrega las firmas de tus estudiantes, todo dentro de tu materia.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("amoxtli-docente","Amoxtli digital: proyecto formativo y firmas")]],para:"Para entregar tu Amoxtli completo, con tu nombre, tu firma y la relación de estudiantes enterados, sin imprimir ni escanear."},
-    {t:"Practica: Primeros clics",d:"Un simulador de la plataforma con juegos de práctica, medallas, preguntas a Sable y la Sala de calma. Nada de lo que hagas ahí afecta tus materias.",tp:"guia",e:"ok",acc:[["Abrir el simulador",nueva("practica-docentes","Primeros clics para docentes · online.uvp.mx")]],para:"Para ensayar los primeros clics en un entorno que se ve como la plataforma, antes de hacerlo en tu materia real."}]}
+    {t:"Amoxtli digital: proyecto formativo y firmas",d:"Llena y firma el proyecto formativo integrador y reúne las firmas de enterado de tus estudiantes, todo dentro de tu materia.",tp:"info",e:"ok",ancha:1,acc:[["Ver ficha",ficha("amoxtli-docente","Amoxtli digital: proyecto formativo y firmas")]],para:"Para entregar tu Amoxtli completo, con tu nombre, tu firma y la relación de estudiantes enterados, sin imprimir ni escanear."}]}
 ];
 
 const ESPACIOS = {
@@ -737,17 +736,15 @@ const ESPACIOS = {
           {t:"Calificar una entrega",d:"Abrir la entrega del alumno, calificarla y guardar.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_02_CalificarUnaEntrega","Calificar una entrega")],["Leer en la guía",guia("t15","Calificar una entrega"),1]],para:"Para asignar la calificación de una tarea que un alumno subió."},
           {t:"Ver las calificaciones",d:"El libro de calificaciones y el avance de cada alumno.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_06_VerLasCalificaciones","Ver las calificaciones")],["Leer en la guía",guia("t7","Ver las calificaciones"),1]],para:"Para conocer el avance de cada alumno y detectar a tiempo quién va atrasado."},
           {t:"Dar una prórroga",d:"Más tiempo a un alumno para entregar, desde Instructor › Extensiones.",tp:"video",e:"ok",dur:"1 min",acc:[["Ver video",video("Tutorial_04_DarUnaProrroga","Dar una prórroga")],["Leer en la guía",guia("t8","Prórrogas"),1]],para:"Para dar más tiempo a un alumno sin cambiar la fecha de todo el grupo."},
-          {t:"Calificaciones por parcial",d:"Con plantilla de Excel descargable.",tp:"guia",e:"ok",acc:[["Abrir en la guía",guia("t17","Calificaciones por parcial")]],para:"Para calcular y reportar las calificaciones de cada parcial con una plantilla de Excel."},
-          {t:"Un buen arranque: buenas prácticas docentes",d:"Estrategias y recomendaciones para iniciar el ciclo.",tp:"video",e:"pend"}]}
+          {t:"Calificaciones por parcial",d:"Con plantilla de Excel descargable.",tp:"guia",e:"ok",acc:[["Abrir en la guía",guia("t17","Calificaciones por parcial")]],para:"Para calcular y reportar las calificaciones de cada parcial con una plantilla de Excel."}]}
       ],
       nueva:nuevaDoc
     },
     materiales:[
       {g:"Planeación", it:[
-        {t:"Guiones instruccionales 2026",d:"Elige tu modalidad para ver la plantilla. Se abre desde Drive con tu cuenta institucional.",tp:"doc",e:"ok",acc:GUIONES.map(([m,id],i)=>[m, doc(id,"Guion instruccional · "+m), i?1:0]),para:"Para planear tu asignatura con el formato oficial de tu modalidad antes de cargar contenidos en la plataforma."},
-        {t:"Planeación docente",d:"Formato y tutorial de llenado.",tp:"doc",e:"pend"}]},
+        {t:"Guiones instruccionales 2026",d:"Elige tu modalidad para ver la plantilla. Se abre desde Drive con tu cuenta institucional.",tp:"doc",e:"ok",acc:GUIONES.map(([m,id],i)=>[m, doc(id,"Guion instruccional · "+m), i?1:0]),para:"Para planear tu asignatura con el formato oficial de tu modalidad antes de cargar contenidos en la plataforma."}]},
       {g:"Formación", it:[
-        {t:"Curso de Inducción al EVA 2026",d:"Curso autogestionado sobre el entorno virtual. Se abre en ol.uvp.mx con tu cuenta.",tp:"curso",e:"ok",acc:[["Ir al curso",{externo:INDUCCION}]],para:"Para conocer el entorno virtual completo con práctica guiada y a tu ritmo: modo edición, modo en vivo, fechas, entregas y buenas prácticas."}]}
+        {t:"Curso de Inducción al EVA 2026",d:"Curso autogestionado sobre el entorno virtual. Se abre en ol.uvp.mx con tu cuenta.",tp:"curso",e:"ok",ancha:1,acc:[["Ir al curso",{externo:INDUCCION}]],para:"Para conocer el entorno virtual completo con práctica guiada y a tu ritmo: modo edición, modo en vivo, fechas, entregas y buenas prácticas."}]}
     ],
     recursos:[
       {g:"Herramientas digitales", it:[
@@ -755,8 +752,7 @@ const ESPACIOS = {
         {t:"Comprimir un PDF con Small PDF",d:"Alternativa en línea, sin instalar nada.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("smallpdf","Comprimir un PDF con Small PDF")]],para:"Para reducir el peso de un PDF si I Love PDF no está disponible."},
         {t:"Genially, Canva y otras páginas",d:"Cómo mostrarlas dentro del curso.",tp:"guia",e:"ok",acc:[["Abrir en la guía",guia("t13","Genially, Canva y otras páginas")]],para:"Para mostrar presentaciones interactivas o diseños de otras páginas dentro de tu curso."}]},
       {g:"Aplicaciones educativas", it:[
-        {t:"Catálogo de aplicaciones educativas",d:"27 aplicaciones con fichas, formatos de integración en edX, banco de prompts, taller de IA y autoevaluación.",tp:"web",e:"ok",acc:[["Abrir el catálogo",CATALOGO]],para:"Para elegir una aplicación que haga tu clase más interactiva. Cada ficha dice para qué sirve, cómo integrarla en edX y trae prompts de IA listos para usar."},
-        {t:"Nuevas recomendaciones",d:"Espacio para las siguientes herramientas que proponga el equipo.",tp:"web",e:"pend"}]}
+        {t:"Catálogo de aplicaciones educativas",d:"27 aplicaciones con fichas, formatos de integración en edX, banco de prompts, taller de IA y autoevaluación.",tp:"web",e:"ok",ancha:1,acc:[["Abrir el catálogo",CATALOGO]],para:"Para elegir una aplicación que haga tu clase más interactiva. Cada ficha dice para qué sirve, cómo integrarla en edX y trae prompts de IA listos para usar."}]}
     ]
   }
 };
@@ -782,7 +778,7 @@ function tarjeta(x){
   const vacio = x.e === "pend";
   const muchas = x.acc && x.acc.length > 3;
   const acc = x.acc ? `<div class="acciones${muchas?" lista":""}">${x.acc.map(boton).join("")}</div>` : "";
-  return `<article class="tj${vacio?" vacio":""}${muchas?" ancha":""}"><div class="cuerpo">
+  return `<article class="tj${vacio?" vacio":""}${muchas||x.ancha?" ancha":""}"><div class="cuerpo">
     <div class="meta"><span class="est ${x.e}">${EST[x.e]}</span><span class="tipo">${I[x.tp]}${TIPO[x.tp]}${x.dur?" · "+esc(x.dur):""}</span></div>
     <h4>${esc(x.t)}</h4>${x.d?`<p>${esc(x.d)}</p>`:""}
     ${x.para?pqs(esc(x.para),1):""}
@@ -930,7 +926,7 @@ const FAQ = {
         [OL+" Aparece el error 403","Significa “sin permiso”: la plataforma no te deja ver los contenidos de la materia. Escribe a Diseño Instruccional para que revise tus permisos en el curso."],
         [OL+" No tengo acceso a mi curso, pero mis alumnos sí","Escribe a Diseño Instruccional para que revise tu rol en el curso."]]},
       {g:"Contenidos y fechas", q:[
-        [ON+" ¿Cómo lleno y firmo el Amoxtli?","En tu materia, dentro de «Acerca del curso», abre la página «Solo docentes: Hoja digital del Amoxtli». Ahí firmas la constancia de enterado, llenas el proyecto formativo integrador y los avances, y das clic en «Enviar». El paso a paso está en <a href=\"#docentes-tutoriales\">Docentes → Tutoriales → online.uvp.mx</a>."],
+        [ON+" ¿Cómo lleno y firmo el Amoxtli?","En tu materia, dentro de «Acerca del curso», abre la página «Solo docentes: Hoja digital del Amoxtli». Ahí escribes tus datos y tu firma, llenas el proyecto formativo integrador y los avances, y das clic en «Enviar». Tu firma va en la página del proyecto formativo; la primera página del Amoxtli la firman solo tus estudiantes. El paso a paso está en <a href=\"#docentes-tutoriales\">Docentes → Tutoriales → online.uvp.mx</a>."],
         ["¿Cuáles son los formatos permitidos para subir lecturas y archivos?","Se recomienda subir todos los documentos en PDF para que los estudiantes puedan leerlos desde cualquier dispositivo. Para presentaciones o videos largos, es preferible enlazarlos desde Google Drive, Canva o YouTube."],
         ["¿Dónde puedo obtener los formatos oficiales para mi asignatura?","En <a href=\"#docentes-materiales\">Docentes → Materiales</a> están los guiones instruccionales 2026 de cada modalidad."],
         ["Coordino una licenciatura, ¿dónde veo el reporte de materias?","En <a href=\"#coordinaciones\">Coordinaciones</a>. Elige tu plantel (Puebla, Tehuacán o Tlaxcala) y busca tu licenciatura. Cada reporte es de uso exclusivo de su coordinación."],
