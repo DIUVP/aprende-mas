@@ -3850,6 +3850,30 @@ header.top,#startBox,.sim,.rail,.barraMovil,.hojaMas,#sableBtn,#sableGlobo,#medB
 .guiaTabs{display:flex;gap:8px;justify-content:center;margin:0 0 16px;position:sticky;top:8px;z-index:20}
 .guiaTabs button{border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:9px 18px;font:inherit;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
 .guiaTabs button[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:#fff}
+
+/* ---- firma de Diseño Instruccional (07/10/2026): logotipo «DI» a la izquierda y pie de página.
+        Pieza compartida por la guía de estudiantes y la de docentes. ---- */
+.firmaDI{position:fixed;left:18px;top:16px;z-index:40;display:flex;align-items:center;gap:10px;outline:none}
+.firmaDI .di-logo{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;padding-bottom:3px;position:relative;overflow:hidden;cursor:default;
+  background:linear-gradient(145deg,var(--purple-deep),var(--purple));color:#fff;
+  font:800 19px/1 var(--display);letter-spacing:.5px;box-shadow:var(--shadow);transition:transform .22s ease,box-shadow .22s ease}
+.firmaDI .di-logo i{font-style:normal;color:#FFC857}
+.firmaDI .di-logo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,#D81B60 0 50%,#F4A300 50% 100%)}
+.firmaDI:hover .di-logo,.firmaDI:focus .di-logo,.firmaDI:focus-visible .di-logo{transform:translateY(-2px) rotate(-4deg);box-shadow:0 10px 24px -8px rgba(106,27,154,.55)}
+.firmaDI:focus-visible .di-logo{outline:2px solid var(--ring);outline-offset:3px}
+.firmaDI .di-tip{opacity:0;transform:translateX(-6px);pointer-events:none;white-space:nowrap;background:var(--ink);color:var(--surface);
+  font:600 12.5px/1 var(--sans);padding:9px 12px;border-radius:9px;box-shadow:var(--shadow);transition:opacity .18s ease,transform .18s ease}
+.firmaDI:hover .di-tip,.firmaDI:focus .di-tip,.firmaDI:focus-visible .di-tip{opacity:1;transform:none}
+.pieDI{margin:34px auto 0;padding:16px 0 22px;border-top:1px solid var(--line);text-align:center;font:500 13px/1.5 var(--sans);color:var(--muted)}
+.pieDI .di-corazon{position:relative;display:inline-block;cursor:default;font-size:15px;line-height:1;vertical-align:-1px;padding:0 1px;outline:none}
+.pieDI .di-corazon:hover,.pieDI .di-corazon:focus-visible{animation:diLatido .9s ease-in-out infinite}
+.pieDI .di-corazon:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border-radius:6px}
+.pieDI .di-globo{position:absolute;left:50%;bottom:calc(100% + 9px);transform:translate(-50%,4px);opacity:0;pointer-events:none;white-space:nowrap;
+  background:var(--ink);color:var(--surface);font:600 12px/1 var(--sans);padding:8px 11px;border-radius:9px;box-shadow:var(--shadow);transition:opacity .18s ease,transform .18s ease}
+.pieDI .di-corazon:hover .di-globo,.pieDI .di-corazon:focus-visible .di-globo{opacity:1;transform:translate(-50%,0)}
+@keyframes diLatido{0%,100%{transform:scale(1)}20%{transform:scale(1.35)}40%{transform:scale(1.05)}60%{transform:scale(1.3)}}
+@media (max-width:700px){.firmaDI{left:10px;top:10px}.firmaDI .di-logo{width:36px;height:36px;border-radius:11px;font-size:15px}.firmaDI .di-tip{display:none}}
+@media (prefers-reduced-motion: reduce){.pieDI .di-corazon:hover,.firmaDI:hover .di-logo{animation:none;transform:none}}
 </style>
 
 <div class="wrap">
@@ -19715,5 +19739,19 @@ setTimeout(function(){ try {
   bar.addEventListener('click', function(e){ var b = e.target.closest('button'); if (b) ir(b.getAttribute('data-p')); });
   document.title = 'Guía rápida y tutoriales para docentes · UVP Online';
   ir('guia');
-} catch(e){ console.error('guia sola', e); } }, 60);</script>
+} catch(e){ console.error('guia sola', e); } }, 60);
+/* ---- firma de Diseño Instruccional (07/10/2026): logotipo «DI» fijo a la izquierda y pie de página al centro ---- */
+try {
+  var diLogo = document.createElement('div');
+  diLogo.className = 'firmaDI'; diLogo.tabIndex = 0;
+  diLogo.setAttribute('role', 'img'); diLogo.setAttribute('aria-label', 'Hecho por Diseño Instruccional');
+  diLogo.innerHTML = '<span class="di-logo" aria-hidden="true">D<i>I</i></span><span class="di-tip" aria-hidden="true">Hecho por Diseño Instruccional</span>';
+  document.body.appendChild(diLogo);
+  var diPie = document.createElement('div');
+  diPie.className = 'pieDI';
+  diPie.innerHTML = 'Hecho con <span class="di-corazon" tabindex="0" role="img" aria-label="cariño">❤️<span class="di-globo" aria-hidden="true">Con cariño, para ti</span></span> en Diseño Instruccional &nbsp;|&nbsp; 2026';
+  var diWrap = document.querySelector('.wrap') || document.body;
+  diWrap.appendChild(diPie);
+} catch (e) { console.error('firma DI', e); }
+</script>
 </body></html>
