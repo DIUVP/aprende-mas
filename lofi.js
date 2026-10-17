@@ -28,7 +28,7 @@
      prog2:[[[53,56,60,63],41],[[50,56,58,62],34],[[51,55,58,62],39],[[48,51,55,58],36]],
      esc:[63,65,67,70,72,75,77], lluvia:false}
   ];
-  var L = {on:false, d:0, paso:0, compas:0, tSig:0, pista:1, inicio:0, transcurrido:0, vol:.7, reloj:null, var2:false, sinBateria:false, creditos:0, tMoneda:-9};
+  var L = {on:false, d:0, paso:0, compas:0, tSig:0, pista:1, inicio:0, transcurrido:0, vol:.7, reloj:null, sinBateria:false, creditos:0, tMoneda:-9};
   var ctx = null, bus = null, epBus = null, bajoBus = null, batBus = null, wow = null, salida = null, analizador = null, vinilo = [], timers = [];
   var mtof = function(m){ return 440 * Math.pow(2, (m - 69) / 12); };
 
@@ -61,23 +61,23 @@
     m.connect(mg); mg.connect(c.frequency); wow.connect(c.detune);
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.16 * vel, t + .006); g.gain.exponentialRampToValueAtTime(.07 * vel, t + .6);
     g.gain.setValueAtTime(.07 * vel, t + dur); g.gain.exponentialRampToValueAtTime(.0005, t + dur + 1.1);
-    c.connect(g); g.connect(epBus); c.start(t); m.start(t); c.stop(t + dur + 1.2); m.stop(t + dur + 1.2);
+    c.connect(g); g.connect(epBus); c.start(t); m.start(t); c.stop(t + dur + 1.2); m.stop(t + dur + 1.2); ag(c, t); ag(m, t);
   }
   function bajo(midi, t, dur){
     var o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), g2 = ctx.createGain();
     o.type = "sine"; o.frequency.value = mtof(midi); o2.type = "triangle"; o2.frequency.value = mtof(midi); g2.gain.value = .35; wow.connect(o.detune);
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.5, t + .015); g.gain.exponentialRampToValueAtTime(.25, t + .25); g.gain.setValueAtTime(.25, t + dur * .9); g.gain.linearRampToValueAtTime(0, t + dur);
-    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(bajoBus); o.start(t); o2.start(t); o.stop(t + dur + .05); o2.stop(t + dur + .05);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(bajoBus); o.start(t); o2.start(t); o.stop(t + dur + .05); o2.stop(t + dur + .05); ag(o, t); ag(o2, t);
   }
-  function bombo(t, v){ var o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(46, t + .12); g.gain.setValueAtTime(.85 * v, t); g.gain.exponentialRampToValueAtTime(.001, t + .38); o.connect(g); g.connect(batBus); o.start(t); o.stop(t + .4); }
+  function bombo(t, v){ var o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(46, t + .12); g.gain.setValueAtTime(.85 * v, t); g.gain.exponentialRampToValueAtTime(.001, t + .38); o.connect(g); g.connect(batBus); o.start(t); o.stop(t + .4); ag(o, t); }
   function tarola(t, v){
     var s = ctx.createBufferSource(); s.buffer = ruido(); var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1700; bp.Q.value = .7; var g = ctx.createGain();
-    g.gain.setValueAtTime(.32 * v, t); g.gain.exponentialRampToValueAtTime(.001, t + .2); s.connect(bp); bp.connect(g); g.connect(batBus); s.start(t, Math.random()); s.stop(t + .22);
-    var o = ctx.createOscillator(), go = ctx.createGain(); o.type = "triangle"; o.frequency.value = 185; go.gain.setValueAtTime(.18 * v, t); go.gain.exponentialRampToValueAtTime(.001, t + .1); o.connect(go); go.connect(batBus); o.start(t); o.stop(t + .12);
+    g.gain.setValueAtTime(.32 * v, t); g.gain.exponentialRampToValueAtTime(.001, t + .2); s.connect(bp); bp.connect(g); g.connect(batBus); s.start(t, Math.random()); s.stop(t + .22); ag(s, t);
+    var o = ctx.createOscillator(), go = ctx.createGain(); o.type = "triangle"; o.frequency.value = 185; go.gain.setValueAtTime(.18 * v, t); go.gain.exponentialRampToValueAtTime(.001, t + .1); o.connect(go); go.connect(batBus); o.start(t); o.stop(t + .12); ag(o, t);
   }
   function platillo(t, v, abierto){
     var s = ctx.createBufferSource(); s.buffer = ruido(); var hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 7200; var g = ctx.createGain(), d = abierto ? .22 : .04;
-    g.gain.setValueAtTime(.09 * v, t); g.gain.exponentialRampToValueAtTime(.001, t + d); s.connect(hp); hp.connect(g); g.connect(batBus); s.start(t, Math.random()); s.stop(t + d + .02);
+    g.gain.setValueAtTime(.09 * v, t); g.gain.exponentialRampToValueAtTime(.001, t + d); s.connect(hp); hp.connect(g); g.connect(batBus); s.start(t, Math.random()); s.stop(t + d + .02); ag(s, t);
   }
   function arrancaVinilo(lluvia){
     var s = ctx.createBufferSource(); s.buffer = ruido(); s.loop = true; var hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 900; var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 3200; var g = ctx.createGain(); g.gain.value = .018;
@@ -89,31 +89,75 @@
   }
   function paraVinilo(){ vinilo.forEach(function(s){ try{ s.stop(); }catch(e){} }); vinilo = []; timers.forEach(clearTimeout); timers = []; }
 
-  /* ---------- compositor: cuatro compases por vuelta, variación cada ocho, a veces un corte de batería ---------- */
+  /* ---------- recetas: cada una de las seis pistas de un disco tiene su propia tonalidad, tempo, orden de acordes,
+     batería, bajo y melodía, para que «otra pista» de verdad suene distinta ---------- */
+  var RECETAS = [
+    {tr:0,  prog:0, rot:0, dbpm:0,   bat:"clasico",   bajo:"normal",    mel:.14, reg:0,   arp:0},
+    {tr:-2, prog:1, rot:0, dbpm:-6,  bat:"media",     bajo:"largo",     mel:.08, reg:0,   arp:.55},
+    {tr:3,  prog:0, rot:2, dbpm:4,   bat:"boom",      bajo:"caminante", mel:.2,  reg:0,   arp:0},
+    {tr:-5, prog:1, rot:1, dbpm:-10, bat:"escobilla", bajo:"largo",     mel:.1,  reg:-12, arp:.7},
+    {tr:5,  prog:0, rot:3, dbpm:2,   bat:"clasico",   bajo:"caminante", mel:.26, reg:12,  arp:0},
+    {tr:-3, prog:1, rot:2, dbpm:-4,  bat:"sin",       bajo:"largo",     mel:.12, reg:0,   arp:.45}
+  ];
+  function receta(){ return RECETAS[(L.pista - 1) % RECETAS.length]; }
+  function bpm(){ return DISCOS[L.d].bpm + receta().dbpm; }
+  /* notas ya programadas que aún no empiezan: se cancelan al cambiar de pista para que el cambio se oiga al instante */
+  var pend = [];
+  function ag(n, t){ pend.push([n, t]); }
+  function corta(){
+    if(!ctx) return; var ahora = ctx.currentTime;
+    pend.forEach(function(x){ if(x[1] > ahora + .01){ try{ x[0].stop(ahora); }catch(e){} } }); pend = [];
+    L.tSig = ahora + .08; L.paso = 0;
+  }
+
+  /* ---------- compositor: cuatro compases por vuelta, pista nueva cada ocho, a veces un corte de batería ---------- */
   function programa(){
     if(!L.on) return;
-    var D = DISCOS[L.d], s16 = 60 / D.bpm / 4, hasta = ctx.currentTime + 1.5;
+    var hasta = ctx.currentTime + 1.5, ahora = ctx.currentTime;
+    pend = pend.filter(function(x){ return x[1] > ahora; });
     while(L.tSig < hasta){
-      var p = L.paso % 16, t = L.tSig + ((p % 4 === 2) ? s16 * D.swing * 2 : 0), prog = L.var2 ? D.prog2 : D.prog, ac = prog[L.compas % prog.length], hum = function(){ return (Math.random() - .5) * .012; };
-      if(p === 0){
-        ac[0].forEach(function(n, i){ epiano(n, t + i * .018 + hum(), s16 * 12, .75 + Math.random() * .2); });
-        bajo(ac[1], t, s16 * 6);
-      }
-      if(p === 6 && Math.random() < .45) ac[0].slice(1).forEach(function(n, i){ epiano(n, t + i * .015, s16 * 4, .45); });
-      if(p === 10 && Math.random() < .6) bajo(ac[1] + (Math.random() < .5 ? 7 : 12), t, s16 * 4);
-      if(p === 14 && Math.random() < .35) bajo(ac[1] - 1, t, s16 * 2);
+      var D = DISCOS[L.d], R = receta(), s16 = 60 / bpm() / 4, p = L.paso % 16, t = L.tSig + ((p % 4 === 2) ? s16 * D.swing * 2 : 0),
+        prog = R.prog ? D.prog2 : D.prog, ac = prog[(L.compas + R.rot) % prog.length], notas = ac[0].map(function(n){ return n + R.tr; }), raiz = ac[1] + R.tr,
+        hum = function(){ return (Math.random() - .5) * .012; }, rnd = Math.random;
+      // piano: acorde al inicio del compás, a veces repetido; en algunas pistas, arpegio en corcheas
+      if(p === 0) notas.forEach(function(n, i){ epiano(n, t + i * .018 + hum(), s16 * (R.bat === "sin" ? 16 : 12), .75 + rnd() * .2); });
+      if(p === 6 && !R.arp && rnd() < .45) notas.slice(1).forEach(function(n, i){ epiano(n, t + i * .015, s16 * 4, .45); });
+      if(R.arp && p % 2 === 0 && p && rnd() < R.arp) epiano(notas[(p / 2) % notas.length] + 12, t + hum(), s16 * 3, .4);
+      // bajo
+      if(R.bajo === "largo"){ if(p === 0) bajo(raiz, t, s16 * 14); if(p === 12 && rnd() < .3) bajo(raiz + 7, t, s16 * 3); }
+      else if(R.bajo === "caminante"){ if(p % 4 === 0) bajo(raiz + [0, notas.length > 2 ? 7 : 5, 12, 10][p / 4], t, s16 * 3.2); }
+      else { if(p === 0) bajo(raiz, t, s16 * 6); if(p === 10 && rnd() < .6) bajo(raiz + (rnd() < .5 ? 7 : 12), t, s16 * 4); if(p === 14 && rnd() < .35) bajo(raiz - 1, t, s16 * 2); }
+      // batería
       if(!L.sinBateria){
-        if(p === 0 || p === 10 || (p === 7 && Math.random() < .35)) bombo(t + hum(), p === 0 ? 1 : .8);
-        if(p === 4 || p === 12) tarola(t + hum(), .9);
-        if(p === 15 && Math.random() < .25) tarola(t, .3);
-        if(p % 2 === 0) platillo(t + hum(), (p % 4 === 0 ? .9 : .6) * (.8 + Math.random() * .3), p === 14 && Math.random() < .2);
+        if(R.bat === "clasico"){
+          if(p === 0 || p === 10 || (p === 7 && rnd() < .35)) bombo(t + hum(), p === 0 ? 1 : .8);
+          if(p === 4 || p === 12) tarola(t + hum(), .9);
+          if(p === 15 && rnd() < .25) tarola(t, .3);
+          if(p % 2 === 0) platillo(t + hum(), (p % 4 === 0 ? .9 : .6) * (.8 + rnd() * .3), p === 14 && rnd() < (R.reg > 0 ? .5 : .2));
+        } else if(R.bat === "media"){
+          if(p === 0 || (p === 11 && rnd() < .4)) bombo(t + hum(), p === 0 ? .95 : .6);
+          if(p === 8) tarola(t + hum(), .85);
+          if(p % 4 === 0) platillo(t + hum(), .7, p === 12 && rnd() < .3);
+        } else if(R.bat === "boom"){
+          if(p === 0 || p === 3 || p === 10) bombo(t + hum(), p === 3 ? .7 : 1);
+          if(p === 4 || p === 12) tarola(t + hum(), 1);
+          if(p === 7 && rnd() < .3) tarola(t, .25);
+          if(p % 2 === 0 || (p === 15 && rnd() < .5)) platillo(t + hum(), p % 2 ? .4 : .75);
+        } else if(R.bat === "escobilla"){
+          if(p === 0 || (p === 8 && rnd() < .5)) bombo(t + hum(), .55);
+          if(p === 4 || p === 12) tarola(t + hum(), .4);
+          platillo(t + hum(), (p % 4 === 0 ? .55 : .3) * (.8 + rnd() * .4));
+        } else if(R.bat === "sin"){
+          if(L.compas % 2 === 1 && p % 4 === 2) platillo(t + hum(), .45);
+        }
       }
-      if(p % 2 === 0 && Math.random() < .14){ var nota = D.esc[Math.floor(Math.random() * D.esc.length)]; epiano(nota, t + hum(), s16 * (2 + Math.floor(Math.random() * 4)), .5); }
+      // melodía suelta sobre la escala del disco
+      if(p % 2 === 0 && rnd() < R.mel){ var nota = D.esc[Math.floor(rnd() * D.esc.length)] + R.tr + R.reg; epiano(nota, t + hum(), s16 * (2 + Math.floor(rnd() * 4)), .5); }
       L.paso++; L.tSig += s16;
       if(L.paso % 16 === 0){
         L.compas++;
-        if(L.compas % 8 === 0){ L.var2 = !L.var2; L.pista++; pinta(); DIAudio.estado(); }
-        L.sinBateria = L.compas % 16 === 15 && Math.random() < .7;
+        if(L.compas % 8 === 0){ L.pista++; pinta(); DIAudio.estado(); }
+        L.sinBateria = L.compas % 16 === 15 && rnd() < .7;
       }
     }
   }
@@ -133,9 +177,9 @@
     pinta(); if(!sinEstado) DIAudio.estado();
   }
   function detener(sinEstado){ pausa(true); L.transcurrido = 0; L.pista = 1; L.compas = 0; pinta(); if(!sinEstado) DIAudio.estado(); }
-  function eligeDisco(i){ var seguia = L.on; if(seguia) pausa(true); L.d = (i + DISCOS.length) % DISCOS.length; L.transcurrido = 0; L.pista = 1; L.compas = 0; L.var2 = false; if(seguia) reproduce(); else pinta(); }
-  function siguiente(){ L.var2 = !L.var2; L.compas = 0; L.pista++; pinta(); DIAudio.estado(); }
-  function eligePista(i){ L.pista = i + 1; L.var2 = i % 2 === 1; L.compas = 0; if(!L.on) reproduce(); else { pinta(); DIAudio.estado(); } }
+  function eligeDisco(i){ var seguia = L.on; if(seguia) pausa(true); L.d = (i + DISCOS.length) % DISCOS.length; L.transcurrido = 0; L.pista = 1; L.compas = 0; if(seguia) reproduce(); else pinta(); }
+  function siguiente(){ L.compas = 0; L.pista++; if(L.on) corta(); pinta(); DIAudio.estado(); }
+  function eligePista(i){ L.pista = i + 1; L.compas = 0; if(!L.on) reproduce(); else { corta(); pinta(); DIAudio.estado(); } }
 
   /* ---------- máscaras ---------- */
   var MASCARAS = [["tocadiscos", "Tocadiscos"], ["retro", "Retro"], ["arcade", "Arcade"]];
@@ -152,7 +196,7 @@
       '<div class="td-base"><div class="td-plato"><div class="td-disco' + (L.on ? " gira" : "") + '"><div class="td-etq"><img src="' + RAIZ + 'img/sable-disco-' + (L.d + 1) + '.png" alt="" width="280" height="280"></div></div></div>' +
       '<svg class="td-brazo' + (L.on ? " sobre" : "") + '" viewBox="0 0 100 220" aria-hidden="true"><circle cx="70" cy="22" r="16" fill="#cfc8da" stroke="#9a90ab" stroke-width="3"/><circle cx="70" cy="22" r="6" fill="#7d7390"/><path d="M70 22 L70 150 L46 196" fill="none" stroke="#b8afc6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="34" y="188" width="22" height="16" rx="3" transform="rotate(-30 45 196)" fill="#6f6680"/></svg>' +
       '<div class="td-perillas" aria-hidden="true"><i></i><i></i></div></div>' +
-      '<div class="td-info"><span class="td-k">' + (L.on ? "Sonando" : "Disco listo") + ' · ' + esc(D.n) + '</span><b>' + esc(tituloPista()) + '</b><span>Pista ' + L.pista + ' · ' + D.bpm + ' BPM · <span data-lofi="tiempo">' + tiempo() + '</span></span></div>' +
+      '<div class="td-info"><span class="td-k">' + (L.on ? "Sonando" : "Disco listo") + ' · ' + esc(D.n) + '</span><b>' + esc(tituloPista()) + '</b><span>Pista ' + L.pista + ' · ' + bpm() + ' BPM · <span data-lofi="tiempo">' + tiempo() + '</span></span></div>' +
       '<div class="td-ctl"><button type="button" class="accion" data-lofi="play">' + (L.on ? I.pausa + " Pausa" : I.play + " Reproducir") + '</button>' +
       '<button type="button" class="accion sec" data-lofi="sig">' + I.sig + ' Otra pista</button>' +
       '<label class="td-vol">Volumen <input type="range" min="0" max="100" value="' + Math.round(L.vol * 100) + '" data-lofi="vol"></label></div>' +
@@ -164,7 +208,7 @@
       '<div class="rt-barra"><span>DISEÑO INSTRUCCIONAL · LO-FI</span><span aria-hidden="true"><i></i><i></i><i></i></span></div>' +
       '<div class="rt-main"><div class="rt-cuerpo"><div class="rt-lcd"><div class="rt-fila"><span class="rt-estado">' + (L.on ? "▶" : "❚❚") + '</span><span class="rt-tiempo" data-lofi="tiempo">' + tiempo() + '</span></div>' +
         '<div class="rt-marquesina"><span' + (L.on && !reduce() ? ' class="corre"' : '') + '>' + esc(String(L.pista).padStart(2, "0") + ". " + tituloPista() + " · " + D.n + " · lo-fi generativo de Diseño Instruccional · ") + '</span></div>' +
-        '<div class="rt-datos"><span>' + D.bpm + ' BPM</span><span>LO-FI</span><span>GENERATIVO</span></div>' +
+        '<div class="rt-datos"><span>' + bpm() + ' BPM</span><span>LO-FI</span><span>GENERATIVO</span></div>' +
         '<canvas class="rt-espectro" data-lofi="espectro" aria-hidden="true"></canvas></div>' +
       '<div class="rt-botones"><button type="button" data-lofi="ant" aria-label="Disco anterior">' + I.ant + '</button><button type="button" data-lofi="play" aria-label="' + (L.on ? "Pausa" : "Reproducir") + '">' + (L.on ? I.pausa : I.play) + '</button><button type="button" data-lofi="stop" aria-label="Detener">' + I.stop + '</button><button type="button" data-lofi="sig" aria-label="Otra pista">' + I.sig + '</button>' +
         '<label class="rt-vol"><span>VOL</span><input type="range" min="0" max="100" value="' + Math.round(L.vol * 100) + '" data-lofi="vol" aria-label="Volumen"></label></div></div>' +
@@ -176,7 +220,7 @@
       '<div class="ar-marq"><b>DI ARCADE</b><span>LO-FI GENERATIVO</span></div>' +
       '<div class="ar-bisel"><canvas class="ar-pant" data-lofi="arcade" role="img" aria-label="Pantalla de la máquina: ' + esc(tituloPista()) + ', ' + (L.on ? "sonando" : "en pausa") + '"></canvas></div>' +
       '<div class="ar-panel">' +
-        '<div class="ar-joy" role="group" aria-label="Palanca: cambia de nivel"><button type="button" data-lofi="ant" aria-label="Nivel anterior">◀</button><span class="ar-palanca' + (L.on ? ' baila' : '') + '" aria-hidden="true" title="Jala la palanca para cambiar de nivel" style="--beat:' + (120 / D.bpm).toFixed(2) + 's"><i></i></span><button type="button" data-lofi="dsig" aria-label="Nivel siguiente">▶</button></div>' +
+        '<div class="ar-joy" role="group" aria-label="Palanca: cambia de nivel"><button type="button" data-lofi="ant" aria-label="Nivel anterior">◀</button><span class="ar-palanca' + (L.on ? ' baila' : '') + '" aria-hidden="true" title="Jala la palanca para cambiar de nivel" style="--beat:' + (120 / bpm()).toFixed(2) + 's"><i></i></span><button type="button" data-lofi="dsig" aria-label="Nivel siguiente">▶</button></div>' +
         '<div class="ar-bots"><span class="ar-bot"><button type="button" class="ar-b ar-a" data-lofi="play" aria-label="' + (L.on ? "Pausa" : "Jugar") + '">A</button><small>' + (L.on ? "PAUSA" : "JUGAR") + '</small></span>' +
           '<span class="ar-bot"><button type="button" class="ar-b ar-bb" data-lofi="sig" aria-label="Otra pista">B</button><small>OTRA PISTA</small></span>' +
           '<span class="ar-bot"><button type="button" class="ar-b ar-c" data-lofi="stop" aria-label="Detener">C</button><small>SALIR</small></span></div>' +
@@ -221,7 +265,7 @@
     var cv = document.createElement("canvas"); cv.width = cv.height = 56; var g = cv.getContext("2d"); g.imageSmoothingEnabled = true; g.drawImage(i, 0, 0, 56, 56); return (pix[k] = cv);
   }
   function dibujaArcade(quieto){
-    var c = cont.querySelector("[data-lofi=arcade]"); if(!c || !mide(c)) return; var g = c.getContext("2d"), W = c.width, H = c.height, t = performance.now() / 1000, D = DISCOS[L.d], beat = t * D.bpm / 60;
+    var c = cont.querySelector("[data-lofi=arcade]"); if(!c || !mide(c)) return; var g = c.getContext("2d"), W = c.width, H = c.height, t = performance.now() / 1000, D = DISCOS[L.d], beat = t * bpm() / 60;
     var px = Math.max(2, Math.round(W / 320));
     g.imageSmoothingEnabled = false; g.fillStyle = "#0B0820"; g.fillRect(0, 0, W, H);
     if(!estrellas.length) for(var s = 0; s < 70; s++) estrellas.push({x:Math.random(), y:Math.random() * .62, v:.02 + Math.random() * .08, c:["#F6E27A", "#9FD8FF", "#F49AC1", "#B7A6F2"][s % 4]});
