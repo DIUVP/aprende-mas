@@ -684,6 +684,7 @@ const ficha = (n, titulo) => ({tipo:"web", src:`../fichas/${n}.html?p=docentes`,
 const doc   = (id, titulo) => ({tipo:"web", src:`https://docs.google.com/document/d/${id}/preview`, abrir:`https://docs.google.com/document/d/${id}/edit`, drive:true, titulo});
 const hoja  = (id, titulo) => ({tipo:"web", src:`https://docs.google.com/spreadsheets/d/${id}/preview`, abrir:`https://docs.google.com/spreadsheets/d/${id}/edit`, drive:true, titulo});
 const CATALOGO = {tipo:"web", src:"../catalogo/index.html", titulo:"Catálogo de aplicaciones educativas"};
+const PROYECTOS = {tipo:"web", src:"../proyectos/index.html", titulo:"Banco de proyectos formativos"};
 const INDUCCION = "https://ol.uvp.mx/courses/course-v1:UVP+INDDOC+2026_01_F26_D26/about";
 
 const GUIONES = [["Escolarizado","1JElynKV7q0KmYJuUShF2Hi1rwcufwlrL"],["Bachillerato","10uDO6zXDzh_puT5irEFnOuxWA0qNXLqy"],["Posgrados","1jS6DMs9qX9P8ahKL5hgOkd9IbQKJ397I"],["Sistema abierto","1URDdFXhHEy1IRM9w5uB51v2B2exjN9mu"],["B-Learning","1R3p080y-E1iyEl56MBH-XCsNHA5xWAvd"],["Online","1Cy4ozBBlZuMt1qKULUieT9s04vu6XKKw"]];
@@ -742,7 +743,8 @@ const ESPACIOS = {
     },
     materiales:[
       {g:"Planeación", it:[
-        {t:"Guiones instruccionales 2026",d:"Elige tu modalidad para ver la plantilla. Se abre desde Drive con tu cuenta institucional.",tp:"doc",e:"ok",acc:GUIONES.map(([m,id],i)=>[m, doc(id,"Guion instruccional · "+m), i?1:0]),para:"Para planear tu asignatura con el formato oficial de tu modalidad antes de cargar contenidos en la plataforma."}]},
+        {t:"Guiones instruccionales 2026",d:"Elige tu modalidad para ver la plantilla. Se abre desde Drive con tu cuenta institucional.",tp:"doc",e:"ok",acc:GUIONES.map(([m,id],i)=>[m, doc(id,"Guion instruccional · "+m), i?1:0]),para:"Para planear tu asignatura con el formato oficial de tu modalidad antes de cargar contenidos en la plataforma."},
+        {t:"Banco de proyectos formativos",d:"30 ideas de proyecto formativo integrador en tarjetas que se voltean. Filtra por tipo del Modelo Tlamatini, nivel, área y logística, y copia el entregable, la situación y los criterios RAPA al Amoxtli.",tp:"web",e:"ok",ancha:1,acc:[["Abrir el banco de ideas",PROYECTOS]],para:"Para elegir un proyecto formativo integrador más allá del examen: cada idea trae el entregable por nivel (bachillerato, licenciatura y posgrado), tres avances que suben de nivel y criterios RAPA que suman 100 %, listos para adaptar a tu Amoxtli."}]},
       {g:"Formación", it:[
         {t:"Curso de Inducción al EVA 2026",d:"Curso autogestionado sobre el entorno virtual. Se abre en ol.uvp.mx con tu cuenta.",tp:"curso",e:"ok",ancha:1,acc:[["Ir al curso",{externo:INDUCCION}]],para:"Para conocer el entorno virtual completo con práctica guiada y a tu ritmo: modo edición, modo en vivo, fechas, entregas y buenas prácticas."}]}
     ],

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Banco de proyectos formativos · Diseño Instruccional UVP</title>
+<meta name="description" content="Ideas de proyectos formativos integradores para docentes de la Universidad del Valle de Puebla, organizadas por tipo del Modelo Educativo Tlamatini, nivel educativo y tipo de trabajo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="../a11y.css">
+<link rel="stylesheet" href="proyectos.css">
+<script src="../a11y.js"></script>
+</head>
+<body>
+
+<header class="barra"><div class="wrap">
+  <span>Diseño Instruccional · <b>Banco de proyectos formativos</b></span>
+  <span class="acc">
+    <button class="btn" type="button" id="b-sorpresa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>Sorpréndeme</button>
+    <button class="btn p" type="button" id="b-sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/></svg>Mi selección <span class="n" id="n-sel">0</span></button>
+  </span>
+</div></header>
+
+<main class="wrap">
+
+  <section class="hero" aria-labelledby="t-h1">
+    <span class="eyebrow">Docentes · Proyecto formativo integrador</span>
+    <h1 id="t-h1">Ideas para tu proyecto formativo</h1>
+    <p>Un proyecto formativo es la parte de tu materia que más aprendizaje deja, y la que tú decides. Aquí encuentras ideas probadas, organizadas por tipo del <b>Modelo Educativo Tlamatini</b> y por nivel, listas para adaptar a tu asignatura. Cada tarjeta trae lo que el Amoxtli te pide llenar.</p>
+    <ol class="pasos3">
+      <li><b>Filtra</b>Elige tu nivel, el tipo de proyecto y cuánta logística quieres.</li>
+      <li><b>Voltea la tarjeta</b>Mira la idea y el entregable propuesto para tu nivel.</li>
+      <li><b>Copia al Amoxtli</b>Abre la ficha completa y copia entregable, situación, requisitos y criterios RAPA.</li>
+    </ol>
+  </section>
+
+  <details class="tip">
+    <summary>¿Qué significa cada tipo del Modelo Tlamatini?</summary>
+    <div class="tipos5">
+      <div class="tipo-d" data-tipo="Prototipo"><b>Prototipo</b><span>Se diseña y construye un modelo, producto o solución que se prueba y se mejora: un objeto, una app, una maqueta, un modelo conceptual.</span></div>
+      <div class="tipo-d" data-tipo="Proyecto"><b>Proyecto</b><span>Se planea y ejecuta un plan con metas, tiempos y recursos que termina en un producto o servicio para alguien: una campaña, un evento, un programa.</span></div>
+      <div class="tipo-d" data-tipo="Problema"><b>Problema</b><span>Se parte de una situación problemática, real o simulada, que se analiza, se diagnostica y se resuelve con fundamento: casos, dilemas, diagnósticos.</span></div>
+      <div class="tipo-d" data-tipo="Experiencia"><b>Experiencia</b><span>Se vive una situación en un entorno real o simulado (organización, comunidad, laboratorio) y se documenta y reflexiona lo aprendido.</span></div>
+      <div class="tipo-d" data-tipo="Investigación"><b>Investigación</b><span>Se formula una pregunta, se elige un método, se reúnen y analizan datos o fuentes y se comunican hallazgos con rigor.</span></div>
+    </div>
+    <p class="nota-d">Estas descripciones son una redacción de trabajo de Diseño Instruccional para orientar la elección. La definición oficial de cada tipo es la del Modelo Educativo Tlamatini.</p>
+  </details>
+
+  <section class="filtros" aria-label="Filtros">
+    <div class="fila">
+      <span class="et" id="et-nivel">Tu nivel</span>
+      <div class="chips" role="group" aria-labelledby="et-nivel" id="f-nivel"></div>
+      <span class="nivel-ayuda">El reverso de cada tarjeta y la ficha se adaptan al nivel que elijas.</span>
+    </div>
+    <div class="fila">
+      <span class="et" id="et-tipo">Tipo</span>
+      <div class="chips" role="group" aria-labelledby="et-tipo" id="f-tipo"></div>
+    </div>
+    <div class="sel-grid">
+      <label>Buscar<input type="search" id="f-q" placeholder="Palabra clave: salud, app, comunidad…" autocomplete="off"></label>
+      <label>Tipo de trabajo<select id="f-nat"><option value="">Todos</option><option>Teórico</option><option>Práctico</option><option>Mixto</option></select></label>
+      <label>Dónde ocurre<select id="f-ent"><option value="">Todos</option></select></label>
+      <label>Área de conocimiento<select id="f-area"><option value="">Todas</option></select></label>
+      <label>Logística<select id="f-log"><option value="">Cualquiera</option><option value="1">Baja · solo aula o digital</option><option value="2">Media · algo de gestión</option><option value="3">Alta · requiere terceros</option></select></label>
+      <label>Equipo<select id="f-eq"><option value="">Cualquiera</option><option>Individual</option><option>Equipo</option><option>Ambos</option></select></label>
+    </div>
+    <div class="fin">
+      <span id="cuenta" role="status" aria-live="polite"></span>
+      <span class="acc" style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" type="button" id="b-barajar">Barajar</button>
+        <button class="btn" type="button" id="b-limpiar">Limpiar filtros</button>
+      </span>
+    </div>
+  </section>
+
+  <section aria-label="Proyectos formativos"><div class="mazo" id="mazo"></div><div class="vacio" id="vacio" hidden><b>Ningún proyecto cumple todos los filtros.</b><span>Prueba quitando alguno, o limpia los filtros para ver todo el banco.</span><button class="btn p" type="button" id="b-limpiar2">Limpiar filtros</button></div></section>
+
+  <section class="antes" aria-labelledby="t-antes">
+    <h2 id="t-antes">Antes de elegir, revisa cinco cosas</h2>
+    <ul>
+      <li><b>Alineación.</b> El proyecto debe llevar a la <i>competencia general de la asignatura</i> y respetar el temario del Anexo 3. Si la idea no encaja tal cual, cámbiale el tema, no la estructura.</li>
+      <li><b>Progresión en tres avances.</b> El 1.º pide conocer y comprender; el 2.º, aplicar y analizar; el 3.º, sintetizar y evaluar. Cada avance sube de nivel y no repite el anterior.</li>
+      <li><b>Criterios RAPA.</b> Los porcentajes de los criterios de calidad deben sumar 100 %. Todas las fichas ya lo cumplen; si los cambias, vuelve a sumarlos.</li>
+      <li><b>Logística y permisos.</b> Si el proyecto implica a terceros (organizaciones, comunidad, menores de edad), avisa a tu coordinación y ofrece una alternativa dentro de la universidad.</li>
+      <li><b>Inteligencia artificial.</b> Dile a tus estudiantes desde el inicio si se permite su uso y que deben declararlo y citarlo en APA 7, como pide la política del Amoxtli.</li>
+    </ul>
+    <p class="aviso">Son ideas para inspirarte, no formatos obligatorios. El proyecto formativo integrador lo define cada docente con su coordinación académica. ¿Quieres que agreguemos una idea para tu área? Escribe a diseno.instruccional2@uvp.mx.</p>
+  </section>
+</main>
+
+<footer class="pie"><div class="wrap"><span>Hecho con ❤️ en Diseño Instruccional | 2026</span><span>Universidad del Valle de Puebla · Centro de Recursos para docentes</span></div></footer>
+
+<dialog id="ficha" aria-labelledby="fi-t">
+  <div class="d-cab" id="fi-cab">
+    <div><span class="tag-t" id="fi-tag"></span><h2 id="fi-t" style="margin-top:8px"></h2></div>
+    <div class="d-acc">
+      <span class="copiado" id="fi-ok" hidden role="status">Copiado ✓</span>
+      <button class="btn m" type="button" id="fi-copiar">Copiar para el Amoxtli</button>
+      <button class="btn" type="button" id="fi-fav" aria-pressed="false">☆ Guardar</button>
+      <button class="btn" type="button" id="fi-imp">Imprimir</button>
+      <button class="btn p" type="button" id="fi-x">Cerrar ✕</button>
+    </div>
+  </div>
+  <div class="d-cuerpo" id="fi-c"></div>
+</dialog>
+
+<dialog id="seleccion" aria-labelledby="se-t">
+  <div class="d-cab">
+    <div><h2 id="se-t">Mi selección</h2><p class="sub" style="color:var(--tinta2);font-size:15px;margin-top:4px">Se guarda solo en este navegador. Compárala con tu coordinación o llévatela como lista.</p></div>
+    <div class="d-acc">
+      <span class="copiado" id="se-ok" hidden role="status">Copiado ✓</span>
+      <button class="btn m" type="button" id="se-copiar">Copiar lista</button>
+      <button class="btn" type="button" id="se-imp">Imprimir</button>
+      <button class="btn p" type="button" id="se-x">Cerrar ✕</button>
+    </div>
+  </div>
+  <div class="d-cuerpo" id="se-c"></div>
+</dialog>
+
+<script src="datos/1-prototipo.js"></script>
+<script src="datos/2-proyecto.js"></script>
+<script src="datos/3-problema.js"></script>
+<script src="datos/4-experiencia.js"></script>
+<script src="datos/5-investigacion.js"></script>
+<script src="proyectos.js"></script>
+</body>
+</html>
