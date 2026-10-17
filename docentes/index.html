@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../a11y.css">
 <link rel="stylesheet" href="../bienestar.css">
 <link rel="stylesheet" href="../lofi.css">
+<link rel="stylesheet" href="../sable-asistente.css">
 <script src="../a11y.js"></script>
 <style>
 html,body{margin:0}
@@ -206,6 +207,10 @@ section.vista>*,.sec>*,.sec-t>*{min-width:0}
 .equipo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:12px}
 .persona{display:flex;gap:12px;align-items:center;background:var(--hoja);border:1px solid var(--linea);border-radius:12px;padding:14px}
 .av{flex:none;width:46px;height:46px;border-radius:50%;background:var(--violeta-s);color:var(--violeta);display:grid;place-items:center;font-family:var(--disp);font-weight:600}
+img.av{width:60px;height:60px;object-fit:contain;padding:3px;background:radial-gradient(circle at 50% 45%,#FFFFFF 0,#EFE6F8 68%,#E2D3F2 100%);border:2px solid var(--violeta-s);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.persona:hover img.av{transform:rotate(-6deg) scale(1.06)}
+@media (prefers-reduced-motion:reduce){.persona:hover img.av{transform:none}}
+html.a11y-movimiento .persona:hover img.av{transform:none}
 .persona b{display:block;font-size:16px;line-height:1.25}
 .persona small{display:block;color:var(--tinta2);font-size:14px}
 .persona .mail{font-size:14px;user-select:all;color:var(--tinta);overflow-wrap:anywhere}
@@ -571,9 +576,9 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
   <div class="bloque">
     <header><h2>Equipo de Diseño Instruccional</h2><div data-pqs="equipo"></div></header>
     <div class="equipo">
-      <div class="persona"><span class="av">FT</span><span><b>Francisco Javier Tovar Narváez</b><small>Coordinador de Diseño Instruccional</small><span class="mail">coord.diseno.instruccional@uvp.mx</span></span></div>
-      <div class="persona"><span class="av">BH</span><span><b>Blanca Flor Hernández Patiño</b><small>Diseñadora Instruccional</small><span class="mail">diseno.instruccional2@uvp.mx</span></span></div>
-      <div class="persona"><span class="av">FC</span><span><b>Francisco Javier de la Cruz Martínez</b><small>Diseñador Instruccional</small><span class="mail">diseno.instruccional3@uvp.mx</span></span></div>
+      <div class="persona"><img class="av" src="../img/sable-disco-1.png" alt="" width="60" height="60" loading="lazy"><span><b>Francisco Javier Tovar Narváez</b><small>Coordinador de Diseño Instruccional</small><span class="mail">coord.diseno.instruccional@uvp.mx</span></span></div>
+      <div class="persona"><img class="av" src="../img/sable-disco-2.png" alt="" width="60" height="60" loading="lazy"><span><b>Blanca Flor Hernández Patiño</b><small>Diseñadora Instruccional</small><span class="mail">diseno.instruccional2@uvp.mx</span></span></div>
+      <div class="persona"><img class="av" src="../img/sable-disco-4.png" alt="" width="60" height="60" loading="lazy"><span><b>Francisco Javier de la Cruz Martínez</b><small>Diseñador Instruccional</small><span class="mail">diseno.instruccional3@uvp.mx</span></span></div>
     </div>
   </div>
 </section>
@@ -1090,5 +1095,6 @@ addEventListener("hashchange", ir); ir();
 </script>
 <script src="../bienestar.js"></script>
 <script src="../lofi.js"></script>
+<script src="../sable-asistente.js"></script>
 </body>
 </html>
