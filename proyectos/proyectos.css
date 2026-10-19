@@ -206,3 +206,20 @@ html.a11y-movimiento .carta-i,html.a11y-movimiento .cara{transition:none!importa
   body.imp .d-cuerpo{overflow:visible}
   .barra,.filtros,footer.pie{display:none}
 }
+
+/* indicación para pasar la idea al Amoxtli */
+.nota-copia{margin:0;padding:10px 20px;font-size:15px;color:var(--tinta2);background:var(--hoja2);border-bottom:1px solid var(--linea)}
+.nota-copia b{color:var(--tinta);font-family:var(--disp);font-weight:600}
+
+/* Modelo Tlamatini: método relacionado con cada tipo y guía para elegir el proyecto */
+.tipo-d .metodo{font-size:13.5px;color:var(--tinta2);border-top:1px dashed var(--linea);padding-top:6px;margin-top:4px}
+.tipo-d .metodo b{font-family:var(--disp);font-weight:600;color:var(--tinta)}
+.tl-cuerpo{display:grid;gap:16px;padding-bottom:4px}
+.tl-pasos{margin:0;padding-left:22px;display:grid;gap:8px}
+.tl-pasos li::marker{color:var(--magenta);font-weight:700}
+.tl-nivel{background:var(--hoja2);border:1px solid var(--linea);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.tl-t{font-family:var(--disp);font-weight:600;font-size:17px}
+.tl-res{display:grid;gap:8px}
+.tl-k{font-family:var(--disp);font-weight:600;color:var(--magenta)}
+.tl-ayuda{font-size:14.5px;color:var(--tinta2)}
+#tl-niveles .chip[aria-pressed="true"]{color:var(--sobre)}

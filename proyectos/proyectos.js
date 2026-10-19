@@ -8,7 +8,7 @@ var esc = function(s){return String(s).replace(/[&<>"]/g,function(c){return {"&"
 var NIVELES = [["b","Bachillerato"],["l","Licenciatura"],["p","Posgrado"]];
 var TIPOS = ["Prototipo","Proyecto","Problema","Experiencia","Investigación"];
 var LOGT = {1:"Baja",2:"Media",3:"Alta"};
-var BLOOM = [["Conocer y comprender",33],["Aplicar y analizar",67],["Sintetizar y evaluar",100]];
+var BLOOM = [["Conocer y comprender",33],["Aplicar y analizar",67],["Evaluar y crear",100]];
 var ICONO = {
   "Prototipo":'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
   "Proyecto":'<path d="M5 21V4"/><path d="M5 4h12l-2 4 2 4H5"/>',
@@ -77,7 +77,7 @@ function carta(p){
       '<p class="gancho">'+esc(p.gancho)+'</p>'+
       '<ul class="meta" aria-label="Características">'+
         '<li><b>'+p.nat+'</b></li><li>'+esc(p.ent)+'</li><li>'+p.eq+'</li>'+
-        '<li>'+logPuntos(p.log)+'Logística '+LOGT[p.log].toLowerCase()+'</li></ul>'+
+        '<li>'+logPuntos(p.log)+'Dificultad '+LOGT[p.log].toLowerCase()+'</li></ul>'+
       '<p class="sub" style="font-size:14px;color:var(--tinta2)">'+esc(areasTxt)+'</p>'+
       '<div class="pie-c"><button type="button" class="voltear" data-voltear="'+p.id+'" aria-label="Voltear la tarjeta: '+esc(p.t)+'">'+
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Voltear</button></div>'+
@@ -119,7 +119,7 @@ function pintarFicha(){
   $("#fi-fav").setAttribute("aria-pressed", fav.indexOf(p.id)>=0);
   $("#fi-fav").textContent = fav.indexOf(p.id)>=0 ? "★ Guardado" : "☆ Guardar";
   $("#fi-c").innerHTML =
-   '<section><ul class="meta"><li><b>'+p.nat+'</b></li><li>'+esc(p.ent)+'</li><li>'+p.eq+'</li><li>'+logPuntos(p.log)+'Logística '+LOGT[p.log].toLowerCase()+'</li>'+p.areas.map(function(a){return '<li>'+esc(a)+'</li>'}).join("")+'</ul>'+
+   '<section><ul class="meta"><li><b>'+p.nat+'</b></li><li>'+esc(p.ent)+'</li><li>'+p.eq+'</li><li>'+logPuntos(p.log)+'Dificultad '+LOGT[p.log].toLowerCase()+'</li>'+p.areas.map(function(a){return '<li>'+esc(a)+'</li>'}).join("")+'</ul>'+
      '<p style="font-size:18px"><i>'+esc(p.gancho)+'</i></p><p>'+esc(p.idea)+'</p></section>'+
    '<section><h3>Entregable según tu nivel</h3>'+
      '<div class="niv-tabs" role="tablist" aria-label="Nivel">'+NIVELES.map(function(n){return '<button type="button" role="tab" data-fnivel="'+n[0]+'" aria-selected="'+(fichaNivel===n[0])+'">'+n[1]+'</button>'}).join("")+'</div>'+
@@ -148,7 +148,7 @@ function textoAmoxtli(p, nivel){
   p.rapa.forEach(function(r){L.push("- "+r[0]+": "+r[1]+" ("+r[2]+" %)")});
   L.push("Sumatoria: "+p.rapa.reduce(function(s,r){return s+r[2]},0)+" %","");
   L.push("AVANCES SUGERIDOS"); p.av.forEach(function(a){L.push(a)}); L.push("");
-  L.push("Idea adaptada del Banco de proyectos formativos de Diseño Instruccional UVP. Revísala y ajústala a tu asignatura antes de usarla.");
+  L.push("Idea adaptada del Banco de proyectos formativos de Diseño Instruccional UVP. Revísala y ajústala a tu asignatura; después copia cada parte a su campo en la hoja digital del Amoxtli.");
   return L.join("\n");
 }
 function copiar(texto, aviso){
@@ -165,7 +165,7 @@ function pintarSeleccion(){
   var c = $("#se-c");
   if(!fav.length){ c.innerHTML='<p class="sub" style="color:var(--tinta2)">Aún no guardas ideas. Toca la estrella de una tarjeta para agregarla aquí.</p>'; return; }
   c.innerHTML='<ul class="sel-lista">'+fav.map(function(id){var p=porId[id];
-    return '<li data-tipo="'+p.tipo+'"><span><b>'+esc(p.t)+'</b><small>'+p.tipo+' · '+p.nat+' · '+esc(p.ent)+' · Logística '+LOGT[p.log].toLowerCase()+'</small></span>'+
+    return '<li data-tipo="'+p.tipo+'"><span><b>'+esc(p.t)+'</b><small>'+p.tipo+' · '+p.nat+' · '+esc(p.ent)+' · Dificultad '+LOGT[p.log].toLowerCase()+'</small></span>'+
     '<span class="d-acc"><button class="btn" type="button" data-ficha="'+id+'" data-desde-sel="1">Ver ficha</button><button class="btn" type="button" data-quitar="'+id+'">Quitar</button></span></li>'}).join("")+'</ul>';
 }
 function textoSeleccion(){
@@ -237,6 +237,35 @@ function imprimir(){ document.body.classList.add("imp"); setTimeout(function(){ 
 $("#fi-imp").addEventListener("click", imprimir);
 $("#se-imp").addEventListener("click", imprimir);
 window.addEventListener("afterprint", function(){ document.body.classList.remove("imp") });
+
+/* ---- ¿Qué nivel pide tu competencia? (Modelo Tlamatini, Tabla 3, p. 103) ---- */
+var NIV_TL = [
+  ["Conocimiento","Primer nivel: el estudiante recuerda la información.",["Organizador gráfico","Prueba objetiva"],["Investigación"],"Es un nivel de entrada: conviene más para las evidencias de los primeros avances que para el proyecto completo."],
+  ["Comprensión","Segundo nivel: además de saber los conceptos, los explica con sus propias palabras.",["Presentación oral","Mapa mental","Mapa conceptual"],["Investigación","Problema"],"Úsalo para el 1.er avance: que expliquen el problema o el tema con sus palabras."],
+  ["Aplicación","Tercer nivel: pone en práctica lo que ya comprendió.",["Experimentación"],["Experiencia","Prototipo"],""],
+  ["Análisis","Cuarto nivel: divide el objeto de estudio en sus partes y las relaciona entre sí.",["Proyecto","Reporte"],["Proyecto","Problema"],""],
+  ["Evaluación","Quinto nivel: emite juicios basados en criterios y valora el conocimiento.",["Ensayo","Reflexión teórica"],["Problema","Investigación"],""],
+  ["Creación","Sexto nivel: usa lo aprendido para desarrollar conocimiento nuevo.",["Investigación empírica"],["Investigación","Prototipo","Proyecto"],""]
+];
+var tlN = $("#tl-niveles"), tlR = $("#tl-res");
+if(tlN && tlR){
+  tlN.innerHTML = NIV_TL.map(function(n,i){return '<button type="button" class="chip" data-tl="'+i+'" aria-pressed="false">'+(i+1)+'. '+n[0]+'</button>'}).join("");
+  tlR.innerHTML = '<p class="tl-ayuda">Elige el nivel que corresponde al verbo de tu competencia (por ejemplo, «explica» es comprensión; «diseña» o «propone» es creación).</p>';
+  tlN.addEventListener("click", function(e){
+    var b = e.target.closest("[data-tl]"); if(!b) return;
+    var n = NIV_TL[+b.dataset.tl];
+    tlN.querySelectorAll("[data-tl]").forEach(function(x){x.setAttribute("aria-pressed", x===b)});
+    tlR.innerHTML = '<p><b>'+n[0]+'.</b> '+esc(n[1])+'</p>'+
+      '<p><span class="tl-k">El modelo sugiere:</span> '+n[2].map(esc).join(", ")+'.</p>'+
+      '<p><span class="tl-k">Tipos del banco que encajan:</span></p><div class="chips">'+n[3].map(function(t){return '<button type="button" class="chip" data-tipo="'+t+'" data-tl-tipo="'+t+'"><i></i>Ver ideas de '+t+'</button>'}).join("")+'</div>'+
+      (n[4] ? '<p class="tl-ayuda">'+esc(n[4])+'</p>' : "");
+  });
+  tlR.addEventListener("click", function(e){
+    var t = e.target.closest("[data-tl-tipo]"); if(!t) return;
+    estado.tipo = t.dataset.tlTipo; pintarChips(); pintar();
+    $("#mazo").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth", block:"start"});
+  });
+}
 
 /* inicio */
 pintarChips(); pintar();

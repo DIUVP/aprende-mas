@@ -5,7 +5,7 @@ Repositorio de ideas de proyecto formativo integrador para la pestaña **Docente
 ## Archivos
 - `index.html` — estructura de la página (filtros, mazo, fichas, selección).
 - `proyectos.css` — estilos con los mismos tokens del sitio (modo oscuro, alto contraste y tamaño de texto heredados de `a11y.css`).
-- `proyectos.js` — lógica: filtros, tarjetas que se voltean, ficha completa, «Copiar para el Amoxtli», «Mi selección» (se guarda en el navegador).
+- `proyectos.js` — lógica: filtros, tarjetas que se voltean, ficha completa, «Copiar texto de la idea», «Mi selección» (se guarda en el navegador).
 - `datos/1-prototipo.js` … `datos/5-investigacion.js` — las 30 ideas, 6 por tipo del Modelo Tlamatini.
 
 ## Cómo agregar una idea
@@ -18,7 +18,7 @@ Copia un bloque de cualquier archivo de `datos/` y cámbiale el contenido. Campo
 | `nat` | `Teórico`, `Práctico` o `Mixto` |
 | `ent` | Dónde ocurre: `Aula o taller`, `Digital`, `Comunidad`, `Organización externa` |
 | `eq` | `Individual`, `Equipo` o `Ambos` |
-| `log` | Logística para el docente: 1 baja, 2 media, 3 alta (requiere terceros) |
+| `log` | Dificultad (en pantalla dice «Dificultad»): 1 baja, 2 media, 3 alta (requiere personas externas) |
 | `areas` | Una o más de: Artes y Humanidades, Ciencias de la Salud, Ciencias de la Vida, Ingenierías, Negocios, Hospitalidad y Ciencias Sociales, Transversal |
 | `niv` | `b`, `l`, `p` (bachillerato, licenciatura, posgrado): `[entregable, matiz]` |
 | `sit` | Situación cotidiana, profesional o laboral. **Mínimo 100 palabras** (lo pide el Amoxtli) |
