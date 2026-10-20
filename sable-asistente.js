@@ -122,6 +122,7 @@
     q = String(q || "").trim(); if(!q) return;
     burbuja("<p>" + e$(q) + "</p>", "yo");
     var r = buscar(q);
+    try{ document.dispatchEvent(new CustomEvent("sable:pregunta", { detail:{ encontrado: r.length > 0 } })); }catch(e){}   // para el contador de visitas (sin el texto)
     var pensando = burbuja('<p class="sb-pensando"><span></span><span></span><span></span><span class="a11y-oculto">Buscando…</span></p>', "sable", IMG.piensa);
     setTimeout(function(){
       pensando.remove();
