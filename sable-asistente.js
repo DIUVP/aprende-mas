@@ -121,6 +121,14 @@
   function responder(q){
     q = String(q || "").trim(); if(!q) return;
     burbuja("<p>" + e$(q) + "</p>", "yo");
+    // comando del equipo de DI para que su navegador no cuente en el contador de visitas
+    var nq = norm(q).replace(/[^a-z\s]/g, "").trim();
+    if(nq === "no contar mis visitas" || nq === "contar mis visitas"){
+      var fuera = nq === "no contar mis visitas";
+      try{ document.dispatchEvent(new CustomEvent("contador:excluir", { detail:{ excluir: fuera } })); }catch(e){}
+      burbuja("<p>" + (fuera ? "Listo: las visitas de este navegador ya no se cuentan. Si quieres volver a contarlas, escríbeme «contar mis visitas»." : "Listo: las visitas de este navegador vuelven a contarse desde la próxima vez que abras el sitio.") + "</p>", "sable");
+      return;
+    }
     var r = buscar(q);
     try{ document.dispatchEvent(new CustomEvent("sable:pregunta", { detail:{ encontrado: r.length > 0 } })); }catch(e){}   // para el contador de visitas (sin el texto)
     var pensando = burbuja('<p class="sb-pensando"><span></span><span></span><span></span><span class="a11y-oculto">Buscando…</span></p>', "sable", IMG.piensa);

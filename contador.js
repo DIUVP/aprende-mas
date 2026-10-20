@@ -7,7 +7,10 @@
 (function(){
   "use strict";
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbyndPDby3_ePvKGoYxqlfmxX-uM94LgE0Ti4h96bWZYY4R8kcA8YYcvLGjVwuoq2q18/exec";   // Apps Script «Contador de visitas DI». Vacía = no se envía nada.
-  if(!ENDPOINT || location.hostname !== "diuvp.github.io") return;
+  /* El equipo de DI puede excluir su navegador escribiéndole a Sable «no contar mis visitas» («contar mis visitas» lo revierte) */
+  document.addEventListener("contador:excluir", function(e){ try{ if(e.detail && e.detail.excluir) localStorage.setItem("di-no-contar", "1"); else localStorage.removeItem("di-no-contar"); }catch(x){} });
+  var excluido = false; try{ excluido = localStorage.getItem("di-no-contar") === "1"; }catch(e){}
+  if(!ENDPOINT || location.hostname !== "diuvp.github.io" || excluido) return;
 
   var azar = function(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 10); };
   var visitante = null, nuevo = false, sesion = null;
@@ -43,8 +46,15 @@
     for(var k in NOM){ if(h === k || h.indexOf(k + "-") === 0) return NOM[k]; }
     return "Inicio";
   }
-  var ultima = null;
-  function vista(){ var s = seccion(); if(s !== ultima){ ultima = s; registra("vista", s, location.hash.slice(1)); } }
+  /* Una sección se cuenta una vez por sesión cada 30 min: las recargas (o el editor de Google Sites, que recarga
+     la página varias veces) no inflan el conteo. */
+  var ultima = null, VENTANA = 30 * 60 * 1000;
+  function yaContada(s){
+    try{ var m = JSON.parse(sessionStorage.getItem("di-vistas") || "{}"), ahora = Date.now();
+      if(m[s] && ahora - m[s] < VENTANA) return true; m[s] = ahora; sessionStorage.setItem("di-vistas", JSON.stringify(m)); }catch(e){}
+    return false;
+  }
+  function vista(){ var s = seccion(); if(s !== ultima){ ultima = s; if(!yaContada(s)) registra("vista", s, location.hash.slice(1)); } }
   addEventListener("hashchange", vista); vista();
 
   /* materiales que se abren en el visor del sitio (videos, fichas, guías, documentos) */
