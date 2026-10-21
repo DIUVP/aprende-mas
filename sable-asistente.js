@@ -214,7 +214,7 @@
   var RUTA = [
     { t:"Identifica tu plataforma", d:"Mira la dirección: ol.uvp.mx u online.uvp.mx.", b:[["Comparar plataformas", { foco:".plats" }]] },
     { t:"Entra con tu cuenta @uvp.edu.mx", d:"La cuenta @uvp.mx es administrativa y no abre tus aulas.", b:[["¿Cómo entro?", { q:"Cómo ingreso a mis aulas virtuales" }]] },
-    { t:"Descarga tu guion instruccional", d:"La plantilla oficial de tu modalidad para planear la asignatura.", b:[["Ir a Materiales", { ir:"#docentes-materiales" }]] },
+    { t:"Descarga tu guion instruccional", d:"La plantilla oficial de tu modalidad para planear la asignatura.", b:[["Ver guiones", { ir:"#docentes-tutoriales" }]] },
     { t:"Recorre la guía de tu plataforma", d:"Paso a paso, con búsqueda y práctica.", b:[["ol.uvp.mx", { ver:"guia" }], ["online.uvp.mx", { guiaNueva:1 }]] },
     { t:"Llena y firma tu Amoxtli", d:"Solo en online.uvp.mx: proyecto, avances y, al final, tu firma.", b:[["Ver cómo", { amoxtli:1 }]] },
     { t:"Revisa las fechas de tus semanas", d:"Que cada semana abra y cierre cuando debe.", b:[["¿Cómo cambio una fecha?", { q:"Cambiar una fecha de entrega" }]] },
