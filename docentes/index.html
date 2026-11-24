@@ -416,7 +416,7 @@ dialog.panel-a11y::backdrop{background:rgba(20,17,29,.6)}
       <span class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
       <h2>Espacio <span>docente</span></h2>
       <p>Configura tus aulas virtuales, carga contenidos, califica y consulta los formatos oficiales del ciclo.</p>
-      <ul><li>Tutoriales</li><li>Materiales</li><li>Recursos recomendados</li></ul>
+      <ul><li>Tutoriales</li><li>Materiales para tu clase</li><li>Herramientas digitales</li></ul>
       <span class="ir">Entrar al espacio docente →</span>
     </a>
     <a class="puerta coordina" href="#coordinaciones">
@@ -689,6 +689,12 @@ const video = (n, titulo) => ({tipo:"video", src:`../guia/Videos/${n}.mp4`, post
 const ficha = (n, titulo) => ({tipo:"web", src:`../fichas/${n}.html?p=docentes`, titulo});
 const doc   = (id, titulo) => ({tipo:"web", src:`https://docs.google.com/document/d/${id}/preview`, abrir:`https://docs.google.com/document/d/${id}/edit`, drive:true, titulo});
 const hoja  = (id, titulo) => ({tipo:"web", src:`https://docs.google.com/spreadsheets/d/${id}/preview`, abrir:`https://docs.google.com/spreadsheets/d/${id}/edit`, drive:true, titulo});
+// Repositorio: archivos de Drive de cualquier tipo (pptx, xlsx, pdf…), carpetas, presentaciones y revistas de Issuu
+const archivo  = (id, titulo, abrir) => ({tipo:"web", src:`https://drive.google.com/file/d/${id}/preview`, abrir:abrir||`https://drive.google.com/file/d/${id}/view`, drive:true, titulo});
+const carpeta  = (id, titulo) => ({tipo:"web", src:`https://drive.google.com/embeddedfolderview?id=${id}#grid`, abrir:`https://drive.google.com/drive/folders/${id}`, drive:true, titulo});
+const diapos   = (id, titulo) => ({tipo:"web", src:`https://docs.google.com/presentation/d/${id}/preview`, abrir:`https://docs.google.com/presentation/d/${id}/edit`, drive:true, titulo});
+// Las revistas se ven con el visor de Issuu (así cuentan en sus estadísticas) y se pueden abrir en issuu.com
+const revista  = (slug, titulo) => ({tipo:"web", src:`https://e.issuu.com/embed.html?d=${slug}&u=innovaciontec`, abrir:`https://issuu.com/innovaciontec/docs/${slug}`, abrirTexto:"Abrir en Issuu ↗", titulo});
 const CATALOGO = {tipo:"web", src:"../catalogo/index.html", titulo:"Catálogo de aplicaciones educativas"};
 const PROYECTOS = {tipo:"web", src:"../proyectos/index.html", titulo:"Banco de proyectos formativos"};
 const INDUCCION = "https://ol.uvp.mx/courses/course-v1:UVP+INDDOC+2026_01_F26_D26/about";
@@ -730,7 +736,7 @@ const nuevaDoc = [
 const ESPACIOS = {
   docentes:{
     eyebrow:"Espacio docente", titulo:"Docentes",
-    intro:"Tutoriales para configurar y operar tus aulas virtuales, los formatos oficiales del ciclo y herramientas para enriquecer tus clases.",
+    intro:"Tutoriales para configurar y operar tus aulas virtuales, materiales listos para usar en tus clases y herramientas digitales para enriquecerlas.",
     tutoriales:{
       edx:[
         {destacada:{t:"Guía para docentes · ol.uvp.mx",d:"La guía completa, con búsqueda, calculadora de hora, simulador y solución de errores comunes. Se abre aquí mismo. Empieza aquí si es tu primer ciclo.",niveles:["Primeros pasos","Básico: calificar y ver calificaciones","Avanzado: fechas, cuestionarios, prórrogas","Profesional: videos, PDF, Genially","Práctica y soporte"],acc:[["Abrir la guía",guia("","Guía para docentes · ol.uvp.mx")],["Ver los videotutoriales",guia("t22","Videotutoriales de un minuto"),1]],para:"Para aprender a usar ol.uvp.mx a tu ritmo. Explica cada tarea con pasos, imágenes y videos, y tiene un buscador para ir directo a lo que necesitas."}},
@@ -753,17 +759,55 @@ const ESPACIOS = {
       ],
       nueva:nuevaDoc
     },
+    // Materiales y herramientas (incluye los recursos que compartió el equipo de Innovación Tecnológica UVP)
     materiales:[
-      {g:"Planeación", it:[
-        {t:"Banco de proyectos formativos",d:"30 ideas de proyecto formativo integrador en tarjetas que se voltean. Filtra por tipo del Modelo Tlamatini, nivel, área y dificultad. Copia el texto de la idea, pégalo en un editor de textos y de ahí llena tu Amoxtli.",tp:"web",e:"ok",ancha:1,acc:[["Abrir el banco de ideas",PROYECTOS]],para:"Para elegir un proyecto formativo integrador más allá del examen: cada idea trae el entregable por nivel (bachillerato, licenciatura y posgrado), tres avances que suben de nivel y criterios RAPA que suman 100 %, listos para adaptar a tu Amoxtli."}]}
+      {g:"Planeación y evaluación", it:[
+        {t:"Banco de proyectos formativos",d:"30 ideas de proyecto formativo integrador en tarjetas que se voltean. Filtra por tipo del Modelo Tlamatini, nivel, área y dificultad. Copia el texto de la idea, pégalo en un editor de textos y de ahí llena tu Amoxtli.",tp:"web",e:"ok",ancha:1,acc:[["Abrir el banco de ideas",PROYECTOS]],para:"Para elegir un proyecto formativo integrador más allá del examen: cada idea trae el entregable por nivel (bachillerato, licenciatura y posgrado), tres avances que suben de nivel y criterios RAPA que suman 100 %, listos para adaptar a tu Amoxtli."},
+        {t:"Rúbricas para evaluar productos",d:"Diez rúbricas listas para descargar y adaptar a tu actividad.",tp:"doc",e:"ok",ancha:1,acc:[
+          ["Foro",archivo("10DqhZEGYZk_p2KcxXZCDRYabMz88coOK","Rúbrica · Foro")],["Presentaciones gráficas",archivo("1gSvNJVRaaeSD-MWb8HpHQ8ZB0IiN8y_O","Rúbrica · Presentaciones gráficas"),1],
+          ["Dramatización",archivo("1ePQhyIGZiLNk9aCnF832hRx6uXjFXRHy","Rúbrica · Dramatización"),1],["Presentaciones y exposiciones",archivo("1bql1QaGIFaOSl33r64GZsXYoepLuv0yS","Rúbrica · Presentaciones y exposiciones"),1],
+          ["Audios",archivo("1FmP1tx98imMS5DxaKj3G0fciieFyjdMs","Rúbrica · Audios"),1],["Videos",archivo("1yuOw8Coz5huYEimJv9e_8hADOpuLMaVD","Rúbrica · Videos"),1],
+          ["Organizadores gráficos",archivo("1yQNvqTqTlwLhdk0EnaxDhMo7f4TG7oLg","Rúbrica · Organizadores gráficos"),1],["Análisis de textos",archivo("1su58sr3F2KUNn7lxGEvxoVOcDap6YLtx","Rúbrica · Análisis de textos"),1],
+          ["Textos informativos",archivo("1klNEx5Nymk1YzDyBTBxLgYP-gaOfE-eO","Rúbrica · Textos informativos"),1],["Cuentos e historietas",archivo("1Xhof-MdW_Z2R5FOPkj0sTCEYMKMp9IAa","Rúbrica · Cuentos e historietas"),1]],
+          para:"Para evaluar con criterios claros y que tus estudiantes sepan desde el inicio qué se espera de su trabajo."}]},
+      {g:"Plantillas institucionales", it:[
+        {t:"Documentos institucionales",d:"Formatos con la imagen de la UVP. Para usarlos: Archivo › Descargar (elige el formato) o Archivo › Hacer una copia.",tp:"doc",e:"ok",acc:[["Ver plantilla",doc("1Sd-x-9FeaaX6jmYVkP2Fk1jiTmOCZpGIGfSJ9cDetao","Documentos institucionales UVP")]],para:"Para entregar documentos con el formato oficial de la universidad sin diseñarlos desde cero."},
+        {t:"Presentaciones UVP",d:"Dos plantillas de presentación con la imagen institucional. Descárgalas desde Archivo › Descargar.",tp:"doc",e:"ok",acc:[["Presentación 1",archivo("1lp7Myei06f2-v1gmRcS8MbRec1EOBbJ1","Plantilla de presentación UVP 1","https://docs.google.com/presentation/d/1lp7Myei06f2-v1gmRcS8MbRec1EOBbJ1/edit")],["Presentación 2",archivo("14cLkqgPNMIuX-3-ApnZcsOZVpiI56Eou","Plantilla de presentación UVP 2","https://docs.google.com/presentation/d/14cLkqgPNMIuX-3-ApnZcsOZVpiI56Eou/edit"),1]],para:"Para preparar tus clases y exposiciones con la imagen de la UVP."},
+        {t:"Logotipos y logoteca",d:"Los logotipos de la UVP y la logoteca con los gráficos para diseñar recursos digitales.",tp:"web",e:"ok",acc:[["Ver logotipos",carpeta("1XHulL46Y_u9DaUtpipv4M7eXBp_l5PAk","Logotipos UVP")],["Logoteca UVP",{externo:"https://uvp.mx/logoteca"},1]],para:"Para usar el logotipo correcto en tus materiales sin bajarlo de internet."}]},
+      {g:"Gamificación", it:[
+        {t:"Plantillas de juegos para clase",d:"Juegos editables para aplicar la gamificación como estrategia didáctica.",tp:"doc",e:"ok",ancha:1,acc:[["Sopa de letras",hoja("1V1G7in1dWRgzmLGrxdoAk4Juknb_qgFc5j6zTJ3dieY","Plantilla · Sopa de letras")],["Crucigrama",doc("1gbT7YrVRlPtfym8fpMSWjYOyktQTHLao1opGYGfMT8g","Plantilla · Crucigrama"),1],["Serpientes y escaleras",diapos("1J4qJyhTsc_tsoXuxJSOB8mKO3J_tMBQlz47Jsv4Fxw0","Plantilla · Serpientes y escaleras"),1],["Jeopardy",diapos("1n15tyEl6oqg9v_kT9mlFWPk4or2QGTTBRqJCOcMvHpY","Plantilla · Jeopardy"),1]],para:"Para repasar contenidos con una dinámica de juego. Haz una copia y cambia las preguntas por las de tu materia."}]},
+      {g:"Para seguir aprendiendo", it:[
+        {t:"Podcast Notza",d:"Voces de arte y ciencia docente: contenidos y estrategias desde la experiencia de docentes y expertos en educación.",tp:"web",e:"ok",acc:[["Escuchar en Spotify",{tipo:"web",src:"https://open.spotify.com/embed/show/4KAfohTGl2XsxjRP86xqAq",abrir:"https://open.spotify.com/show/4KAfohTGl2XsxjRP86xqAq",abrirTexto:"Abrir en Spotify ↗",titulo:"Podcast Notza"}],["Amazon Music",{externo:"https://music.amazon.com.mx/podcasts/b91f8b23-5efd-40e4-9c31-7a12ac704c82/notza-voces-de-arte-y-ciencia-docente"},1],["iHeart",{externo:"https://www.iheart.com/podcast/269-notza-voces-de-arte-y-cien-106853924/"},1]],para:"Para aprender de otros docentes mientras te trasladas o haces una pausa."},
+        {t:"Namox: libros universitarios",d:"El repositorio de libros de la UVP.",tp:"web",e:"ok",acc:[["Ir a Namox",{externo:"https://uvp.mx/namox/"}]],para:"Para consultar y recomendar libros escritos en la universidad."},
+        {t:"Revistas UVP",d:"Revistas universitarias de distintas áreas del conocimiento.",tp:"web",e:"ok",acc:[["Ir a Revistas UVP",{externo:"https://revistas.uvp.mx/"}]],para:"Para actualizarte y encontrar artículos para tus clases."},
+        {t:"Laboratorio de Innovación",d:"Conoce el laboratorio y suscríbete para recibir sus novedades.",tp:"web",e:"ok",acc:[["¿Qué es?",{tipo:"web",src:"https://view.genial.ly/63ed518271a3e000116f214c/interactive-image-laboratorio-de-innovacion-tecnologica-20",abrir:"https://view.genial.ly/63ed518271a3e000116f214c/interactive-image-laboratorio-de-innovacion-tecnologica-20",titulo:"Laboratorio de Innovación"}],["Suscríbete",{externo:"https://forms.gle/u3wkxzpTLWvWH5h57"},1]],para:"Para estar al tanto de nuevas herramientas y proyectos de innovación en la universidad."}]}
     ],
     recursos:[
-      {g:"Herramientas digitales", it:[
-        {t:"Comprimir un PDF con I Love PDF",d:"Para archivos que superan el peso permitido.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("ilovepdf","Comprimir un PDF con I Love PDF")]],para:"Para reducir el peso de un PDF cuando la plataforma no te deja subirlo."},
-        {t:"Comprimir un PDF con Small PDF",d:"Alternativa en línea, sin instalar nada.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("smallpdf","Comprimir un PDF con Small PDF")]],para:"Para reducir el peso de un PDF si I Love PDF no está disponible."},
+      {g:"Catálogos para elegir una herramienta", it:[
+        {t:"Catálogo de aplicaciones educativas",d:"27 aplicaciones con fichas, formatos de integración en edX, banco de prompts, taller de IA y autoevaluación.",tp:"web",e:"ok",ancha:1,acc:[["Abrir el catálogo",CATALOGO]],para:"Para elegir una aplicación que haga tu clase más interactiva. Cada ficha dice para qué sirve, cómo integrarla en edX y trae prompts de IA listos para usar."},
+        {t:"Herramientas genéricas",d:"Revistas digitales con herramientas y aplicaciones para cualquier materia, por categoría.",tp:"web",e:"ok",ancha:1,acc:[
+          ["Organizadores gráficos",revista("cat_logo_organizadores_gr_ficos","Catálogo · Organizadores gráficos")],["Pizarras y wikis",revista("colaborativo_wiki_y_pizarras","Catálogo · Pizarras y wikis"),1],
+          ["Presentaciones",revista("cat_logo_presentaciones","Catálogo · Presentaciones"),1],["Edición de documentos e imágenes",revista("edici_n_documentos_e_imagenes","Catálogo · Edición de documentos e imágenes"),1],
+          ["Pruebas para seguimiento y evaluación",revista("cat_logo_pruebas","Catálogo · Pruebas para seguimiento y evaluación"),1],["Edición de audio y video",revista("cat_logo_edici_n_video_y_audio","Catálogo · Edición de audio y video"),1],
+          ["Administración del tiempo",revista("cat_logo_gesti_n_tareas","Catálogo · Gestión de tareas y tiempo"),1],["Estrategias varias",revista("cat_logo_estrategias_varias","Catálogo · Estrategias varias"),1]],
+          para:"Para descubrir aplicaciones que dinamicen tus actividades. Se abren aquí mismo; con «Abrir en Issuu» las ves en pantalla completa."},
+        {t:"Herramientas especializadas por programa",d:"Revistas digitales con herramientas y aplicaciones para cada licenciatura y para preparatoria.",tp:"web",e:"ok",ancha:1,acc:[
+          ["Administración",revista("administraci_n","Herramientas especializadas · Administración")],["Cirujano Dentista",revista("cirujano_dentista","Herramientas especializadas · Cirujano Dentista"),1],
+          ["Comunicación",revista("comunicaci_n","Herramientas especializadas · Comunicación"),1],["Diseño de Modas",revista("dise_o_modas","Herramientas especializadas · Diseño de Modas"),1],
+          ["Enfermería",revista("enfermer_a","Herramientas especializadas · Enfermería"),1],["Fisioterapia",revista("fisioterapia","Herramientas especializadas · Fisioterapia"),1],
+          ["Gastronomía",revista("gastronom_a","Herramientas especializadas · Gastronomía"),1],["Ingeniería",revista("industrial","Herramientas especializadas · Ingeniería Industrial"),1],
+          ["Lenguas extranjeras",revista("lenguas_extranjeras","Herramientas especializadas · Lenguas extranjeras"),1],["Nutrición",revista("nutrici_n","Herramientas especializadas · Nutrición"),1],
+          ["Pedagogía",revista("pedagogia","Herramientas especializadas · Pedagogía"),1],["Preparatoria",revista("bachillerato","Herramientas especializadas · Preparatoria"),1]],
+          para:"Para encontrar herramientas propias de tu disciplina. Elige tu programa."}]},
+      {g:"Inteligencia artificial", it:[
+        {t:"Lineamientos del uso de IA",d:"Cómo integrar la inteligencia artificial de forma ética y responsable en clases, proyectos y evaluaciones.",tp:"doc",e:"ok",acc:[["Ver lineamientos",archivo("1SHfDdqDXbqYnbUvTdTVnRF8foYC_uLNX","Lineamientos del uso de IA")]],para:"Para saber qué está permitido y cómo pedir a tus estudiantes que declaren el uso de IA."},
+        {t:"Catálogo de IA generativa",d:"Revista digital con herramientas de inteligencia artificial que pueden usar los estudiantes.",tp:"web",e:"ok",acc:[["Ver catálogo",revista("cat_logo_ia_gen_v1","Catálogo · Inteligencia artificial generativa")]],para:"Para conocer herramientas de IA y decidir cuáles sumar a tus actividades."}]},
+      {g:"Presentaciones y diseño", it:[
+        {t:"Páginas para hacer presentaciones",d:"Sitios con plantillas gratuitas para presentaciones atractivas.",tp:"web",e:"ok",ancha:1,acc:[["Canva",{externo:"https://www.canva.com/es_419/"}],["Visme",{externo:"https://www.visme.co/es/templates/presentaciones/"},1],["Prezi",{externo:"https://prezi.com/es/"},1],["SlidesMania",{externo:"https://slidesmania.com/"},1],["Slidesgo",{externo:"https://slidesgo.com/es/"},1],["SlidesCarnival",{externo:"https://www.slidescarnival.com/es/category/plantillas-presentaciones-gratis"},1]],para:"Para encontrar un diseño de presentación listo para adaptar a tu clase."},
         {t:"Genially, Canva y otras páginas",d:"Cómo mostrarlas dentro del curso.",tp:"guia",e:"ok",acc:[["Abrir en la guía",guia("t13","Genially, Canva y otras páginas")]],para:"Para mostrar presentaciones interactivas o diseños de otras páginas dentro de tu curso."}]},
-      {g:"Aplicaciones educativas", it:[
-        {t:"Catálogo de aplicaciones educativas",d:"27 aplicaciones con fichas, formatos de integración en edX, banco de prompts, taller de IA y autoevaluación.",tp:"web",e:"ok",ancha:1,acc:[["Abrir el catálogo",CATALOGO]],para:"Para elegir una aplicación que haga tu clase más interactiva. Cada ficha dice para qué sirve, cómo integrarla en edX y trae prompts de IA listos para usar."}]}
+      {g:"Archivos PDF", it:[
+        {t:"Comprimir un PDF con I Love PDF",d:"Para archivos que superan el peso permitido.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("ilovepdf","Comprimir un PDF con I Love PDF")]],para:"Para reducir el peso de un PDF cuando la plataforma no te deja subirlo."},
+        {t:"Comprimir un PDF con Small PDF",d:"Alternativa en línea, sin instalar nada.",tp:"info",e:"ok",acc:[["Ver ficha",ficha("smallpdf","Comprimir un PDF con Small PDF")]],para:"Para reducir el peso de un PDF si I Love PDF no está disponible."}]}
     ]
   }
 };
@@ -818,9 +862,9 @@ const PQS = {
   faq:"Respuestas cortas a las dudas más comunes. Elige tu perfil y abre la pregunta que te interesa.",
   tutoriales:{docentes:"Aquí aprendes a hacer cada tarea en la plataforma: entrar, cargar contenidos, calificar y dar seguimiento. Primero elige la dirección de tu plataforma, ol.uvp.mx u online.uvp.mx; los tutoriales cambian según la que elijas.",
               alumnos:"Aquí aprendes a usar tu aula virtual: entrar, entregar actividades y revisar tus calificaciones. Primero elige la dirección de tu plataforma, ol.uvp.mx u online.uvp.mx; los tutoriales cambian según la que elijas."},
-  materiales:{docentes:"Documentos oficiales para planear tu asignatura, como el banco de proyectos formativos. Los guiones instruccionales están en Tutoriales, en la pestaña de tu plataforma. Los documentos se abren desde Google Drive con tu cuenta institucional.",
+  materiales:{docentes:"Lo que puedes descargar, copiar y adaptar para tu asignatura: el banco de proyectos formativos, rúbricas, plantillas con la imagen de la UVP y juegos para clase. Al final hay lecturas y un podcast para seguir aprendiendo. Los guiones instruccionales están en Tutoriales, en la pestaña de tu plataforma.",
               alumnos:"Documentos de consulta para tu ciclo escolar, como el calendario y los lineamientos de evaluación. Se publicarán aquí conforme estén listos."},
-  recursos:{docentes:"Herramientas externas que recomienda Diseño Instruccional para preparar materiales y hacer tus clases más interactivas.",
+  recursos:{docentes:"Herramientas externas para preparar materiales y hacer tus clases más interactivas. Empieza por los catálogos: te ayudan a elegir una aplicación por tipo de actividad o por programa. Las revistas digitales se abren aquí mismo y también puedes verlas en Issuu.",
             alumnos:"Herramientas que te ayudan con tus entregas, como reducir el peso de un PDF que no se deja subir."},
   ayuda:"Te dice a quién acudir si algo no funciona y qué datos incluir para que te ayuden más rápido.",
   coordinaciones:"Cada coordinación consulta aquí el reporte de su licenciatura: qué materias ya están cargadas en UVP Online y en qué estado está cada aula virtual. Elige tu plantel, busca tu licenciatura y abre el reporte."
@@ -835,7 +879,7 @@ function pintarEspacio(k){
   const E = ESPACIOS[k], el = document.getElementById("v-"+k);
   el.innerHTML = `
     <div class="cab-esp"><span class="eyebrow">${E.eyebrow}</span><h1>${E.titulo}</h1><p>${E.intro}</p>
-      <nav class="subnav" aria-label="Secciones de ${E.titulo}"><a href="#${k}-tutoriales">Tutoriales</a><a href="#${k}-materiales">Materiales</a><a href="#${k}-recursos">Recursos recomendados</a><a href="#faq-${k}">Preguntas frecuentes</a></nav>
+      <nav class="subnav" aria-label="Secciones de ${E.titulo}"><a href="#${k}-tutoriales">Tutoriales</a><a href="#${k}-materiales">Materiales para tu clase</a><a href="#${k}-recursos">Herramientas digitales</a><a href="#faq-${k}">Preguntas frecuentes</a></nav>
     </div>
     ${E.inicio?destacada(E.inicio):""}
     <div class="sec" id="${k}-tutoriales">
@@ -848,11 +892,11 @@ function pintarEspacio(k){
       <div data-panel="nueva" id="panel-${k}-nueva" role="tabpanel" aria-labelledby="tab-${k}-nueva" hidden>${AVISO_NUEVA}${grupos(E.tutoriales.nueva)}</div>
     </div>
     <div class="sec" id="${k}-materiales">
-      <div class="sec-t"><div><h2>Materiales</h2><p>${k==="docentes"?"Formatos oficiales e ideas para planear tu asignatura.":"Documentos de consulta para tu ciclo escolar."}</p>${pqs(PQS.materiales[k])}</div></div>
+      <div class="sec-t"><div><h2>Materiales para tu clase</h2><p>Ideas, rúbricas, plantillas y juegos listos para usar, y lecturas para seguir aprendiendo.</p>${pqs(PQS.materiales[k])}</div></div>
       ${grupos(E.materiales)}
     </div>
     <div class="sec" id="${k}-recursos">
-      <div class="sec-t"><div><h2>Recursos recomendados</h2><p>${k==="docentes"?"Herramientas digitales para preparar y enriquecer tus clases.":"Herramientas que te ayudan a estudiar y entregar mejor."}</p>${pqs(PQS.recursos[k])}</div></div>
+      <div class="sec-t"><div><h2>Herramientas digitales</h2><p>Catálogos para elegir la herramienta adecuada, inteligencia artificial y apoyos para presentaciones y archivos.</p>${pqs(PQS.recursos[k])}</div></div>
       ${grupos(E.recursos)}
     </div>`;
   el.querySelectorAll(".switch button").forEach(b => b.addEventListener("click", () => elegirPlat(b.dataset.plat)));
@@ -978,7 +1022,7 @@ const a11y = () => (window.A11Y ? A11Y.get() : {});
 function abrirVisor(d){
   document.getElementById("visor-t").textContent = d.titulo || "";
   const nuevo = new URL(d.abrir || d.src, location.href).href;
-  document.getElementById("visor-a").href = nuevo;
+  const va = document.getElementById("visor-a"); va.href = nuevo; va.textContent = d.abrirTexto || "Abrir en pestaña nueva ↗";
   const nota = document.getElementById("visor-nota");
   nota.hidden = !d.drive;
   nota.textContent = d.drive ? "Se abre desde Google Drive. Si no carga o pide permiso, usa «Abrir en pestaña nueva» con tu cuenta institucional." : "";
