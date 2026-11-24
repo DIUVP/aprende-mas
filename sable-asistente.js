@@ -21,13 +21,13 @@
   function recorre(lista, plat, sec){
     (lista || []).forEach(function(gr){
       if(gr.destacada){ var x = gr.destacada; agrega({ t:x.t, d:x.d, extra:(x.niveles || []).join(" "), para:x.para, acc:x.acc, plat:plat, sec:sec, grupo:"Guía recomendada" }); return; }
-      (gr.it || []).forEach(function(x){ if(x.e === "pend") return; agrega({ t:x.t, d:x.d, para:x.para, acc:x.acc, plat:plat, sec:sec, grupo:gr.g }); });
+      (gr.it || []).forEach(function(x){ if(x.e === "pend") return; agrega({ t:x.t, d:x.d, para:x.para, extra:(x.acc || []).map(function(a){ return a[0]; }).join(" "), acc:x.acc, plat:plat, sec:sec, grupo:gr.g }); });
     });
   }
   try{
     var E = ESPACIOS.docentes;
     recorre(E.tutoriales.edx, "edx", "Tutoriales"); recorre(E.tutoriales.nueva, "nueva", "Tutoriales");
-    recorre(E.materiales, null, "Materiales"); recorre(E.recursos, null, "Recursos recomendados");
+    recorre(E.materiales, null, "Materiales para tu clase"); recorre(E.recursos, null, "Herramientas digitales");
   }catch(e){}
   try{
     FAQ.docentes.temas.forEach(function(tm, i){ tm.q.forEach(function(q){
@@ -93,11 +93,14 @@
   }
 
   /* ---------- panel de Sable ---------- */
-  var DEST = [];
+  var DEST = [], PALABRAS_Q = [];
   var PLAT = { edx:'<span class="sb-tag edx">ol.uvp.mx</span>', nueva:'<span class="sb-tag nueva">online.uvp.mx</span>' };
   function botones(o){
     var h = "";
-    (o.acc || []).slice(0, 3).forEach(function(a){
+    // primero los botones cuyo nombre coincide con lo que se buscó (p. ej. «rúbrica de foro» → «Foro»)
+    var acc = (o.acc || []).slice(), pw = PALABRAS_Q;
+    if(pw.length && acc.length > 3) acc.sort(function(a, b){ var m = function(x){ var n = norm(x[0]); return pw.some(function(w){ return n.indexOf(w.length > 5 ? w.slice(0, -1) : w) >= 0; }) ? 0 : 1; }; return m(a) - m(b); });
+    acc.slice(0, 3).forEach(function(a){
       var d = a[1]; if(!d) return;
       if(d.externo) h += '<a class="sb-ac" href="' + e$(d.externo) + '" target="_blank" rel="noopener">' + e$(a[0]) + ' ↗<span class="a11y-oculto"> (se abre en una pestaña nueva)</span></a>';
       else h += '<button type="button" class="sb-ac" data-sb-abrir="' + (DEST.push(d) - 1) + '">' + e$(a[0]) + '</button>';
@@ -129,6 +132,7 @@
       burbuja("<p>" + (fuera ? "Listo: las visitas de este navegador ya no se cuentan. Si quieres volver a contarlas, escríbeme «contar mis visitas»." : "Listo: las visitas de este navegador vuelven a contarse desde la próxima vez que abras el sitio.") + "</p>", "sable");
       return;
     }
+    PALABRAS_Q = palabras(q);
     var r = buscar(q);
     try{ document.dispatchEvent(new CustomEvent("sable:pregunta", { detail:{ encontrado: r.length > 0 } })); }catch(e){}   // para el contador de visitas (sin el texto)
     var pensando = burbuja('<p class="sb-pensando"><span></span><span></span><span></span><span class="a11y-oculto">Buscando…</span></p>', "sable", IMG.piensa);
